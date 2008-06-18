@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.swixml</groupId>
+  <artifactId>swixml</artifactId>
+  <version>2.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>SWINXML FRAMEWORK</name>
+  <url>http://www.swixml.org</url>
+  <description>GUI generating engine for Java applications</description>
+
+<properties>
+	<!-- SCM properties  -->
+	<addTimestamp>true</addTimestamp>
+	<tag>${pom.artifactId}-${pom.version}</tag>
+	<!--tagBase>https://africa.herzumsoftware.com/svn/tags</tagBase-->
+</properties>	
+
+  <scm>
+    <developerConnection>scm:svn:https://support.softphone.it/svn/trunk/SWIXML</developerConnection>  
+    <url>https://support.softphone.it/svn/trunk/SWIXML</url>
+  </scm>
+
+  <dependencies>
+    <dependency>
+        <groupId>com.jgoodies</groupId>
+        <artifactId>forms</artifactId>
+        <version>1.1.0</version>
+    </dependency>
+      
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>java2html</groupId>
+      <artifactId>j2h</artifactId>
+      <version>1.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.applet.eawt</groupId>
+      <artifactId>ui</artifactId>
+      <version>swixml-bundled</version>    
+    </dependency>
+    <dependency>
+        <groupId>org.jdesktop</groupId>
+        <artifactId>jsr296</artifactId>
+        <version>1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.jdesktop</groupId>
+        <artifactId>jsr295</artifactId>
+        <version>1.2.1</version>
+    </dependency>
+  </dependencies>
+  
+<build>
+
+<plugins>
+    <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+            <source>1.5</source>
+            <target>1.5</target>
+        </configuration>
+    </plugin>
+</plugins>
+
+</build>
+
+<distributionManagement>
+    <repository>
+        <id>${release.repo.id}</id>
+        <url>${release.repo.url}</url>
+    </repository>
+    <snapshotRepository>
+        <id>${snapshot.repo.id}</id>
+        <url>${snapshot.repo.url}</url>
+    </snapshotRepository>
+</distributionManagement>
+  
+</project>
