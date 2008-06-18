@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>ClientAttr (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">ClientAttr.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1 </FONT><A NAME="1"></A>
+<FONT ID="LN">2 </FONT><A NAME="2"></A><FONT ID="Import">import</FONT> <A HREF="http://www.swixml.org/apidocs/org/swixml/SwingEngine.html">org.swixml.SwingEngine</A>;
+<FONT ID="LN">3 </FONT><A NAME="3"></A>
+<FONT ID="LN">4 </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> javax.swing.*;
+<FONT ID="LN">5 </FONT><A NAME="5"></A><FONT ID="Import">import</FONT> <A HREF="http://java.sun.com/javase/6/docs/api//java/awt/event/ActionEvent.html">java.awt.event.ActionEvent</A>;
+<FONT ID="LN">6 </FONT><A NAME="6"></A><FONT ID="Import">import</FONT> <A HREF="http://java.sun.com/javase/6/docs/api//java/awt/event/WindowAdapter.html">java.awt.event.WindowAdapter</A>;
+<FONT ID="LN">7 </FONT><A NAME="7"></A>
+<FONT ID="LN">8 </FONT><A NAME="8"></A><FONT ID="FormalComment">/**
+<FONT ID="LN">9 </FONT><A NAME="9"></A> * The ClientAttr shows in the usage of client attributes in swixml tags.
+<FONT ID="LN">10</FONT><A NAME="10"></A> *
+<FONT ID="LN">11</FONT><A NAME="11"></A> * @author &lt;a href="mailto:wolf@paulus.com"&gt;Wolf Paulus&lt;/a&gt;
+<FONT ID="LN">12</FONT><A NAME="12"></A> * @version $Revision: 1.1 $
+<FONT ID="LN">13</FONT><A NAME="13"></A> *
+<FONT ID="LN">14</FONT><A NAME="14"></A> * @since swixml 0.98
+<FONT ID="LN">15</FONT><A NAME="15"></A> */</FONT>
+<FONT ID="LN">16</FONT><A NAME="16"></A><FONT ID="Public">public</FONT> <FONT ID="Class">class</FONT> ClientAttr <FONT ID="Extends">extends</FONT> <A HREF="http://java.sun.com/javase/6/docs/api//java/awt/event/WindowAdapter.html">WindowAdapter</A> {
+<FONT ID="LN">17</FONT><A NAME="17"></A>  <FONT ID="Private">private</FONT> <A HREF="http://www.swixml.org/apidocs/org/swixml/SwingEngine.html">SwingEngine</A> swix = <FONT ID="New">new</FONT> <A HREF="http://www.swixml.org/apidocs/org/swixml/SwingEngine.html">SwingEngine</A>( <FONT ID="This">this</FONT> );
+<FONT ID="LN">18</FONT><A NAME="18"></A>
+<FONT ID="LN">19</FONT><A NAME="19"></A>  <FONT ID="Public">public</FONT> JButton btn;
+<FONT ID="LN">20</FONT><A NAME="20"></A>  <FONT ID="Public">public</FONT> JTextArea ta;
+<FONT ID="LN">21</FONT><A NAME="21"></A>  <FONT ID="Public">public</FONT> Action show = <FONT ID="New">new</FONT> AbstractAction() {
+<FONT ID="LN">22</FONT><A NAME="22"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> actionPerformed( <A HREF="http://java.sun.com/javase/6/docs/api//java/awt/event/ActionEvent.html">ActionEvent</A> e ) {
+<FONT ID="LN">23</FONT><A NAME="23"></A>      ta.setText( <FONT ID="StringLiteral">"X:"</FONT> + btn.getClientProperty( <FONT ID="StringLiteral">"X"</FONT> ) + <FONT ID="StringLiteral">"\n"</FONT> + <FONT ID="StringLiteral">"Y:"</FONT> + btn.getClientProperty( <FONT ID="StringLiteral">"Y"</FONT> ) );
+<FONT ID="LN">24</FONT><A NAME="24"></A>    }
+<FONT ID="LN">25</FONT><A NAME="25"></A>  };
+<FONT ID="LN">26</FONT><A NAME="26"></A>
+<FONT ID="LN">27</FONT><A NAME="27"></A>  <FONT ID="Private">private</FONT> ClientAttr() {
+<FONT ID="LN">28</FONT><A NAME="28"></A>    <FONT ID="Try">try</FONT> {
+<FONT ID="LN">29</FONT><A NAME="29"></A>      swix.render( <FONT ID="StringLiteral">"xml/clientattr.xml"</FONT> ).setVisible( <FONT ID="True">true</FONT> );
+<FONT ID="LN">30</FONT><A NAME="30"></A>      swix.forget( <FONT ID="StringLiteral">"x"</FONT> );
+<FONT ID="LN">31</FONT><A NAME="31"></A>    } <FONT ID="Catch">catch</FONT> (<A HREF="http://java.sun.com/javase/6/docs/api//java/lang/Exception.html">Exception</A> e) {
+<FONT ID="LN">32</FONT><A NAME="32"></A>      e.printStackTrace();
+<FONT ID="LN">33</FONT><A NAME="33"></A>    }
+<FONT ID="LN">34</FONT><A NAME="34"></A>  }
+<FONT ID="LN">35</FONT><A NAME="35"></A>
+<FONT ID="LN">36</FONT><A NAME="36"></A>  <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <FONT ID="Void">void</FONT> main( <A HREF="http://java.sun.com/javase/6/docs/api//java/lang/String.html">String</A>[] args ) {
+<FONT ID="LN">37</FONT><A NAME="37"></A>    <FONT ID="New">new</FONT> <A HREF="ClientAttr.java.html">ClientAttr</A>();
+<FONT ID="LN">38</FONT><A NAME="38"></A>  }
+<FONT ID="LN">39</FONT><A NAME="39"></A>}</pre><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">ClientAttr.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+
+</BODY>
+</HTML>

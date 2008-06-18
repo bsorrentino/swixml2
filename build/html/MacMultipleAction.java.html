@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>MacMultipleAction (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">MacMultipleAction.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1 </FONT><A NAME="1"></A><FONT ID="Import">import</FONT> <A HREF="http://java.sun.com/javase/6/docs/api//java/awt/event/ActionEvent.html">java.awt.event.ActionEvent</A>;
+<FONT ID="LN">2 </FONT><A NAME="2"></A>
+<FONT ID="LN">3 </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> <A HREF="http://java.sun.com/javase/6/docs/api//javax/swing/AbstractAction.html">javax.swing.AbstractAction</A>;
+<FONT ID="LN">4 </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> <A HREF="http://java.sun.com/javase/6/docs/api//javax/swing/JOptionPane.html">javax.swing.JOptionPane</A>;
+<FONT ID="LN">5 </FONT><A NAME="5"></A><FONT ID="SingleLineComment">// $Id: MacMultipleAction.java,v 1.1 2004/10/05 21:32:35 tichy Exp $
+<FONT ID="LN">6 </FONT><A NAME="6"></A></FONT>
+<FONT ID="LN">7 </FONT><A NAME="7"></A><FONT ID="FormalComment">/**
+<FONT ID="LN">8 </FONT><A NAME="8"></A> * Demonstrates delivering of a valid action command from the ActionEvent.
+<FONT ID="LN">9 </FONT><A NAME="9"></A> * 
+<FONT ID="LN">10</FONT><A NAME="10"></A> * On MacOS, this contains strings like {@link org.swixml.Parser#ATTR_MACOS_ABOUT}
+<FONT ID="LN">11</FONT><A NAME="11"></A> * when the attribute &lt;code&gt;"macos_about"&lt;/code&gt; was set to &lt;code&gt;true&lt;/code&gt;. See the
+<FONT ID="LN">12</FONT><A NAME="12"></A> * provided file &lt;code&gt;mactester.xml&lt;/code&gt; as an usage example. This allows specifying
+<FONT ID="LN">13</FONT><A NAME="13"></A> * of multiple &lt;code&gt;"macos_*"&lt;/code&gt; attributes for one {@link javax.swing.Action}.
+<FONT ID="LN">14</FONT><A NAME="14"></A> *  
+<FONT ID="LN">15</FONT><A NAME="15"></A> * 
+<FONT ID="LN">16</FONT><A NAME="16"></A> * @author $Author: tichy $
+<FONT ID="LN">17</FONT><A NAME="17"></A> */</FONT>
+<FONT ID="LN">18</FONT><A NAME="18"></A><FONT ID="Public">public</FONT> <FONT ID="Class">class</FONT> MacMultipleAction <FONT ID="Extends">extends</FONT> <A HREF="http://java.sun.com/javase/6/docs/api//javax/swing/AbstractAction.html">AbstractAction</A> {
+<FONT ID="LN">19</FONT><A NAME="19"></A>
+<FONT ID="LN">20</FONT><A NAME="20"></A>    <FONT ID="MultiLineComment">/* (non-Javadoc)
+<FONT ID="LN">21</FONT><A NAME="21"></A>     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+<FONT ID="LN">22</FONT><A NAME="22"></A>     */</FONT>
+<FONT ID="LN">23</FONT><A NAME="23"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> actionPerformed(<A HREF="http://java.sun.com/javase/6/docs/api//java/awt/event/ActionEvent.html">ActionEvent</A> arg0) {
+<FONT ID="LN">24</FONT><A NAME="24"></A>        <FONT ID="SingleLineComment">// TODO Auto-generated method stub
+<FONT ID="LN">25</FONT><A NAME="25"></A></FONT>        JOptionPane.showMessageDialog( MacTest.getSwix().getRootComponent(), <FONT ID="StringLiteral">"This is the Mac OS X MultipleExample. Showing "</FONT>+arg0.getActionCommand() );
+<FONT ID="LN">26</FONT><A NAME="26"></A>               
+<FONT ID="LN">27</FONT><A NAME="27"></A>    }
+<FONT ID="LN">28</FONT><A NAME="28"></A>
+<FONT ID="LN">29</FONT><A NAME="29"></A>}
+<FONT ID="LN">30</FONT><A NAME="30"></A></pre><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">MacMultipleAction.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+
+</BODY>
+</HTML>

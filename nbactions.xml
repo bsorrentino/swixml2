@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-[dev,skip-test] clean install</actionName>
+            <displayName>[dev,skip-test] clean install</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <activatedProfiles>
+                <activatedProfile>dev</activatedProfile>
+            </activatedProfiles>
+        </action>
+        <action>
+            <actionName>CUSTOM-[softphone] deploy</actionName>
+            <displayName>[softphone] deploy</displayName>
+            <goals>
+                <goal>deploy</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>softphone</activatedProfile>
+            </activatedProfiles>
+        </action>
+        <action>
+            <actionName>CUSTOM-[sogei] deploy</actionName>
+            <displayName>[sogei] deploy</displayName>
+            <goals>
+                <goal>deploy</goal>
+            </goals>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <activatedProfiles>
+                <activatedProfile>sogei</activatedProfile>
+            </activatedProfiles>
+        </action>
+    </actions>
