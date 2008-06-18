@@ -37,4 +37,18 @@
                 <activatedProfile>sogei</activatedProfile>
             </activatedProfiles>
         </action>
+        <action>
+            <actionName>CUSTOM-[dev] assembly</actionName>
+            <displayName>[dev] assembly</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>assembly:assembly</goal>
+            </goals>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <activatedProfiles>
+                <activatedProfile>dev</activatedProfile>
+            </activatedProfiles>
+        </action>
     </actions>
