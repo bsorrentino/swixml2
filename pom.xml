@@ -6,19 +6,19 @@
   <version>2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>SWINXML FRAMEWORK</name>
-  <url>http://www.swixml.org</url>
+  <url>http://code.google.com/p/swixml2/</url>
   <description>GUI generating engine for Java applications</description>
 
 <properties>
 	<!-- SCM properties  -->
 	<addTimestamp>true</addTimestamp>
-	<tag>${pom.artifactId}-${pom.version}</tag>
-	<!--tagBase>https://africa.herzumsoftware.com/svn/tags</tagBase-->
+	<!--tag>${pom.artifactId}-${pom.version}</tag-->
+	<tagBase>https://swixml2.googlecode.com/svn/trunk/</tagBase>
 </properties>	
 
   <scm>
-    <developerConnection>scm:svn:https://support.softphone.it/svn/trunk/SWIXML</developerConnection>  
-    <url>https://support.softphone.it/svn/trunk/SWIXML</url>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
+    <url>https://swixml2.googlecode.com/svn/trunk/core</url>
   </scm>
 
   <dependencies>
