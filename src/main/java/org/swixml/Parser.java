@@ -216,6 +216,11 @@ public class Parser {
   private Document jdoc;
 
   /**
+   * global variable library
+   */
+  private VariableLibrary globalVarlib = VariableLibrary.getInstance();
+  
+  /**
    *  Static Initializer adds Attribute Names into the LOCALIZED_ATTRIBUTES Vector
    *  Needs to be inserted all lowercase.
    */
@@ -753,7 +758,18 @@ public class Parser {
               }
               action = (Action) para;
             } else {
-              para = converter.convert(paraType, attr, engine.getLocalizer());
+              
+              final String val = attr.getValue();
+              
+              if( VariableLibrary.isVariablePattern( val ) ) {
+                  para = engine.localVariables.getVariable(val);
+                  if( null==para ) {
+                    para = globalVarlib.getVariable(val);  
+                  }
+              }
+              else {
+                para = converter.convert(paraType, attr, engine.getLocalizer());
+              }
             }
 
             method.invoke(obj, para); // ATTR SET

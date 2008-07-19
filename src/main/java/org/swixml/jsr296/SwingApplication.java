@@ -14,6 +14,7 @@ import org.swixml.SwingEngine;
 import org.swixml.jsr295.BeanRegistry;
 import org.swixml.jsr295.widgets.BBLabel;
 import org.swixml.jsr295.widgets.BBTextField;
+import org.swixml.jsr296.widgets.Tree2;
 
 /**
  *
@@ -46,6 +47,7 @@ public abstract class SwingApplication extends Application  {
       
       BBTextField.register(this);
       BBLabel.register(this);
+      Tree2.register(this);
 
     }
 
