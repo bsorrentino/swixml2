@@ -187,6 +187,11 @@ public class SwingEngine {
   protected ClassLoader cl = this.getClass().getClassLoader();
 
   /**
+   * local variables
+   */
+  public final VariableLibrary localVariables = new VariableLibrary();
+  
+  /**
    * Default ctor for a SwingEngine.
    */
   public SwingEngine() {
