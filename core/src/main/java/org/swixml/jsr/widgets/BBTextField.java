@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.swixml.jsr295.widgets;
+package org.swixml.jsr.widgets;
 
 import javax.swing.JTextField;
 import org.swixml.jsr295.BindingUtils;

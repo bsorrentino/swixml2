@@ -347,4 +347,16 @@ public final class DefaultFactory implements Factory {
   public void removeSetter( Method method ) {
     setters.remove( method );
   }
+
+    public String getOriginalName(String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Class<?> getPropertyType(Object bean, String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setProperty(Object bean, String name, Object value) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

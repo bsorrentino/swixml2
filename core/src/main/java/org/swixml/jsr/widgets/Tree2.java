@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.swixml.jsr296.widgets;
+package org.swixml.jsr.widgets;
 
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
@@ -26,6 +26,7 @@ public class Tree2 extends JTree {
      */
     public Tree2() {
         super();
+        init();
     }
     
     /**
@@ -34,16 +35,26 @@ public class Tree2 extends JTree {
      */
     public Tree2(TreeModel newModel) {
         super(newModel);
-        
+        init();
+    }
+
+    
+    private void init() {
         super.addTreeSelectionListener(new TreeSelectionListener(){
 
             public void valueChanged(TreeSelectionEvent e) {
-                Tree2.this.valueChanged(e);
+                Action a = getAction();
+
+                if( null==a ) return;
+
+                ActionEvent ev = new ActionEvent( e, 0, null );
+
+                a.actionPerformed(ev);
             }
             
-        });
+        });        
     }
-
+    
     /**
      * 
      * @param app
@@ -68,21 +79,5 @@ public class Tree2 extends JTree {
     public void setAction(Action action) {
         this.action = action;
     }
-
-    /**
-     * 
-     * @param e
-     */
-    public void valueChanged(TreeSelectionEvent e) {
-        
-        Action a = getAction();
-        
-        if( null==a ) return;
-        
-        ActionEvent ev = new ActionEvent( e, 0, null );
-        
-        a.actionPerformed(ev);
-    }
-
 
 }
