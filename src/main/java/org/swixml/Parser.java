@@ -51,6 +51,7 @@
 
 package org.swixml;
 
+import java.awt.event.ActionEvent;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -62,6 +63,11 @@ import java.awt.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Level;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.PropertyResolutionException;
+import org.swixml.jsr295.BindingUtils;
 
 /**
  * Singleton Parser to render XML for Swing Documents
@@ -76,7 +82,7 @@ import java.util.List;
  * @see org.swixml.ConverterLibrary
  */
 @SuppressWarnings({"unchecked", "deprecation"})
-public class Parser {
+public class Parser extends LogUtil {
 
   //
   //  Custom Attributes
@@ -186,6 +192,13 @@ public class Parser {
    */
   public static final Vector<String> LOCALIZED_ATTRIBUTES = new Vector<String>();
 
+  private class EmptyAction extends AbstractAction {
+
+        public void actionPerformed(ActionEvent e) {
+            logger.info( "empty action performed " + e.getSource());
+        }
+  };
+  
   //
   //  Private Members
   //
@@ -215,11 +228,6 @@ public class Parser {
    */
   private Document jdoc;
 
-  /**
-   * global variable library
-   */
-  private VariableLibrary globalVarlib = VariableLibrary.getInstance();
-  
   /**
    *  Static Initializer adds Attribute Names into the LOCALIZED_ATTRIBUTES Vector
    *  Needs to be inserted all lowercase.
@@ -337,7 +345,7 @@ public class Parser {
         UIManager.setLookAndFeel(plaf.getValue());
       } catch (Exception e) {
         if (SwingEngine.DEBUG_MODE) {
-          System.err.println(e);
+           logger.log( Level.SEVERE, "processCustomAttributes", e);
         }
       }
       element.removeAttribute(Parser.ATTR_PLAF);
@@ -477,17 +485,17 @@ public class Parser {
             }
           }
         } catch (ClassNotFoundException e) {
-          System.err.println(Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage() + e);
+          logger.log( Level.SEVERE, Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage(), e);
         } catch (SecurityException e) {
-          System.err.println(Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage() + e);
+          logger.log( Level.SEVERE, Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage(), e);
         } catch (IllegalAccessException e) {
-          System.err.println(Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage() + e);
+          logger.log( Level.SEVERE, Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage(), e);
         } catch (IllegalArgumentException e) {
-          System.err.println(Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage() + e);
+          logger.log( Level.SEVERE, Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage(), e);
         } catch (InvocationTargetException e) {
-          System.err.println(Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage() + e);
+          logger.log( Level.SEVERE, Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage(), e);
         } catch (InstantiationException e) {
-          System.err.println(Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage() + e);
+          logger.log( Level.SEVERE, Parser.ATTR_INITCLASS + " not instantiated : " + e.getLocalizedMessage(), e);
         } catch (RuntimeException re) {
           throw re;
         } catch (Exception e) {
@@ -563,7 +571,7 @@ public class Parser {
     //  put Tag's Text content into Text Attribute
     //
     if (element.getAttribute("Text") == null && 0 < element.getTextTrim().length()) {
-      attributes.add(new Attribute("Text", element.getTextTrim()));
+      attributes.add(new Attribute("text", element.getTextTrim()));
     }
     List remainingAttrs = applyAttributes(obj, factory, attributes);
     //
@@ -644,11 +652,11 @@ public class Parser {
           if (JComponent.class.isAssignableFrom(obj.getClass())) {
             ((JComponent) obj).putClientProperty(attr.getName(), attr.getValue());
             if (SwingEngine.DEBUG_MODE) {
-              System.out.println("ClientProperty put: " + obj.getClass().getName() + "(" + id + "): " + attr.getName() + "=" + attr.getValue());
+             logger.info("ClientProperty put: " + obj.getClass().getName() + "(" + id + "): " + attr.getName() + "=" + attr.getValue());
             }
           } else {
             if (SwingEngine.DEBUG_MODE) {
-              System.err.println(attr.getName() + " not applied for tag: <" + element.getName() + ">");
+              logger.info(attr.getName() + " not applied for tag: <" + element.getName() + ">");
             }
           }
         }
@@ -658,6 +666,40 @@ public class Parser {
     return (constructed ? obj : null);
   }
 
+  /**
+   * 
+   * @param method
+   * @return
+   */
+  private Object getMethodParamValue( Class<?> paraType, Converter converter, Attribute attr ) throws Exception  {
+
+        Object para = null;
+        //
+        //  Actions are provided in the engine's member variables.
+        //  a getClass().getFields lookup has to be done to find the correct fields.
+        //
+        if (Action.class.equals(paraType)) {
+          try {
+            para = engine.getClient().getClass().getField(attr.getValue()).get(engine.getClient());
+          } catch (NoSuchFieldException e) {
+            //
+            // At this point we know that a action attribute was put into an XML tag but the client call doesn't
+            // seem to have an Action member varible with a matching name.
+            // Now we look for a public method that could be wrapped into an generated AbstrtactAction instead
+            //
+            try {
+              para = new XAction(engine.getClient(), attr.getValue());
+            } catch (NoSuchMethodException e1) {
+                para = new EmptyAction();
+            }
+          }
+        } else {
+
+            para = converter.convert(paraType, attr, engine.getLocalizer());
+        }
+      return para;
+  }
+  
   /**
    * Creates an object and sets properties based on the XML tag's attributes
    *
@@ -725,82 +767,95 @@ public class Parser {
         continue;
       }
 
-      // using guessSetter allow to not have to care about case when looking at the attribute name.
-      Method method = factory.guessSetter(attr.getName());
-      if (method != null) {
-        //
+      //Method method = null;
+      Object para = null;
+      
+      /////////////////////////
+      final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
+      
+      if( isVariable ) {
+          Object owner = engine.getClient(); // we can use also Application.getInstance();
+          
+          try {
+
+              ELProperty p = ELProperty.create(attr.getValue());
+
+              if( !p.isReadable( owner ) ) {
+                  logger.warning( "property " + attr.getValue() + " is not readable!");
+                  continue;
+              }
+  
+              para = p.getValue( owner );
+          
+              if( null!=para ) {
+
+                    BeanProperty bp = BeanProperty.create(attr.getName());
+                    if( bp.isWriteable(obj) ) {
+                        //factory.setSimpleProperty(obj, attr.getName(), para);
+                        bp.setValue(obj, para);
+                    }
+                    else {
+                        logger.warning( "property " + attr.getName() + " is not writable!" );
+                    }
+                    continue;
+
+                }
+                else  {
+                    logger.warning( "value of " + attr.getValue() +  " is null! ignored!");
+                }
+          } catch( PropertyResolutionException ex ) {
+                logger.log( Level.WARNING, "variable " + attr.getValue() +  " doesn't exist!", ex);  
+                continue;
+          }
+      }
+      ////////////////////////
+
+
+    Class<?> paraType = factory.getPropertyType(obj, attr.getName());
+
+    if( null!=paraType ) {
         //  A setter method has successfully been identified.
-        //
-        Class paraType = method.getParameterTypes()[0];
         Converter converter = cvtlib.getConverter(paraType);
 
         if (converter != null) {  // call setter with a newly instanced parameter
-          Object para = null;
-          try {
-            //
-            //  Actions are provided in the engine's member variables.
-            //  a getClass().getFields lookup has to be done to find the correct fields.
-            //
-            if (Action.class.equals(paraType)) {
-              try {
-                para = engine.getClient().getClass().getField(attr.getValue()).get(engine.getClient());
-              } catch (NoSuchFieldException e) {
-                //
-                // At this point we know that a action attribute was put into an XML tag but the client call doesn't
-                // seem to have an Action member varible with a matching name.
-                // Now we look for a public method that could be wrapped into an generated AbstrtactAction instead
-                //
-                try {
-                  para = new XAction(engine.getClient(), attr.getValue());
-                } catch (NoSuchMethodException e1) {
-                  para = null;
-                }
-              }
-              action = (Action) para;
-            } else {
-              
-              final String val = attr.getValue();
-              
-              if( VariableLibrary.isVariablePattern( val ) ) {
-                  para = engine.localVariables.getVariable(val);
-                  if( null==para ) {
-                    para = globalVarlib.getVariable(val);  
-                  }
-              }
-              else {
-                para = converter.convert(paraType, attr, engine.getLocalizer());
-              }
-            }
+            try {
 
-            method.invoke(obj, para); // ATTR SET
+              if( null==para ) para = getMethodParamValue(paraType, converter, attr);
 
-          } catch (NoSuchFieldException e) {
-            if (SwingEngine.DEBUG_MODE) {
-              System.err.println("Method: " + method.getName() + " Attribute " + attr.getName() + " : " + attr.getValue() + "' not set. ");
-            }
-          } catch (InvocationTargetException e) {
-            //
-            // The JFrame class is slightly incompatible with Frame.
-            // Like all other JFC/Swing top-level containers, a JFrame contains a JRootPane as its only child.
-            // The content pane provided by the root pane should, as a rule, contain all the non-menu components
-            // displayed by the JFrame. The JFrame class is slightly incompatible with Frame.
-            //
-            if (obj instanceof RootPaneContainer) {
-              Container rootpane = ((RootPaneContainer) obj).getContentPane();
-              Factory f = engine.getTaglib().getFactory(rootpane.getClass());
-              Method m = f.guessSetter(attr.getName());
-              try {
-                m.invoke(rootpane, para); // ATTR SET
-              } catch (Exception ex) {
+              if( para instanceof Action ) {
+                  action = (Action) para;              
+              }
+
+              factory.setProperty(obj, attr.getName(), para); // ATTR SET
+
+            } catch (NoSuchFieldException e) {
+                // useful for extra attributes
+                logger.fine( "property " + attr.getName() + " doesn't exist!");
                 list.add(attr);
-              }
-            } else {
-              list.add(attr);
+            } catch (InvocationTargetException e) {
+                //
+                // The JFrame class is slightly incompatible with Frame.
+                // Like all other JFC/Swing top-level containers, a JFrame contains a JRootPane as its only child.
+                // The content pane provided by the root pane should, as a rule, contain all the non-menu components
+                // displayed by the JFrame. The JFrame class is slightly incompatible with Frame.
+                //
+                if (obj instanceof RootPaneContainer) {
+                  Container rootpane = ((RootPaneContainer) obj).getContentPane();
+                  Factory f = engine.getTaglib().getFactory(rootpane.getClass());
+                  try {
+                    f.setProperty(rootpane, attr.getName(), para); // ATTR SET
+                  } catch (Exception ex) {  
+                      list.add(attr);
+                  }
+                } else {
+                  list.add(attr);
+                }
+            } 
+            catch (Exception e) {
+                throw new Exception(e + ":" + attr.getName() + ":" + para, e);
             }
-          } catch (Exception e) {
-            throw new Exception(e + ":" + method.getName() + ":" + para, e);
-          }
-          continue;
+            
+            continue;
         }
 
         //
@@ -812,7 +867,7 @@ public class Parser {
             if (Parser.LOCALIZED_ATTRIBUTES.contains(attr.getName().toLowerCase()) && attr.getAttributeType() == Attribute.CDATA_TYPE) {
               s = engine.getLocalizer().getString(s);
             }
-            method.invoke(obj, s); // ATTR SET
+            factory.setProperty(obj, attr.getName(), s); // ATTR SET
           } catch (Exception e) {
             list.add(attr);
           }
@@ -824,17 +879,19 @@ public class Parser {
         //
         if (paraType.isPrimitive()) {
           try {
-            method.invoke(obj, PrimitiveConverter.conv(paraType, attr, engine.getLocalizer())); // ATTR SET
+            factory.setProperty(obj, attr.getName(), PrimitiveConverter.conv(paraType, attr, engine.getLocalizer())); // ATTR SET
           } catch (Exception e) {
             list.add(attr);
           }
           continue;
         }
+
         //
         // try again later
         //
         list.add(attr);
-      } else {
+
+    } else {
         //
         //  Search for a public field in the obj.class that matches the attribute name
         //

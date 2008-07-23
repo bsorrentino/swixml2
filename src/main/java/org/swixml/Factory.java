@@ -136,4 +136,10 @@ public interface Factory {
    */
   Method guessSetter(String name);
 
+  
+  String getOriginalName( String name );
+  Class<?> getPropertyType( Object bean, String name );
+  void setProperty( Object bean, String name, Object value ) throws Exception;
+  
+
 }

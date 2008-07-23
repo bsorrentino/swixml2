@@ -78,7 +78,7 @@ import java.util.List;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.5 $
  */
-public class SwingEngine {
+public class SwingEngine extends LogUtil {
   //
   //  Static Constants
   //
@@ -112,7 +112,7 @@ public class SwingEngine {
   /**
    * Debug / Release Mode
    */
-  public static boolean DEBUG_MODE = false;
+  public static boolean DEBUG_MODE = true;
   /**
    * main frame
    */
@@ -186,11 +186,6 @@ public class SwingEngine {
    */
   protected ClassLoader cl = this.getClass().getClassLoader();
 
-  /**
-   * local variables
-   */
-  public final VariableLibrary localVariables = new VariableLibrary();
-  
   /**
    * Default ctor for a SwingEngine.
    */

@@ -91,7 +91,8 @@ public abstract class TagLibrary {
    * @param template <code>Class</code> the java class that represents the tag
    */
   public void registerTag( String name, Class template ) {
-    registerTag( name, new DefaultFactory( template ) );
+    //registerTag( name, new DefaultFactory( template ) );
+    registerTag( name, new BeanFactory( template ) );
   }
 
   /**

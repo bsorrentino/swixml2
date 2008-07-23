@@ -6,15 +6,30 @@
 package org.swixml.jsr296;
 
 import java.awt.Container;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyDescriptor;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Level;
+import javax.swing.JTable;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Property;
+import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
+import org.jdesktop.swingbinding.SwingBindings;
 import org.swixml.SwingEngine;
 import org.swixml.jsr295.BeanRegistry;
-import org.swixml.jsr295.widgets.BBLabel;
-import org.swixml.jsr295.widgets.BBTextField;
-import org.swixml.jsr296.widgets.Tree2;
+import org.swixml.jsr.widgets.BBLabel;
+import org.swixml.jsr.widgets.BBTextField;
+import org.swixml.jsr.widgets.Table2;
+import org.swixml.jsr.widgets.Tree2;
 
 /**
  *
@@ -48,6 +63,7 @@ public abstract class SwingApplication extends Application  {
       BBTextField.register(this);
       BBLabel.register(this);
       Tree2.register(this);
+      Table2.register(this);
 
     }
 
@@ -100,5 +116,5 @@ public abstract class SwingApplication extends Application  {
         beanRegistry.shutdown();
         super.shutdown();
     }
-          
+
 }
