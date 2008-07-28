@@ -96,19 +96,19 @@ public class Table2 extends JTable {
         
     }
 
-    public Class<?> getBeanClass() {
+    public Class<?> getBindClass() {
         return beanClass;
     }
 
-    public void setBeanClass(Class<?> beanClass) {
+    public void setBindClass(Class<?> beanClass) {
         this.beanClass = beanClass;
     }
 
-    public List<?> getBeanList() {
+    public List<?> getBindWith() {
         return beanList;
     }
 
-    public void setBeanList(List<?> beanList) {
+    public void setBindWith(List<?> beanList) {
         this.beanList = beanList;
     }
 

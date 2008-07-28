@@ -13,7 +13,7 @@ import org.swixml.jsr296.SwingApplication;
  *
  * @author Sorrentino
  */
-public class BBTextField extends JTextField {
+public class TextField2 extends JTextField {
     String bindWith;
 
     public String getBindWith() {
@@ -28,7 +28,7 @@ public class BBTextField extends JTextField {
     }
     
     public static void register( SwingApplication app ) {
-        app.getSwix().getTaglib().registerTag( "textfieldB", BBTextField.class );
+        app.getSwix().getTaglib().registerTag( "textfield2", TextField2.class  );
     } 
     
 }
