@@ -198,6 +198,11 @@ public class Parser extends LogUtil {
             logger.info( "empty action performed " + e.getSource());
         }
   };
+
+  /**
+   * set the bind target
+   */
+  public static final String ATTR_BIND_TO = "bindTo";
   
   //
   //  Private Members
@@ -770,10 +775,11 @@ public class Parser extends LogUtil {
       //Method method = null;
       Object para = null;
       
+      
       /////////////////////////
       final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
       
-      if( isVariable ) {
+      if( isVariable && !ATTR_BIND_TO.equalsIgnoreCase(attr.getName())) {
           Object owner = engine.getClient(); // we can use also Application.getInstance();
           
           try {

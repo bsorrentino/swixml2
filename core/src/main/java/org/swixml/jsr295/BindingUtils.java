@@ -14,8 +14,12 @@ import org.jdesktop.application.Application;
 import javax.swing.JTable;
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.Property;
 import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
@@ -49,22 +53,16 @@ public class BindingUtils extends LogUtil  {
      * @param owner
      * @param bind
      */
-    public static void parseBind( Object owner, String property, String bind ) {    
-        
-        int index = bind.indexOf(".");
-        
-        if( index==-1 ) {
-            logger.warning( "bind property is not valid!");
-            return;
-        }
+    public static void parseBind( Object owner, String property, String bindProperty ) {    
+    
         Application app = Application.getInstance();
         
         if( app instanceof SwingApplication ) {
             SwingApplication swapp = (SwingApplication) app;
             
-            String bean = bind.substring(0, index++);
-            String prop = bind.substring(index);
-            swapp.getBeanRegistry().addRWAutoBinding(bean, prop, owner, property);
+            BindingGroup group = swapp.getBindingGroup();
+            
+            addAutoBinding( group, UpdateStrategy.READ_WRITE, swapp, bindProperty, owner, property);
         }
         else {
             logger.warning( "application instance is not a SwingApplication instance");
@@ -72,6 +70,36 @@ public class BindingUtils extends LogUtil  {
         }
         
         
+    }
+    
+    /**
+     * 
+     * @param bindingGroup
+     * @param strategy
+     * @param source
+     * @param beanProperty
+     * @param target
+     * @param targetProperty
+     */
+    public static void addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
+      if( null==bindingGroup ) throw new IllegalArgumentException( "binding group argument is null!");
+      if( null==source ) throw new IllegalArgumentException( "bean argument is null!");
+      if( null==target ) throw new IllegalArgumentException( "target argument is null!");
+      if( null==targetProperty ) throw new IllegalArgumentException( "targetProperty argument is null!");
+
+      Property tp = ( targetProperty.startsWith("$") ) 
+              ? ELProperty.create(targetProperty) 
+              : BeanProperty.create(targetProperty);
+
+      AutoBinding binding = Bindings.createAutoBinding(
+              strategy, 
+              source, 
+              BeanProperty.create(beanProperty), 
+              target, 
+              tp);
+
+      bindingGroup.addBinding(binding);
+
     }
 
     /**

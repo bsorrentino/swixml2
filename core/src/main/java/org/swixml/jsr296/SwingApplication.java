@@ -6,29 +6,16 @@
 package org.swixml.jsr296;
 
 import java.awt.Container;
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyDescriptor;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.logging.Level;
-import javax.swing.JTable;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Property;
-import org.jdesktop.swingbinding.JTableBinding;
-import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
-import org.jdesktop.swingbinding.SwingBindings;
+import org.jdesktop.beansbinding.BindingGroup;
 import org.swixml.SwingEngine;
-import org.swixml.jsr295.BeanRegistry;
-import org.swixml.jsr.widgets.BBLabel;
-import org.swixml.jsr.widgets.BBTextField;
+import org.swixml.jsr.widgets.Label2;
+import org.swixml.jsr.widgets.TextField2;
 import org.swixml.jsr.widgets.Table2;
+import org.swixml.jsr.widgets.TextArea2;
 import org.swixml.jsr.widgets.Tree2;
 
 /**
@@ -39,8 +26,8 @@ public abstract class SwingApplication extends Application  {
   protected final SwingEngine swix;
   protected final java.util.Map<String,SwingComponent> componentMap;
   
-  private final BeanRegistry beanRegistry;
-  
+  private BindingGroup bindingGroup = new BindingGroup();
+
   private PropertyChangeListener taskChangeListener = new PropertyChangeListener() {
 
         public void propertyChange(PropertyChangeEvent e) {
@@ -56,22 +43,15 @@ public abstract class SwingApplication extends Application  {
     protected SwingApplication() {
       swix = new SwingEngine( this );   
       componentMap = new java.util.HashMap<String,SwingComponent>(10);
-      beanRegistry = BeanRegistry.createInstance();
       
-      beanRegistry.registerBean( "app", this);
-      
-      BBTextField.register(this);
-      BBLabel.register(this);
+      TextArea2.register(this);
+      TextField2.register(this);
+      Label2.register(this);
       Tree2.register(this);
       Table2.register(this);
 
     }
 
-    public final BeanRegistry getBeanRegistry() {
-        return beanRegistry;
-    }
-
-    
     public void insertComponent( SwingComponent comp, Container c ) throws Exception {
         if( null==comp) throw new IllegalArgumentException("comp parameter is null!");
         String name = comp.getName();
@@ -107,13 +87,17 @@ public abstract class SwingApplication extends Application  {
     }
     
     public final SwingEngine getSwix() {
-    return swix;
+        return swix;
+    }
+
+    public BindingGroup getBindingGroup() {
+        return bindingGroup;
     }
 
     @Override
     protected void shutdown() {
         componentMap.clear();
-        beanRegistry.shutdown();
+        bindingGroup.unbind();
         super.shutdown();
     }
 

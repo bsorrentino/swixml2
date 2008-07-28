@@ -5,7 +5,7 @@
 
 package org.swixml.jsr.widgets;
 
-import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import org.swixml.jsr295.BindingUtils;
 import org.swixml.jsr296.SwingApplication;
 
@@ -13,7 +13,7 @@ import org.swixml.jsr296.SwingApplication;
  *
  * @author sorrentino
  */
-public class BBLabel extends JLabel {
+public class TextArea2 extends JTextArea {
     String bindWith;
 
     public String getBindWith() {
@@ -23,12 +23,12 @@ public class BBLabel extends JLabel {
     public void setBindWith(String bindWith) {
         this.bindWith = bindWith;
         if( null!=bindWith) {
-            BindingUtils.parseBind( this, "text",bindWith );
+            BindingUtils.parseBind( this, "text", bindWith );
         }
     }
     
     public static void register( SwingApplication app ) {
-        app.getSwix().getTaglib().registerTag( "labelB", BBLabel.class );
+        app.getSwix().getTaglib().registerTag( "textarea2", TextArea2.class  );
     } 
 
 }
