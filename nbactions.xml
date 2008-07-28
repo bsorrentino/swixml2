@@ -51,4 +51,30 @@
                 <activatedProfile>dev</activatedProfile>
             </activatedProfiles>
         </action>
+        <action>
+            <actionName>CUSTOM-[dev] release</actionName>
+            <displayName>[dev] release</displayName>
+            <goals>
+                <goal>release:prepare</goal>
+            </goals>
+            <properties>
+                <resume>true</resume>
+            </properties>
+            <activatedProfiles>
+                <activatedProfile>dev</activatedProfile>
+            </activatedProfiles>
+        </action>
+        <action>
+            <actionName>CUSTOM-[dev] deploy</actionName>
+            <displayName>[dev] deploy</displayName>
+            <goals>
+                <goal>deploy</goal>
+            </goals>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <activatedProfiles>
+                <activatedProfile>dev</activatedProfile>
+            </activatedProfiles>
+        </action>
     </actions>

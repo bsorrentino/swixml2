@@ -55,9 +55,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Method;
 import org.jdesktop.application.ApplicationAction;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Bindings;
 import org.swixml.jsr296.SwingApplication;
 
 /**
@@ -76,7 +73,6 @@ public class XAction extends AbstractAction {
         SwingApplication app = (SwingApplication)client;
         delegate = (ApplicationAction)app.getAction(methodName);
         
-        Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, client, BeanProperty.create("connected"), this, BeanProperty.create("enabled"));
     }
     else {
       method= client.getClass().getMethod(methodName);
