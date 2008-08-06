@@ -508,7 +508,7 @@ public class Parser extends LogUtil {
         }
       }
 
-      obj = initParameter != null ? factory.newInstance(new Object[]{initParameter}) : factory.newInstance();
+      obj = initParameter != null ? factory.newInstance(new Object[]{initParameter}) : factory.newInstance( attributes );
       constructed = true;
       //
       //  put newly created object in the map if it has an <id> attribute (uniqueness is given att this point)

@@ -11,6 +11,7 @@ import java.beans.PropertyChangeListener;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.swixml.BoxFactory;
 import org.swixml.SwingEngine;
 import org.swixml.jsr.widgets.Label2;
 import org.swixml.jsr.widgets.TextField2;
@@ -44,11 +45,12 @@ public abstract class SwingApplication extends Application  {
       swix = new SwingEngine( this );   
       componentMap = new java.util.HashMap<String,SwingComponent>(10);
       
-      TextArea2.register(this);
-      TextField2.register(this);
-      Label2.register(this);
-      Tree2.register(this);
-      Table2.register(this);
+      TextArea2.register(swix);
+      TextField2.register(swix);
+      Label2.register(swix);
+      Tree2.register(swix);
+      Table2.register(swix);
+      BoxFactory.register(swix);
 
     }
 

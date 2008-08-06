@@ -56,6 +56,8 @@ package org.swixml;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
+import org.jdom.Attribute;
 
 /**
  * An interface to represent a generic factory
@@ -67,21 +69,23 @@ public interface Factory {
   /** Specifies the prefix string for all setter methods */
   static final String SETTER_ID = "set";
   static final String ADDER_ID = "add";
+  
   /**
    * Create a new component instance
    *
    * @return instance <code>Object</code> a new instance of a template class
    * @throws Exception
    */
-  Object newInstance() throws Exception;
+  Object newInstance( List<Attribute> attributes ) throws Exception;
 
   /**
-   * Creates a new Object which class is {@link #getTemplate()}
-   * @param parameter <code>Object</code>, parameter used during construction or initialization.
+   * Create a new component instance
+   *
    * @return instance <code>Object</code> a new instance of a template class
    * @throws Exception
    */
-  Object newInstance( Object parameter ) throws Exception;
+  @Deprecated
+  Object newInstance() throws Exception;
 
   /**
    * Creates a new Object which class is {@link #getTemplate()} and the constructor
@@ -103,6 +107,7 @@ public interface Factory {
   /**
    * @return <code>Collection</code> - containing all available setter methods
    */
+  @Deprecated
   Collection getSetters();
 
   /**
@@ -110,6 +115,7 @@ public interface Factory {
    * @param template <code>Class</code> type of the setter method's parameter
    * @return <code>Method</code> setter method which maybe invoked on an object of the template class
    */
+  @Deprecated
   Method getSetter( Class template );
 
   /**
@@ -121,6 +127,7 @@ public interface Factory {
    * <p>Method method = factory.getSetter(&quot;set&quot; + Parser.capitalize(attr.getName()));</p>
    * </pre>
    */
+  @Deprecated
   Method getSetter( String name );
 
   /**
@@ -134,11 +141,32 @@ public interface Factory {
    * <p>Method method = factory.getSetter( attr.getName() );</p>
    * </pre>
    */
+  @Deprecated
   Method guessSetter(String name);
 
-  
+  /**
+   * 
+   * @param name
+   * @return
+   */
   String getOriginalName( String name );
+  
+  /**
+   * 
+   * @param bean
+   * @param name
+   * @return
+   */
   Class<?> getPropertyType( Object bean, String name );
+
+  /**
+   * 
+   * @param bean
+   * @param name
+   * @param value
+   * @return 
+   * @exception 
+   */
   void setProperty( Object bean, String name, Object value ) throws Exception;
   
 

@@ -6,8 +6,8 @@
 package org.swixml.jsr.widgets;
 
 import javax.swing.JLabel;
+import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
-import org.swixml.jsr296.SwingApplication;
 
 /**
  *
@@ -27,8 +27,8 @@ public class Label2 extends JLabel {
         }
     }
     
-    public static void register( SwingApplication app ) {
-        app.getSwix().getTaglib().registerTag( "label2", Label2.class  );
+    public static void register( SwingEngine engine ) {
+        engine.getTaglib().registerTag( "label2", Label2.class  );
     } 
 
 }

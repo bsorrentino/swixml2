@@ -6,8 +6,8 @@
 package org.swixml.jsr.widgets;
 
 import javax.swing.JTextArea;
+import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
-import org.swixml.jsr296.SwingApplication;
 
 /**
  *
@@ -27,8 +27,8 @@ public class TextArea2 extends JTextArea {
         }
     }
     
-    public static void register( SwingApplication app ) {
-        app.getSwix().getTaglib().registerTag( "textarea2", TextArea2.class  );
+    public static void register( SwingEngine engine ) {
+        engine.getTaglib().registerTag( "textarea2", TextArea2.class  );
     } 
 
 }

@@ -115,11 +115,11 @@
 
 <distributionManagement>
     <repository>
-        <id>google-swixml2</id>
+        <id>google-project</id>
         <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
     </repository>
     <snapshotRepository>
-        <id>google-swixml2</id>
+        <id>google-project</id>
         <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
     </snapshotRepository>
 </distributionManagement>
