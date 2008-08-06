@@ -5,15 +5,17 @@
 
 package org.swixml;
 
-import java.awt.Dialog;
+import java.awt.Window;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jdom.Attribute;
 import static org.swixml.SwingEngine.logger;
 
 /**
@@ -34,7 +36,7 @@ public class BeanFactory implements Factory {
         for( PropertyDescriptor p : pp ) {
             String s = p.getName();
             
-            if(Dialog.class.isAssignableFrom(template) ) {
+            if(Window.class.isAssignableFrom(template) ) {
                 
                 if( "size".equals(s) ) { // Bux Fix
                     nameMap.put( s, "minimumSize");
@@ -55,14 +57,18 @@ public class BeanFactory implements Factory {
         return nameMap.get( name.toLowerCase() );
     }
     
-    public Object newInstance() throws Exception {
+    public Object newInstance( List<Attribute> attributes ) throws Exception {
         return template.newInstance();
     }
 
-    public Object newInstance(Object parameter) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Object newInstance() throws Exception {
+        logger.warning("invoked a deprecated method newInstance(Object parameter)");
+        return template.newInstance();
     }
 
+    /**
+     * 
+     */
     public Object newInstance(Object[] parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Class<?> types[] = new Class<?>[ parameter.length ];
         int i=0;

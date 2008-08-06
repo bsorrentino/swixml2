@@ -16,8 +16,8 @@ import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.TableModel;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
-import org.swixml.jsr296.SwingApplication;
 
 /**
  *
@@ -91,8 +91,8 @@ public class Table2 extends JTable {
      * 
      * @param app
      */
-    public static void register( SwingApplication app ) {
-        app.getSwix().getTaglib().registerTag( "Table2", Table2.class );
+    public static void register( SwingEngine engine ) {
+        engine.getTaglib().registerTag( "Table2", Table2.class );
         
     }
 

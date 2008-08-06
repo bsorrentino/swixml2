@@ -6,8 +6,8 @@
 package org.swixml.jsr.widgets;
 
 import javax.swing.JTextField;
+import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
-import org.swixml.jsr296.SwingApplication;
 
 /**
  *
@@ -27,8 +27,8 @@ public class TextField2 extends JTextField {
         }
     }
     
-    public static void register( SwingApplication app ) {
-        app.getSwix().getTaglib().registerTag( "textfield2", TextField2.class  );
+    public static void register( SwingEngine engine ) {
+        engine.getTaglib().registerTag( "textfield2", TextField2.class  );
     } 
     
 }

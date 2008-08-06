@@ -57,6 +57,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import org.jdom.Attribute;
 
 /**
  * The <code>DefaultFactory</code> is a default implementation of the <code>Factory</code> Interface.
@@ -171,6 +172,15 @@ public final class DefaultFactory implements Factory {
     return template.newInstance();
   }
 
+  /**
+   * 
+   * @param attributes
+   * @return
+   * @throws java.lang.Exception
+   */
+  public Object newInstance(List<Attribute> attributes) throws Exception {
+     return newInstance();
+  }
 
   /**
    * Creates a new Object which class is {@link #getTemplate()}.
@@ -359,4 +369,5 @@ public final class DefaultFactory implements Factory {
     public void setProperty(Object bean, String name, Object value) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 }
