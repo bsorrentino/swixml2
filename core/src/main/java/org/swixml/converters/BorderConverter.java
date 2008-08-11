@@ -63,6 +63,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The <code>BorderConverter</code> class defines a converter that creates Border objects based on a provided String.
@@ -99,6 +102,8 @@ public class BorderConverter implements Converter {
    */
   private static final Method[] METHODS = BorderFactory.class.getMethods();
 
+  private Pattern p = Pattern.compile( "CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
+
   /**
    * Returns a <code>javax.swing Border</code>
    *
@@ -107,11 +112,39 @@ public class BorderConverter implements Converter {
    * @return <code>Object</code> runtime type is subclass of <code>AbstractBorder</code>
    */
   public Object convert(final Class type, final Attribute attr, Localizer localizer) {
+
+      String input = attr.getValue();
+      
+      Matcher m = p.matcher(input);
+      
+      if( m.matches() ) {
+
+          Border outside = convert(type, m.group(1), localizer); 
+          
+          Border inside  = convert( type, m.group(2), localizer);
+          
+          return BorderFactory.createCompoundBorder(outside, inside);
+      }
+      
+      return convert(type, input, localizer);
+  }
+
+  /**
+   * 
+   * 
+   */
+  protected Border convert(final Class type, final String borderString, Localizer localizer) {
+
     Border border = null;
-    StringTokenizer st = new StringTokenizer(attr.getValue(), "(,)"); // border type + parameters
+    
+    StringTokenizer st = new StringTokenizer(borderString, "(,)"); // border type + parameters
+    
     int n = st.countTokens() - 1; // number of parameter to create a border
+    
     String borderType = st.nextToken().trim();
+    
     Method method = null;
+    
     ConverterLibrary cvtlib = ConverterLibrary.getInstance();
     //
     // Special case for single parameter construction, give priority to String Type
@@ -163,8 +196,7 @@ public class BorderConverter implements Converter {
       }
       border = (Border) method.invoke(null, args);
     } catch (Exception e) {
-      if (SwingEngine.DEBUG_MODE)
-        System.err.println("Couldn't create border, " + attr.getValue() + "\n" + e.getMessage());
+        SwingEngine.logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
     }
     return border;
   }
