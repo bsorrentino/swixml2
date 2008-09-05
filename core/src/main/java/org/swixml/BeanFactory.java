@@ -5,16 +5,14 @@
 
 package org.swixml;
 
-import java.awt.Window;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.jdom.Attribute;
 import static org.swixml.SwingEngine.logger;
 
@@ -24,27 +22,27 @@ import static org.swixml.SwingEngine.logger;
  */
 public class BeanFactory implements Factory {
 
-    final Map<String,String> nameMap;
+    final Map<String,Method> nameMap;
     final Class<?> template;
     
     public BeanFactory( Class<?> beanClass ) {
         this.template = beanClass;
         
-        PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
-    
-        nameMap = new HashMap<String, String>( pp.length );
-        for( PropertyDescriptor p : pp ) {
-            String s = p.getName();
+        Method[] mm = beanClass.getMethods();
+        
+        nameMap = new HashMap<String, Method>(mm.length);
+        
+        for( Method m : mm ) {
             
-            if(Window.class.isAssignableFrom(template) ) {
-                
-                if( "size".equals(s) ) { // Bux Fix
-                    nameMap.put( s, "minimumSize");
-                    continue;
-                }
-                    
+            int modifier = m.getModifiers();
+            String name = m.getName();
+            
+            if( Modifier.isPublic(modifier) && !Modifier.isAbstract(modifier) &&
+                name.startsWith("set") && 
+                m.getParameterTypes().length==1 ) 
+            {
+                nameMap.put( name.substring(3).toLowerCase(), m);
             }
-            nameMap.put( s.toLowerCase() , s);
         }
     }
 
@@ -52,11 +50,6 @@ public class BeanFactory implements Factory {
         return template;
     }
 
-    public String getOriginalName( String name ) {
-        if( null==name ) throw new IllegalArgumentException( "name is null!");
-        return nameMap.get( name.toLowerCase() );
-    }
-    
     public Object newInstance( List<Attribute> attributes ) throws Exception {
         return template.newInstance();
     }
@@ -88,8 +81,9 @@ public class BeanFactory implements Factory {
     }
 
 
-    public Collection getSetters() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<Method> getSetters() {
+        
+        return nameMap.values();
     }
 
     public Method getSetter(Class template) {
@@ -97,28 +91,21 @@ public class BeanFactory implements Factory {
     }
 
     public Method getSetter(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if( null==name ) throw new IllegalArgumentException("name is null!");
+        return nameMap.get( name.toLowerCase());
     }
 
     public Method guessSetter(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getSetter(name);
     }
     
     public Class<?> getPropertyType( Object bean, String name )  {
-        if( null==name ) throw new IllegalArgumentException("name is null!");
+        Method m = getSetter(name);
         
-        final String originalName = getOriginalName(name);
-        
-        if( null==originalName ) return null;
+        if( null==m ) return null;
 
-        Class<?> result = null;
-        try {
-            return PropertyUtils.getPropertyType(bean, originalName);
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, "getPropertyType", ex);
-        }
+        return m.getParameterTypes()[0];
         
-        return result;
     }
     
     public void setProperty( Object bean, String name, Object value ) throws Exception {
@@ -126,11 +113,11 @@ public class BeanFactory implements Factory {
         if( null==bean ) throw new IllegalArgumentException("bean is null!");
         if( null==value ) return;
         
-        final String originalName = getOriginalName(name);
-        if( null==originalName ) throw new NoSuchMethodException(name);
+        Method m = getSetter(name);        
+        if( null==m ) throw new NoSuchMethodException(name);
         
-        PropertyUtils.setSimpleProperty(bean, originalName, value);
-        
+        m.invoke(bean, value);
+                
     }
 
 }

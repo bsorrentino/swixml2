@@ -70,7 +70,7 @@ import org.jdom.Attribute;
 public final class DefaultFactory implements Factory {
 
   /** Collection for all setter methods */
-  private final Collection setters = new ArrayList();
+  private final Collection<Method> setters = new ArrayList<Method>();
 
   /** The factory creates instances of this Class */
   private final Class template;
@@ -275,7 +275,7 @@ public final class DefaultFactory implements Factory {
   /**
    * @return <code>Collection</code> containing all available setter methods
    */
-  public Collection getSetters() {
+  public Collection<Method> getSetters() {
     return setters;
   }
 
@@ -357,10 +357,6 @@ public final class DefaultFactory implements Factory {
   public void removeSetter( Method method ) {
     setters.remove( method );
   }
-
-    public String getOriginalName(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     public Class<?> getPropertyType(Object bean, String name) {
         throw new UnsupportedOperationException("Not supported yet.");

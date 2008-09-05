@@ -105,10 +105,10 @@ public interface Factory {
   Class getTemplate();
 
   /**
+   * Get all setter property methods - useful for debug
    * @return <code>Collection</code> - containing all available setter methods
    */
-  @Deprecated
-  Collection getSetters();
+  Collection<Method> getSetters();
 
   /**
    * Returns a setter method, which accepts a parameter of the given type
@@ -143,13 +143,6 @@ public interface Factory {
    */
   @Deprecated
   Method guessSetter(String name);
-
-  /**
-   * 
-   * @param name
-   * @return
-   */
-  String getOriginalName( String name );
   
   /**
    * 
