@@ -39,12 +39,21 @@ public class BeanFactoryTest {
         }
         
         Method maximumSizeSetter = factory.getSetter("maximumSize");
+        Method preferredSizeSetter = factory.getSetter("preferredSize");
+        Method minimumSizeSetter = factory.getSetter("MinimumSize");
+        Method sizeSetter = factory.getSetter("Size");
       
         assertNotNull( maximumSizeSetter );
+        assertNotNull( preferredSizeSetter );
+        assertNotNull( minimumSizeSetter );
+        assertNotNull( sizeSetter );
         
         JDialog dlg = new JDialog();
         
         factory.setProperty(dlg, "maximumSize", new Dimension(100,100));
+        factory.setProperty(dlg, "preferredSize", new Dimension(100,100));
+        factory.setProperty(dlg, "MinimumSize", new Dimension(100,100));
+        factory.setProperty(dlg, "Size", new Dimension(100,100));
         
     }
     
