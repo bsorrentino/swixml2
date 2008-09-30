@@ -8,22 +8,27 @@ package org.swixml.jsr296;
 import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.jdesktop.application.Application;
+
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.swixml.BoxFactory;
 import org.swixml.SwingEngine;
 import org.swixml.jsr.widgets.Label2;
-import org.swixml.jsr.widgets.TextField2;
 import org.swixml.jsr.widgets.Table2;
 import org.swixml.jsr.widgets.TextArea2;
+import org.swixml.jsr.widgets.TextField2;
 import org.swixml.jsr.widgets.Tree2;
 
 /**
  *
  * @author Sorrentino
  */
-public abstract class SwingApplication extends Application  {
+public abstract class SwingApplication extends SingleFrameApplication  {
   protected final SwingEngine swix;
   protected final java.util.Map<String,SwingComponent> componentMap;
   
@@ -42,6 +47,7 @@ public abstract class SwingApplication extends Application  {
     };
   
     protected SwingApplication() {
+
       swix = new SwingEngine( this );   
       componentMap = new java.util.HashMap<String,SwingComponent>(10);
       
@@ -53,6 +59,7 @@ public abstract class SwingApplication extends Application  {
       BoxFactory.register(swix);
 
     }
+
 
     public void insertComponent( SwingComponent comp, Container c ) throws Exception {
         if( null==comp) throw new IllegalArgumentException("comp parameter is null!");
@@ -80,7 +87,7 @@ public abstract class SwingApplication extends Application  {
         return result;
     }
 
-    public final void setTaskChangeListener( Task t ) {
+    public final void setTaskChangeListener( Task<?,?> t ) {
         t.addPropertyChangeListener( taskChangeListener );
     }
     
@@ -102,5 +109,23 @@ public abstract class SwingApplication extends Application  {
         bindingGroup.unbind();
         super.shutdown();
     }
+
+	@Override
+	protected final void show(JComponent c) {
+		bindingGroup.bind();
+		super.show(c);
+	}
+
+	@Override
+	public final void show(JDialog c) {
+		bindingGroup.bind();
+		super.show(c);
+	}
+
+	@Override
+	public final void show(JFrame c) {
+		bindingGroup.bind();
+		super.show(c);
+	}
 
 }
