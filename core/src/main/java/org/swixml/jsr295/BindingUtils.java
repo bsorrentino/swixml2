@@ -99,6 +99,8 @@ public class BindingUtils extends LogUtil  {
               tp);
 
       bindingGroup.addBinding(binding);
+      
+      
 
     }
 
