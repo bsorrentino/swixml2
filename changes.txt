@@ -1,12 +1,18 @@
-* * * * * * 2.0 rc1 * * * * *
+* * * * * * 2.1  * * * * *
 NEW
 ---
+integrated source code of JSR296 1.03
+integrated source code of JSR295 1.2.1
+
 
 NEW TAGs
 -------
 
 CHANGES
 -------
+
+SwingApplication inherits from org.jdesktop.application.SingleFrameApplication
+
 
 BUG FIXES
 ---------
