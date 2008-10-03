@@ -10,23 +10,24 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.jdesktop.application.Application;
+
+import javax.swing.JComponent;
 import javax.swing.JTable;
+
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.Property;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
-import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.jdesktop.swingbinding.SwingBindings;
+import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.swixml.LogUtil;
 import org.swixml.SwingEngine;
-import org.swixml.jsr296.SwingApplication;
 
 /**
  *
@@ -47,28 +48,16 @@ public class BindingUtils extends LogUtil  {
         return Pattern.matches(pattern, value);
     }
     
-
     /**
      * 
      * @param owner
      * @param bind
      */
-    public static void parseBind( Object owner, String property, String bindProperty ) {    
+    public static void parseBind( JComponent owner, String property, String bindProperty ) {    
     
-        Application app = Application.getInstance();
-        
-        if( app instanceof SwingApplication ) {
-            SwingApplication swapp = (SwingApplication) app;
-            
-            BindingGroup group = swapp.getBindingGroup();
-            
-            addAutoBinding( group, UpdateStrategy.READ_WRITE, swapp, bindProperty, owner, property);
-        }
-        else {
-            logger.warning( "application instance is not a SwingApplication instance");
-            
-        }
-        
+        Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
+
+        addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property );
         
     }
     
@@ -81,28 +70,29 @@ public class BindingUtils extends LogUtil  {
      * @param target
      * @param targetProperty
      */
-    public static void addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
-      if( null==bindingGroup ) throw new IllegalArgumentException( "binding group argument is null!");
-      if( null==source ) throw new IllegalArgumentException( "bean argument is null!");
-      if( null==target ) throw new IllegalArgumentException( "target argument is null!");
-      if( null==targetProperty ) throw new IllegalArgumentException( "targetProperty argument is null!");
-
-      Property tp = ( targetProperty.startsWith("$") ) 
-              ? ELProperty.create(targetProperty) 
-              : BeanProperty.create(targetProperty);
-
-      AutoBinding binding = Bindings.createAutoBinding(
-              strategy, 
-              source, 
-              BeanProperty.create(beanProperty), 
-              target, 
-              tp);
-
-      bindingGroup.addBinding(binding);
-      
-      
-
-    }
+	@SuppressWarnings("unchecked")
+	public static void addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
+		if( null==source )			throw new IllegalArgumentException( "bean argument is null!");
+		if( null==target )			throw new IllegalArgumentException( "target argument is null!");
+		if( null==targetProperty )	throw new IllegalArgumentException( "targetProperty argument is null!");
+	
+		final Property tp = ( targetProperty.startsWith("$") ) 
+		      ? ELProperty.create(targetProperty) 
+		      : BeanProperty.create(targetProperty);
+		
+		final AutoBinding binding = Bindings.createAutoBinding(
+		      strategy, 
+		      source, 
+		      BeanProperty.create(beanProperty), 
+		      target, 
+		      tp);
+	  
+		if( null!=bindingGroup ) {
+			bindingGroup.addBinding(binding);
+		} else {
+			binding.bind();    	  
+		}  
+	}
 
     /**
      * 
@@ -120,13 +110,18 @@ public class BindingUtils extends LogUtil  {
      * @param table
      * @param beanList
      */
-    public static void initTableBinding( UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass ) {
-            PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
+    @SuppressWarnings("unchecked")
+	public static void initTableBinding( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass ) {
+    		if( null==table )		throw new IllegalArgumentException( "table argument is null!");
+    		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
+    		if( null==beanClass )	throw new IllegalArgumentException( "beanClass argument is null!");
+            
+    		PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
         
             JTableBinding tb = SwingBindings.createJTableBinding( startegy, beanList, table);
             
             if( null==pp ) {
-                SwingEngine.logger.warning("getPropertyDescriptors has returned null!");
+                logger.warning("getPropertyDescriptors has returned null!");
                 return;
             }
             
@@ -179,7 +174,12 @@ public class BindingUtils extends LogUtil  {
                 
             }
 
-            tb.bind();
+            if( null!=group ) {
+            	group.addBinding(tb);
+            }
+            else {
+            	tb.bind();
+            }
             
     }
     

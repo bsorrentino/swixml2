@@ -97,12 +97,12 @@ public interface Factory {
    * @throws IllegalAccessException if the constructor is either private or protected.
    * @throws InvocationTargetException if the constructor invoked throws an exception
    */
-  Object newInstance(Object[] parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException;
+  Object newInstance(Object... parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException;
 
   /**
    * @return class - <code>Class</code> the backing class template
    */
-  Class getTemplate();
+  Class<?> getTemplate();
 
   /**
    * Get all setter property methods - useful for debug
@@ -116,7 +116,7 @@ public interface Factory {
    * @return <code>Method</code> setter method which maybe invoked on an object of the template class
    */
   @Deprecated
-  Method getSetter( Class template );
+  Method getSetter( Class<?> template );
 
   /**
    * Returns a setter method by name<br>

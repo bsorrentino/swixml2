@@ -52,8 +52,43 @@
 */
 package org.swixml;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JApplet;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JEditorPane;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.table.JTableHeader;
+
+import org.swixml.BoxFactory.Type;
+import org.swixml.jsr.widgets.JLabelEx;
+import org.swixml.jsr.widgets.JTableEx;
+import org.swixml.jsr.widgets.JTextAreaEx;
+import org.swixml.jsr.widgets.JTextFieldEx;
+import org.swixml.jsr.widgets.JTreeEx;
 
 /**
  * The SwingTagLibrary contains Factories for all Swing Objects that can be instatiated by
@@ -103,7 +138,6 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Glue", XGlue.class );
     registerTag( "GridBagConstraints", XGridBagConstraints.class );
     registerTag( "InternalFrame", JInternalFrame.class );
-    registerTag( "Label", JLabel.class );
     registerTag( "List", JList.class );
     registerTag( "Menu", JMenu.class );
     registerTag( "Menubar", JMenuBar.class );
@@ -121,15 +155,34 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Spinner", JSpinner.class );
     registerTag( "SplitPane", XSplitPane.class );
     registerTag( "TabbedPane", XTabbedPane.class );
-    registerTag( "Table", JTable.class );
     registerTag( "TableHeader", JTableHeader.class );
-    registerTag( "TextArea", JTextArea.class );
-    registerTag( "TextField", JTextField.class );
     registerTag( "TextPane", JTextPane.class );
     registerTag( "TitledSeparator", XTitledSeparator.class );
     registerTag( "ToggleButton", JToggleButton.class );
-    registerTag( "Tree", JTree.class );
     registerTag( "Toolbar", JToolBar.class );
+
+// LET'S INTRODUCE (JSR295) BINDING AND (JSR296) ACTION SUPPORT     
+    //registerTag( "TextArea", JTextArea.class );
+    registerTag( "TextArea", JTextAreaEx.class );
+    //registerTag( "Table", JTable.class );
+    registerTag( "Table", JTableEx.class );
+    //registerTag( "Label", JLabel.class );
+    registerTag( "Label", JLabelEx.class );
+    //registerTag( "Tree", JTree.class );
+    registerTag( "Tree", JTreeEx.class );
+    //registerTag( "TextField", JTextField.class );
+    registerTag( "TextField", JTextFieldEx.class );
+  
+// NEW TAGs
+    registerTag("box.glue", new BoxFactory(Type.GLUE));
+    registerTag("box.hglue", new BoxFactory(Type.HGLUE));
+    registerTag("box.vglue", new BoxFactory(Type.VGLUE));
+    registerTag("box.hstrut", new BoxFactory(Type.HSTRUT));
+    registerTag("box.vstrut", new BoxFactory(Type.VSTRUT));
+    registerTag("box.rigidarea", new BoxFactory(Type.RIGIDAREA));
+    registerTag("vgapbox", BoxFactory.VGapBox.class);
+    registerTag("hgapbox", BoxFactory.HGapBox.class);
+	
   }
 }
 

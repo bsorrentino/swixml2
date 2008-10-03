@@ -52,11 +52,26 @@
 */
 package org.swixml;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import org.jdesktop.application.Application;
+import org.swixml.jsr296.SwingApplication;
 
 /**
  * XDialog simply extends JDialog to allow instantiation with a parent frame
@@ -84,7 +99,8 @@ public class XDialog extends JDialog {
    * @see Window#setLocationRelativeTo
    */
   public XDialog() throws HeadlessException {
-    super( SwingEngine.getAppFrame() != null && SwingEngine.getAppFrame().isDisplayable() ? SwingEngine.getAppFrame() : null );
+    //super( SwingEngine.getAppFrame() != null && SwingEngine.getAppFrame().isDisplayable() ? SwingEngine.getAppFrame() : null );
+	super( Application.getInstance(SwingApplication.class).getMainFrame());
   }
 
   /**

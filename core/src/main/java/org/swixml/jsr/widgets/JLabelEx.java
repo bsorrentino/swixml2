@@ -5,15 +5,16 @@
 
 package org.swixml.jsr.widgets;
 
-import javax.swing.JTextField;
-import org.swixml.SwingEngine;
+import javax.swing.JLabel;
+
 import org.swixml.jsr295.BindingUtils;
 
 /**
  *
- * @author Sorrentino
+ * @author sorrentino
  */
-public class TextField2 extends JTextField {
+@SuppressWarnings("serial")
+public class JLabelEx extends JLabel {
     String bindWith;
 
     public String getBindWith() {
@@ -23,12 +24,8 @@ public class TextField2 extends JTextField {
     public void setBindWith(String bindWith) {
         this.bindWith = bindWith;
         if( null!=bindWith) {
-            BindingUtils.parseBind( this, "text", bindWith );
+            BindingUtils.parseBind( this, "text",bindWith );
         }
     }
-    
-    public static void register( SwingEngine engine ) {
-        engine.getTaglib().registerTag( "textfield2", TextField2.class  );
-    } 
     
 }

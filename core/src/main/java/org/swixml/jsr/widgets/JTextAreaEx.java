@@ -5,15 +5,16 @@
 
 package org.swixml.jsr.widgets;
 
-import javax.swing.JLabel;
-import org.swixml.SwingEngine;
+import javax.swing.JTextArea;
+
 import org.swixml.jsr295.BindingUtils;
 
 /**
  *
  * @author sorrentino
  */
-public class Label2 extends JLabel {
+@SuppressWarnings("serial")
+public class JTextAreaEx extends JTextArea {
     String bindWith;
 
     public String getBindWith() {
@@ -23,12 +24,8 @@ public class Label2 extends JLabel {
     public void setBindWith(String bindWith) {
         this.bindWith = bindWith;
         if( null!=bindWith) {
-            BindingUtils.parseBind( this, "text",bindWith );
+            BindingUtils.parseBind( this, "text", bindWith );
         }
     }
     
-    public static void register( SwingEngine engine ) {
-        engine.getTaglib().registerTag( "label2", Label2.class  );
-    } 
-
 }

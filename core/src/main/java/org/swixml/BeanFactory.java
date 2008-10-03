@@ -46,7 +46,7 @@ public class BeanFactory implements Factory {
         }
     }
 
-    public Class getTemplate() {
+    public Class<?> getTemplate() {
         return template;
     }
 
@@ -62,7 +62,7 @@ public class BeanFactory implements Factory {
     /**
      * 
      */
-    public Object newInstance(Object[] parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public Object newInstance(Object... parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Class<?> types[] = new Class<?>[ parameter.length ];
         int i=0;
         for( Object p : parameter ) {
@@ -86,7 +86,7 @@ public class BeanFactory implements Factory {
         return nameMap.values();
     }
 
-    public Method getSetter(Class template) {
+    public Method getSetter(Class<?> template) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -117,6 +117,8 @@ public class BeanFactory implements Factory {
         if( null==m ) throw new NoSuchMethodException(name);
         
         m.invoke(bean, value);
+        
+        
                 
     }
 
