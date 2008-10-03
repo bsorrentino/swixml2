@@ -4,15 +4,37 @@ NEW
 integrated source code of JSR296 1.03
 integrated source code of JSR295 1.2.1
 
+Added a SwingComponent interface and SwingComponentBase implementation to allow to split application in several modules
+
 
 NEW TAGs
 -------
+<box.glue>
+<box.hglue>
+<box.vglue>
+<box.hstrut>
+<box.vstrut>
+<box.rigidarea>
+<vgapbox>
+<hgapbox>
+
 
 CHANGES
 -------
 
 SwingApplication inherits from org.jdesktop.application.SingleFrameApplication
 
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <Label> from class JLabel to class  org.swixml.jsr.widget.JLabelEx
+ <Table> from class JTable to class  org.swixml.jsr.widget.JTableEx
+ <TextArea> from class JTextArea to class  org.swixml.jsr.widget.JTextAreaEx
+ <TextField> from class JTextField to class  org.swixml.jsr.widget.JTextFieldEx
+ <Tree> from class JTree to class  org.swixml.jsr.widget.JTreeEx
+
+Deprecated: 
+
+SwingEngine.setAppFrame()
+SwingEngine.getAppFrame()
 
 BUG FIXES
 ---------
