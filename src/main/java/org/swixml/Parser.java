@@ -81,7 +81,7 @@ import org.swixml.jsr295.BindingUtils;
  * @see org.swixml.SwingTagLibrary
  * @see org.swixml.ConverterLibrary
  */
-@SuppressWarnings({"unchecked", "deprecation"})
+@SuppressWarnings({"unchecked"})
 public class Parser extends LogUtil {
 
   //
@@ -395,10 +395,10 @@ public class Parser extends LogUtil {
    * @return <code>java.awt.Container</code> representing the GUI impementation of the XML tag.
    * @throws Exception - if parsing fails
    */
-  @SuppressWarnings({"RedundantArrayCreation", "NullArgumentToVariableArgMethod"})
   Object getSwing(Element element, Object obj) throws Exception {
 
     Factory factory = engine.getTaglib().getFactory(element.getName());
+    
     //  look for <id> attribute value
     String id = element.getAttribute(Parser.ATTR_ID) != null ? element.getAttribute(Parser.ATTR_ID).getValue().trim() : null;
     //  either there is no id or the id is not user so far
@@ -508,7 +508,7 @@ public class Parser extends LogUtil {
         }
       }
 
-      obj = initParameter != null ? factory.newInstance(new Object[]{initParameter}) : factory.newInstance( attributes );
+      obj = initParameter != null ? factory.newInstance(initParameter) : factory.newInstance( attributes );
       constructed = true;
       //
       //  put newly created object in the map if it has an <id> attribute (uniqueness is given att this point)
@@ -518,6 +518,13 @@ public class Parser extends LogUtil {
       }
     }
 
+    //
+    // add extra property
+    //
+    if( obj instanceof JComponent ) {
+    	((JComponent)obj).putClientProperty( SwingEngine.CLIENT_PROPERTY, engine.getClient());
+    }
+    
     //
     // handle "layout" element or attribute
     //
@@ -836,10 +843,15 @@ public class Parser extends LogUtil {
 
             } catch (NoSuchFieldException e) {
                 // useful for extra attributes
-                logger.fine( "property " + attr.getName() + " doesn't exist!");
+                logger.warning( "property " + attr.getName() + " doesn't exist!");
                 list.add(attr);
             } catch (InvocationTargetException e) {
-                //
+                
+            	Throwable cause = e.getCause();
+            	if( cause!=null ) {
+            		logger.warning( "exception during invocation of " + attr.getName() + ": " + cause.getMessage());
+            	}
+            	//
                 // The JFrame class is slightly incompatible with Frame.
                 // Like all other JFC/Swing top-level containers, a JFrame contains a JRootPane as its only child.
                 // The content pane provided by the root pane should, as a rule, contain all the non-menu components

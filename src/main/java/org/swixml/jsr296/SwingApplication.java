@@ -6,86 +6,47 @@
 package org.swixml.jsr296;
 
 import java.awt.Container;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
+import javax.swing.Action;
 
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.swixml.BoxFactory;
 import org.swixml.SwingEngine;
-import org.swixml.jsr.widgets.Label2;
-import org.swixml.jsr.widgets.Table2;
-import org.swixml.jsr.widgets.TextArea2;
-import org.swixml.jsr.widgets.TextField2;
-import org.swixml.jsr.widgets.Tree2;
+import org.swixml.jsr.widgets.JLabelEx;
+import org.swixml.jsr.widgets.JTableEx;
+import org.swixml.jsr.widgets.JTextAreaEx;
+import org.swixml.jsr.widgets.JTextFieldEx;
+import org.swixml.jsr.widgets.JTreeEx;
 
 /**
  *
  * @author Sorrentino
  */
-public abstract class SwingApplication extends SingleFrameApplication  {
-  protected final SwingEngine swix;
-  protected final java.util.Map<String,SwingComponent> componentMap;
-  
-  private BindingGroup bindingGroup = new BindingGroup();
+public abstract class SwingApplication extends SingleFrameApplication implements SwingComponent {
 
-  private PropertyChangeListener taskChangeListener = new PropertyChangeListener() {
-
-        public void propertyChange(PropertyChangeEvent e) {
-	    String propertyName = e.getPropertyName();
-	    if ("message".equals(propertyName)) {
-                Object value = e.getNewValue();
-                if( null!=value )
-                    progressMessage( e.getNewValue().toString() );
+	private SwingEngine engine = new SwingEngine(this);
+	
+	private PropertyChangeListener taskChangeListener = new PropertyChangeListener() {
+	
+	        public void propertyChange(PropertyChangeEvent e) {
+		    String propertyName = e.getPropertyName();
+		    if ("message".equals(propertyName)) {
+	            Object value = e.getNewValue();
+	            if( null!=value )
+	                progressMessage( e.getNewValue().toString() );
+		    }
 	    }
-        }
-    };
+	};
   
-    protected SwingApplication() {
-
-      swix = new SwingEngine( this );   
-      componentMap = new java.util.HashMap<String,SwingComponent>(10);
-      
-      TextArea2.register(swix);
-      TextField2.register(swix);
-      Label2.register(swix);
-      Tree2.register(swix);
-      Table2.register(swix);
-      BoxFactory.register(swix);
-
-    }
-
-
-    public void insertComponent( SwingComponent comp, Container c ) throws Exception {
-        if( null==comp) throw new IllegalArgumentException("comp parameter is null!");
-        String name = comp.getName();
-        if( null==name) throw new IllegalArgumentException("component name is is null!");
-     
-        comp.setApplication(this);
-        
-        componentMap.put(name, comp);
-
-        swix.insert( comp.getContentToRender(), c);
-        
-    }
-    
-    public final javax.swing.Action getAction( String name ) {
-        
-        javax.swing.Action result = getContext().getActionMap().get(name);
-        if( null==result ) {
-            for( SwingComponent sc : componentMap.values() ) {
-                result = getContext().getActionMap(sc.getClass(), sc).get(name);        
-
-                if( null!=result ) break;    
-            }
-        }
-        return result;
-    }
+	public Action getComponentAction(String name) {
+		return getContext().getActionMap().get(name);
+	}
 
     public final void setTaskChangeListener( Task<?,?> t ) {
         t.addPropertyChangeListener( taskChangeListener );
@@ -94,38 +55,26 @@ public abstract class SwingApplication extends SingleFrameApplication  {
     protected void progressMessage( final String message ) {
         
     }
+        
+    public final <T extends Container> T render(String resource) throws Exception {
+		return render( engine, resource);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static final <T extends Container> T render( SwingEngine swix, String resource ) throws Exception {
+       
+        Object o = swix.getClient();
+        
+        if( !(o instanceof SwingComponent) ) {
+        	throw new IllegalArgumentException( "client object is no a SwingComponent ");
+        }
+        
+        final SwingComponent client = (SwingComponent)o;
+        
+        final Container c = swix.render(resource);
+
+        return (T)c;
+    }
     
-    public final SwingEngine getSwix() {
-        return swix;
-    }
-
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    @Override
-    protected void shutdown() {
-        componentMap.clear();
-        bindingGroup.unbind();
-        super.shutdown();
-    }
-
-	@Override
-	protected final void show(JComponent c) {
-		bindingGroup.bind();
-		super.show(c);
-	}
-
-	@Override
-	public final void show(JDialog c) {
-		bindingGroup.bind();
-		super.show(c);
-	}
-
-	@Override
-	public final void show(JFrame c) {
-		bindingGroup.bind();
-		super.show(c);
-	}
 
 }

@@ -5,15 +5,16 @@
 
 package org.swixml.jsr.widgets;
 
-import javax.swing.JTextArea;
-import org.swixml.SwingEngine;
+import javax.swing.JTextField;
+
 import org.swixml.jsr295.BindingUtils;
 
 /**
  *
- * @author sorrentino
+ * @author Sorrentino
  */
-public class TextArea2 extends JTextArea {
+@SuppressWarnings("serial")
+public class JTextFieldEx extends JTextField {
     String bindWith;
 
     public String getBindWith() {
@@ -27,8 +28,4 @@ public class TextArea2 extends JTextArea {
         }
     }
     
-    public static void register( SwingEngine engine ) {
-        engine.getTaglib().registerTag( "textarea2", TextArea2.class  );
-    } 
-
 }

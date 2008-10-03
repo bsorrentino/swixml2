@@ -67,6 +67,7 @@ import org.jdom.Attribute;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
+@Deprecated
 public final class DefaultFactory implements Factory {
 
   /** Collection for all setter methods */

@@ -7,6 +7,7 @@ package org.swixml.jsr.widgets;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
+
 import javax.swing.Action;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
@@ -15,26 +16,27 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.TableModel;
+
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
 
 /**
  *
  * @author sorrentino
  */
-public class Table2 extends JTable {
+@SuppressWarnings("serial")
+public class JTableEx extends JTable {
 
     private Action action;
     private Class<?> beanClass;
     private List<?> beanList;
     
-    public Table2() {
+    public JTableEx() {
         super();
         init();
     }
 
-    public Table2(TableModel dm) {
+    public JTableEx(TableModel dm) {
         super(dm);
         init();
         
@@ -87,15 +89,7 @@ public class Table2 extends JTable {
         });
  */
     }
-    /**
-     * 
-     * @param app
-     */
-    public static void register( SwingEngine engine ) {
-        engine.getTaglib().registerTag( "Table2", Table2.class );
-        
-    }
-
+    
     public Class<?> getBindClass() {
         return beanClass;
     }
@@ -124,7 +118,8 @@ public class Table2 extends JTable {
     public void addNotify() {
 
         if( beanList!=null && beanClass!=null )
-            BindingUtils.initTableBinding(UpdateStrategy.READ_WRITE, this, beanList, beanClass);
+        	
+            BindingUtils.initTableBinding( null, UpdateStrategy.READ_WRITE, this, beanList, beanClass);
       
 
         System.out.printf( "addNotify beanClass=%s beanList=%s\n", beanClass, beanList);

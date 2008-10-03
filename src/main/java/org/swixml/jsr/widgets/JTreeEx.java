@@ -6,6 +6,7 @@
 package org.swixml.jsr.widgets;
 
 import java.awt.event.ActionEvent;
+
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
@@ -13,13 +14,13 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
-import org.swixml.SwingEngine;
 
 /**
  *
  * @author sorrentino
  */
-public class Tree2 extends JTree {
+@SuppressWarnings("serial")
+public class JTreeEx extends JTree {
 
     private Action action;
     private ImageIcon leafIcon = null;
@@ -29,7 +30,7 @@ public class Tree2 extends JTree {
     /**
      * 
      */
-    public Tree2() {
+    public JTreeEx() {
         super();
     }
     
@@ -37,7 +38,7 @@ public class Tree2 extends JTree {
      * 
      * @param newModel
      */
-    public Tree2(TreeModel newModel) {
+    public JTreeEx(TreeModel newModel) {
         super(newModel);
     }
 
@@ -68,15 +69,6 @@ public class Tree2 extends JTree {
         }
     }
     
-    /**
-     * 
-     * @param app
-     */
-    public static void register( SwingEngine engine ) {
-        engine.getTaglib().registerTag( "Tree2", Tree2.class );
-        
-    }
-
     public ImageIcon getOpenIcon() {
         return openIcon;
     }
