@@ -70,7 +70,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
@@ -85,6 +84,7 @@ import javax.swing.table.JTableHeader;
 
 import org.swixml.BoxFactory.Type;
 import org.swixml.jsr.widgets.JLabelEx;
+import org.swixml.jsr.widgets.JPasswordFieldEx;
 import org.swixml.jsr.widgets.JTableEx;
 import org.swixml.jsr.widgets.JTextAreaEx;
 import org.swixml.jsr.widgets.JTextFieldEx;
@@ -143,7 +143,6 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Menubar", JMenuBar.class );
     registerTag( "Menuitem", JMenuItem.class );
     registerTag( "Panel", JPanel.class );
-    registerTag( "PasswordField", JPasswordField.class );
     registerTag( "PopupMenu", JPopupMenu.class );
     registerTag( "ProgressBar", JProgressBar.class );
     registerTag( "RadioButton", JRadioButton.class );
@@ -162,6 +161,8 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Toolbar", JToolBar.class );
 
 // LET'S INTRODUCE (JSR295) BINDING AND (JSR296) ACTION SUPPORT     
+    //registerTag( "PasswordField", JPasswordField.class );
+    registerTag( "PasswordField", JPasswordFieldEx.class );
     //registerTag( "TextArea", JTextArea.class );
     registerTag( "TextArea", JTextAreaEx.class );
     //registerTag( "Table", JTable.class );
