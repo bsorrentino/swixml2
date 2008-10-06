@@ -17,5 +17,5 @@ public interface SwingComponent {
 
 		Action getComponentAction( String name );
 
-		<T extends Container> T render( String resource ) throws Exception;
+		<T extends Container> T render( Class<T> resultClass, String resource ) throws Exception;
 }

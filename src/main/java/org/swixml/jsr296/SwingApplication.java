@@ -12,6 +12,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
@@ -56,12 +58,21 @@ public abstract class SwingApplication extends SingleFrameApplication implements
         
     }
         
-    public final <T extends Container> T render(String resource) throws Exception {
-		return render( engine, resource);
+    public final <T extends Container> T render( Class<T> resultClass, String resource) throws Exception {
+		return render( resultClass, engine, resource);
 	}
+    
+    protected final JFrame renderFrame( String resource ) throws Exception {
+    	return render( JFrame.class, resource );
+    }
 
+    protected final JDialog renderDialog( String resource ) throws Exception {
+    	return render( JDialog.class, resource );
+    }
+    
+    
 	@SuppressWarnings("unchecked")
-	public static final <T extends Container> T render( SwingEngine swix, String resource ) throws Exception {
+	public static final <T extends Container> T render( final Class<T> resultClass, final SwingEngine swix, final String resource ) throws Exception {
        
         Object o = swix.getClient();
         
@@ -69,12 +80,14 @@ public abstract class SwingApplication extends SingleFrameApplication implements
         	throw new IllegalArgumentException( "client object is no a SwingComponent ");
         }
         
-        final SwingComponent client = (SwingComponent)o;
+        //final SwingComponent client = (SwingComponent)o;
         
         final Container c = swix.render(resource);
 
         return (T)c;
     }
+	
+	
     
 
 }

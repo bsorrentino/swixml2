@@ -600,10 +600,12 @@ public abstract class Application extends AbstractBean {
             }
             catch (Exception e) {
                 String msg = String.format("Couldn't construct %s", applicationClass);
-                throw(new Error(msg, e));
+                //throw(new Error(msg, e));
+            	Logger.getAnonymousLogger().warning(msg);
+                return null;
             }
         }
-	return applicationClass.cast(application);
+        return applicationClass.cast(application);
     }
 
     /**
