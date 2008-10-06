@@ -79,6 +79,7 @@ import org.swixml.jsr296.SwingApplication;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.2 $
  */
+@SuppressWarnings("serial")
 public class XDialog extends JDialog {
   /**
    * Creates a non-modal dialog without a title and without a specified
@@ -100,7 +101,7 @@ public class XDialog extends JDialog {
    */
   public XDialog() throws HeadlessException {
     //super( SwingEngine.getAppFrame() != null && SwingEngine.getAppFrame().isDisplayable() ? SwingEngine.getAppFrame() : null );
-	super( Application.getInstance(SwingApplication.class).getMainFrame());
+	super( (null!=Application.getInstance(SwingApplication.class)) ? Application.getInstance(SwingApplication.class).getMainFrame() : null);
   }
 
   /**

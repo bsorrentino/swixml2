@@ -3,6 +3,8 @@ package org.swixml.jsr296;
 import java.awt.Container;
 
 import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -32,9 +34,16 @@ public class SwingComponentBase implements SwingComponent {
 		return actionMap.get(name);
 	}
 
-	public <T extends Container> T render(String resource) throws Exception {
-		
-		return SwingApplication.render(engine, resource);
+	public final <T extends Container> T render( Class<T> resultClass, String resource) throws Exception {	
+		return SwingApplication.render( resultClass, engine, resource);
+	}
+	
+	protected final JFrame renderFrame(String resource) throws Exception {
+		return render( JFrame.class, resource);
+	}
+	
+	protected final JDialog renderDialog(String resource) throws Exception {
+		return render( JDialog.class,resource);
 	}
 
 }
