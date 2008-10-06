@@ -29,6 +29,7 @@ substitute tags to add binding, action and resource management as described in J
  <Table> from class JTable to class  org.swixml.jsr.widget.JTableEx
  <TextArea> from class JTextArea to class  org.swixml.jsr.widget.JTextAreaEx
  <TextField> from class JTextField to class  org.swixml.jsr.widget.JTextFieldEx
+ <PasswordField> from class JPasswordField to class  org.swixml.jsr.widget.JPasswordFieldEx
  <Tree> from class JTree to class  org.swixml.jsr.widget.JTreeEx
 
 Deprecated: 
