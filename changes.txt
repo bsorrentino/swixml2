@@ -6,6 +6,13 @@ integrated source code of JSR295 1.2.1
 
 Added a SwingComponent interface and SwingComponentBase implementation to allow to split application in several modules
 
+Added useful instance methods 
+===============================
+SwingApplication.renderFrame
+SwingApplication.renderDialog
+SwingComponentBase.renderFrame
+SwingComponentBase.renderDialog
+
 
 NEW TAGs
 -------
