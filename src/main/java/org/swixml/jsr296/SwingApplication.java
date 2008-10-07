@@ -6,8 +6,6 @@
 package org.swixml.jsr296;
 
 import java.awt.Container;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -17,14 +15,7 @@ import javax.swing.JFrame;
 
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.swixml.BoxFactory;
 import org.swixml.SwingEngine;
-import org.swixml.jsr.widgets.JLabelEx;
-import org.swixml.jsr.widgets.JTableEx;
-import org.swixml.jsr.widgets.JTextAreaEx;
-import org.swixml.jsr.widgets.JTextFieldEx;
-import org.swixml.jsr.widgets.JTreeEx;
 
 /**
  *
