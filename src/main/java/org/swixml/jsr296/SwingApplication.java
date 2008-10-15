@@ -37,6 +37,9 @@ public abstract class SwingApplication extends SingleFrameApplication implements
 	    }
 	};
   
+	protected SwingApplication() {
+		engine.setClassLoader( getClass().getClassLoader() );
+	}
 	public Action getComponentAction(String name) {
 		return getContext().getActionMap().get(name);
 	}

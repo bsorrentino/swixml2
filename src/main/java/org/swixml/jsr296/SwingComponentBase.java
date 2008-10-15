@@ -21,7 +21,9 @@ public class SwingComponentBase implements SwingComponent {
 		this.application = application;
 		
 		application.getContext().getResourceMap().injectFields(this);
-			
+		
+		engine.setClassLoader( getClass().getClassLoader() );
+
 	}
 
 	public BindingGroup getBindingGroup() {
