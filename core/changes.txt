@@ -3,6 +3,7 @@ NEW
 ---
 integrated source code of JSR296 1.03
 integrated source code of JSR295 1.2.1
+included classes from com.applet.eawt jar
 
 Added a SwingComponent interface and SwingComponentBase implementation to allow to split application in several modules
 
