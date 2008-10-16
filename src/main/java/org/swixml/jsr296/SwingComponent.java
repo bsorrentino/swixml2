@@ -5,7 +5,9 @@
 
 package org.swixml.jsr296;
 
-import java.io.Reader;
+import java.awt.Container;
+
+import javax.swing.Action;
 
 /**
  *
@@ -13,10 +15,7 @@ import java.io.Reader;
  */
 public interface SwingComponent {
 
-    public void setApplication(SwingApplication application);
+		Action getComponentAction( String name );
 
-    public String getName();
-    
-    public Reader getContentToRender() throws Exception;
-
+		<T extends Container> T render( Class<T> resultClass, String resource ) throws Exception;
 }
