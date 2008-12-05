@@ -94,7 +94,7 @@ import javax.swing.RootPaneContainer;
  */
 public abstract class SingleFrameApplication extends Application {
     private static final Logger logger = Logger.getLogger(SingleFrameApplication.class.getName());
-    private ResourceMap appResources = null;
+    //private ResourceMap appResources = null;
 
     /**
      * Return the JFrame used to show this application.  

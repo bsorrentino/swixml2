@@ -53,19 +53,21 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
-import org.swixml.ConverterLibrary;
-import org.swixml.Localizer;
-import org.swixml.SwingEngine;
+import static org.swixml.LogUtil.logger;
 
-import javax.swing.*;
-import javax.swing.border.Border;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
+
+import org.jdom.Attribute;
+import org.swixml.Converter;
+import org.swixml.ConverterLibrary;
+import org.swixml.Localizer;
 
 /**
  * The <code>BorderConverter</code> class defines a converter that creates Border objects based on a provided String.
@@ -196,7 +198,7 @@ public class BorderConverter implements Converter {
       }
       border = (Border) method.invoke(null, args);
     } catch (Exception e) {
-        SwingEngine.logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
+        logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
     }
     return border;
   }

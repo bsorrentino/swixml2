@@ -23,9 +23,9 @@ public class JLabelEx extends JLabel {
 
     public void setBindWith(String bindWith) {
         this.bindWith = bindWith;
-        if( null!=bindWith) {
-            BindingUtils.parseBind( this, "text",bindWith );
-        }
+        if( null==bindWith || bindWith.length()==0 || bindWith.trim().length()==0) return ;
+
+        BindingUtils.parseBindR( this, "text", bindWith );
     }
     
 }

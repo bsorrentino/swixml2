@@ -98,11 +98,11 @@ public class JTableEx extends JTable {
         this.beanClass = beanClass;
     }
 
-    public List<?> getBindWith() {
+    public List<?> getBindList() {
         return beanList;
     }
 
-    public void setBindWith(List<?> beanList) {
+    public void setBindList(List<?> beanList) {
         this.beanList = beanList;
     }
 

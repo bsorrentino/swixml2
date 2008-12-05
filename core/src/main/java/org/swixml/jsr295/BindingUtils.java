@@ -5,6 +5,8 @@
 
 package org.swixml.jsr295;
 
+import static org.swixml.LogUtil.logger;
+
 import java.beans.PropertyDescriptor;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -26,15 +28,17 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
-import org.swixml.LogUtil;
 import org.swixml.SwingEngine;
 
 /**
  *
  * @author sorrentino
  */
-public class BindingUtils extends LogUtil  {
-    private static final String pattern =  "[$][{](.*)[}]";
+public class BindingUtils  {
+    public  static final String TABLE_COLUMN_EDITABLE = "column.editable";
+	public static final String TABLE_COLUMN_IS_BOUND = "bind";
+	public static final String TABLE_COLUMN_INDEX = "column.index";
+	private static final String pattern =  "[$][{](.*)[}]";
 
     private BindingUtils() {}
 
@@ -49,6 +53,7 @@ public class BindingUtils extends LogUtil  {
     }
     
     /**
+     * parse bind for UpdateStrategy.READ_WRITE
      * 
      * @param owner
      * @param bind
@@ -58,6 +63,21 @@ public class BindingUtils extends LogUtil  {
         Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
         addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property );
+        
+    }
+    
+    
+    /**
+     * parse bind for UpdateStrategy.READ
+     * 
+     * @param owner
+     * @param bind
+     */
+    public static void parseBindR( JComponent owner, String property, String bindProperty ) {    
+        
+        Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
+
+        addAutoBinding( null, UpdateStrategy.READ, client, bindProperty, owner, property );
         
     }
     
@@ -100,7 +120,7 @@ public class BindingUtils extends LogUtil  {
      * @return
      */
     private static  int getColumnIndex( PropertyDescriptor p ) {
-        final Object i = p.getValue("column.index");
+        final Object i = p.getValue(TABLE_COLUMN_INDEX);
         return (i instanceof Integer ) ? (Integer)i : Integer.MAX_VALUE;
     }
     
@@ -137,7 +157,7 @@ public class BindingUtils extends LogUtil  {
             });
             for( PropertyDescriptor p : pp ) {
                 
-                Boolean isBinded = (Boolean) p.getValue("bind");
+                Boolean isBinded = (Boolean) p.getValue(TABLE_COLUMN_IS_BOUND);
                 if( null!=isBinded && Boolean.FALSE.equals(isBinded)) {
                     continue; // skip property
                 }
@@ -167,7 +187,7 @@ public class BindingUtils extends LogUtil  {
                 }
                 
 
-                Boolean isEditable = (Boolean) p.getValue("column.editable");
+                Boolean isEditable = (Boolean) p.getValue(TABLE_COLUMN_EDITABLE);
                 
                 cb.setEditable( (null!=isEditable && Boolean.TRUE.equals(isEditable)) ) ;
                 
