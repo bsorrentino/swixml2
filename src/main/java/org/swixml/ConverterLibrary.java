@@ -94,7 +94,7 @@ import java.util.Map;
  */
 public class ConverterLibrary {
   private static ConverterLibrary instance = new ConverterLibrary();
-  private Map<Class, Converter> converters = new HashMap<Class, Converter>();
+  private Map<Class<?>, Converter> converters = new HashMap<Class<?>, Converter>();
 
   /**
    * The only available Ctor is private to make this a Singleton
@@ -114,7 +114,7 @@ public class ConverterLibrary {
    * @return <code>Map</code> - all registered converters.
    *         <pre>Use a class to get to the converters</pre>
    */
-  public Map getConverters() {
+  public Map<Class<?>,Converter> getConverters() {
     return converters;
   }
 
@@ -162,7 +162,7 @@ public class ConverterLibrary {
    * @param template  <code>Class</code> type of the objects the Converter creates
    * @param converter <code>Converter</code> Instance of Converter able to convert Strings into objects of the given type
    */
-  public void register(Class template, Converter converter) {
+  public void register(Class<?> template, Converter converter) {
     converters.put(template, converter);
   }
 
@@ -172,11 +172,11 @@ public class ConverterLibrary {
    * @param template <code>Class</code>
    * @return <code>boolean</code> true, if the ConverterLibrary has a Converter to produce an instances of the gioven class.
    */
-  public boolean hasConverter(Class template) {
+  public boolean hasConverter(Class<?> template) {
     boolean found = converters.keySet().contains(template);
-    Iterator it = converters.values().iterator();
+    Iterator<Converter> it = converters.values().iterator();
     while (!found && it != null && it.hasNext()) {
-      found = template.isAssignableFrom(((Converter) it.next()).convertsTo());
+      found = template.isAssignableFrom((it.next()).convertsTo());
     }
     return found;
   }
@@ -187,7 +187,7 @@ public class ConverterLibrary {
    * @param template <code>Class</code> Class of the object the <code>Converter</code> needs to produce.
    * @return <code>Converter</code> - instance of the given Converter class.
    */
-  public Converter getConverter(Class template) {
+  public Converter getConverter(Class<?> template) {
     return converters.get(template);
   }
 }

@@ -51,6 +51,8 @@
 
 package org.swixml;
 
+import static org.swixml.LogUtil.logger;
+
 import java.awt.event.ActionEvent;
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -82,7 +84,7 @@ import org.swixml.jsr295.BindingUtils;
  * @see org.swixml.ConverterLibrary
  */
 @SuppressWarnings({"unchecked"})
-public class Parser extends LogUtil {
+public class Parser {
 
   //
   //  Custom Attributes
@@ -202,7 +204,7 @@ public class Parser extends LogUtil {
   /**
    * set the bind target
    */
-  public static final String ATTR_BIND_TO = "bindTo";
+  public static final String ATTR_BIND_WITH = "bindWith";
   
   //
   //  Private Members
@@ -663,13 +665,9 @@ public class Parser extends LogUtil {
           Attribute attr = (Attribute) it.next();
           if (JComponent.class.isAssignableFrom(obj.getClass())) {
             ((JComponent) obj).putClientProperty(attr.getName(), attr.getValue());
-            if (SwingEngine.DEBUG_MODE) {
-             logger.info("ClientProperty put: " + obj.getClass().getName() + "(" + id + "): " + attr.getName() + "=" + attr.getValue());
-            }
+             logger.fine( String.format( "putClientProperty %s ( %s ): %s=%s", obj.getClass().getName(), id, attr.getName(), attr.getValue()) );
           } else {
-            if (SwingEngine.DEBUG_MODE) {
-              logger.info(attr.getName() + " not applied for tag: <" + element.getName() + ">");
-            }
+             logger.fine( String.format( "%s not applied for tag: <%s>", attr.getName(), element.getName()));
           }
         }
       }
@@ -710,6 +708,19 @@ public class Parser extends LogUtil {
             para = converter.convert(paraType, attr, engine.getLocalizer());
         }
       return para;
+  }
+
+  /**
+   * 
+   * @return
+   */
+  private boolean isVariable( Attribute attr ) {
+     
+	  final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
+      final boolean isBound = ATTR_BIND_WITH.equalsIgnoreCase(attr.getName());
+      
+      return ( isVariable && !isBound ) ;
+
   }
   
   /**
@@ -784,9 +795,9 @@ public class Parser extends LogUtil {
       
       
       /////////////////////////
-      final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
-      
-      if( isVariable && !ATTR_BIND_TO.equalsIgnoreCase(attr.getName())) {
+  
+      if( isVariable( attr )) {
+    	  
           Object owner = engine.getClient(); // we can use also Application.getInstance();
           
           try {

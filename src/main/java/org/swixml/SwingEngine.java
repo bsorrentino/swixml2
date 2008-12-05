@@ -52,6 +52,8 @@
 */
 package org.swixml;
 
+import static org.swixml.LogUtil.logger;
+
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 
@@ -78,7 +80,7 @@ import java.util.List;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.5 $
  */
-public class SwingEngine extends LogUtil {
+public class SwingEngine {
 
 	//
 	//  Static Constants

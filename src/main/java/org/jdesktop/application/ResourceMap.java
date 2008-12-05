@@ -1374,7 +1374,7 @@ public class ResourceMap {
 	    return new ImageIcon(url);
 	}
 	else {
-	    String msg = String.format("couldn't find Icon resource \"%s\"", s);
+	    String msg = String.format("couldn't find Icon resource [%s]", rPath);
 	    throw new ResourceConverterException(msg, s);
 	}
     }

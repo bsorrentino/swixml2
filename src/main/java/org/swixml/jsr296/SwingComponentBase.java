@@ -6,11 +6,12 @@ import javax.swing.Action;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import org.jdesktop.application.AbstractBean;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.swixml.SwingEngine;
 
-public class SwingComponentBase implements SwingComponent {
+public class SwingComponentBase extends AbstractBean implements SwingComponent {
 
 	protected final SwingApplication application;
 	
