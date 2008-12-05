@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.swixml</groupId>
   <artifactId>swixml</artifactId>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.5-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>SWINXML FRAMEWORK</name>
+  <name>SWIXML FRAMEWORK</name>
   <url>http://code.google.com/p/swixml2/</url>
   <description>GUI generating engine for Java applications</description>
 

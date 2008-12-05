@@ -76,7 +76,7 @@ public class ActionConverter implements Converter {
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    *
    */
-  public Object convert( Class type, Attribute attr, Localizer localizer ) throws Exception {
+  public Object convert( Class<?> type, Attribute attr, Localizer localizer ) throws Exception {
     return null;
   }
 
@@ -85,7 +85,7 @@ public class ActionConverter implements Converter {
    * is returning when its <code>convert</code> method is called
    * @return <code>Class</code> - the Class the converter is returning when its convert method is called
    */
-  public Class convertsTo() {
+  public Class<?> convertsTo() {
     return Action.class;
   }
 }

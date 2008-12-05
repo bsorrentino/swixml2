@@ -58,7 +58,6 @@ import javax.swing.AbstractAction;
 
 import org.jdesktop.application.ApplicationAction;
 import org.swixml.jsr296.SwingApplication;
-import org.swixml.jsr296.SwingComponent;
 
 /**
  * XAction, Action Wrapper to generate Actions on  the fly.
@@ -73,16 +72,16 @@ public class XAction extends AbstractAction {
   
   public XAction(Object client, String methodName) throws NoSuchMethodException {
     this.client= client;
-    if( client instanceof SwingComponent ) {
-        SwingComponent app = (SwingComponent)client;
-        delegate = (ApplicationAction)app.getComponentAction(methodName);
-        
-    }
-    else {
+
+    
+	delegate = (ApplicationAction)SwingApplication.getInstance().getContext().getActionMap(client).get(methodName);
+
+	if( delegate==null ) {
       method= client.getClass().getMethod(methodName);
     }
 
   }
+  
   public void actionPerformed(ActionEvent e) {
     try {
         if( null==delegate ) {

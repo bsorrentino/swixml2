@@ -78,14 +78,6 @@ public interface Factory {
    */
   Object newInstance( List<Attribute> attributes ) throws Exception;
 
-  /**
-   * Create a new component instance
-   *
-   * @return instance <code>Object</code> a new instance of a template class
-   * @throws Exception
-   */
-  @Deprecated
-  Object newInstance() throws Exception;
 
   /**
    * Creates a new Object which class is {@link #getTemplate()} and the constructor
@@ -110,40 +102,6 @@ public interface Factory {
    */
   Collection<Method> getSetters();
 
-  /**
-   * Returns a setter method, which accepts a parameter of the given type
-   * @param template <code>Class</code> type of the setter method's parameter
-   * @return <code>Method</code> setter method which maybe invoked on an object of the template class
-   */
-  @Deprecated
-  Method getSetter( Class<?> template );
-
-  /**
-   * Returns a setter method by name<br>
-   * @param name <code>String</code> name of the setter method
-   * @return <code>Method</code> - setter method which can be invoked on an object of the template class
-   * @see #guessSetter
-   * <pre><b>Typical Use:</b>
-   * <p>Method method = factory.getSetter(&quot;set&quot; + Parser.capitalize(attr.getName()));</p>
-   * </pre>
-   */
-  @Deprecated
-  Method getSetter( String name );
-
-  /**
-   * Returns a setter method by a Attribute name.
-   * Differently to the <code>getSetter</code> method, here the attibute name can be used directly and
-   * case doesn't matter.<br>
-   * @param name <code>String</code> name of the setter method
-   * @return <code>Method</code> - setter method which can invoked on an object of the template class
-   * @see #getSetter
-   * <pre><b>Typical Use:</b>
-   * <p>Method method = factory.getSetter( attr.getName() );</p>
-   * </pre>
-   */
-  @Deprecated
-  Method guessSetter(String name);
-  
   /**
    * 
    * @param bean

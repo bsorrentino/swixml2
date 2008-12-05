@@ -67,6 +67,7 @@ import java.util.StringTokenizer;
  * @version $Revision: 1.1 $
  */
 
+@SuppressWarnings("serial")
 public class XTabbedPane extends JTabbedPane {
 
   /**

@@ -194,6 +194,7 @@ public class Parser {
    */
   public static final Vector<String> LOCALIZED_ATTRIBUTES = new Vector<String>();
 
+  @SuppressWarnings("serial")
   private class EmptyAction extends AbstractAction {
 
         public void actionPerformed(ActionEvent e) {
@@ -228,7 +229,7 @@ public class Parser {
   /**
    * map to store specific Mac OS actions mapping
    */
-  private Map<String, Object> mac_map = new HashMap<String, Object>();
+  private Map<String, Action> mac_map = new HashMap<String, Action>();
 
   /**
    * docoument, to be parsed
@@ -292,29 +293,6 @@ public class Parser {
     this.mac_map.clear();
   }
 
-  /**
-   * Converts XML into a javax.swing object tree.
-   * <pre>
-   *    Reads XML from the provied <code>Reader</code> and builds an intermediate jdom document.
-   *    Tags and their attributes are getting converted into swing objects.
-   * </pre>
-   *
-   * @param jdoc <code>Document</code> providing the XML document
-   * @return <code>java.awt.Container</code> root object for the swing object tree
-   * @throws Exception if parsing fails
-   */
-  public Object parse(Document jdoc) throws Exception {
-    this.jdoc = jdoc;
-    this.lbl_map.clear();
-    Object obj = getSwing(processCustomAttributes(jdoc.getRootElement()), null);
-
-    linkLabels();
-    supportMacOS();
-
-    this.lbl_map.clear();
-    this.mac_map.clear();
-    return obj;
-  }
 
   /**
    * Looks for custom attributes to be proccessed.
@@ -397,7 +375,7 @@ public class Parser {
    * @return <code>java.awt.Container</code> representing the GUI impementation of the XML tag.
    * @throws Exception - if parsing fails
    */
-  Object getSwing(Element element, Object obj) throws Exception {
+  public Object getSwing(Element element, Object obj ) throws Exception {
 
     Factory factory = engine.getTaglib().getFactory(element.getName());
     
@@ -486,7 +464,7 @@ public class Parser {
                 Attribute attrib = (Attribute) attributes.get(i);
                 String attribName = attrib.getName();
                 if (attribName != null && attribName.startsWith(ATTR_MACOS_PREFIX)) {
-                  mac_map.put(attribName, initParameter);
+                  mac_map.put(attribName, (Action)initParameter);
                 }
               }
             }

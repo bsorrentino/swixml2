@@ -63,6 +63,7 @@ import javax.swing.*;
  * @version $Revision: 1.1 $
  */
 
+@SuppressWarnings("serial")
 public class XSplitPane extends JSplitPane {
 
   public XSplitPane() {

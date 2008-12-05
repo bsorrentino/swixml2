@@ -52,24 +52,40 @@
 */
 package org.swixml;
 
-import static org.swixml.LogUtil.logger;
-
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.security.AccessControlException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.swing.AbstractButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+
+import org.jdesktop.application.SingleFrameApplication;
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
 
 /**
  * The SwingEngine class is the rendering engine able to convert an XML descriptor into a java.swing UI.
@@ -80,7 +96,7 @@ import java.util.List;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.5 $
  */
-public class SwingEngine {
+public class SwingEngine<T extends Container> {
 
 	//
 	//  Static Constants
@@ -163,11 +179,8 @@ public class SwingEngine {
   /**
    * Client object hosting the swingengine, alternative to extending the SwinEngine Class
    */
-  private Object client;
-  /**
-   * Root Component for the rendered swing UI.
-   */
-  private Container root;
+  private T client;
+
   /**
    * Swing object map, contains only those object that were given an id attribute.
    */
@@ -195,8 +208,7 @@ public class SwingEngine {
   /**
    * Default ctor for a SwingEngine.
    */
-  public SwingEngine() {
-    this.client = this;
+  protected SwingEngine() {
     this.setLocale(SwingEngine.default_locale);
     this.getLocalizer().setResourceBundle(SwingEngine.default_resource_bundle_name);
 
@@ -221,48 +233,11 @@ public class SwingEngine {
    *
    * @param client <code>Object</code> owner of this instance
    */
-  public SwingEngine(Object client) {
+  public SwingEngine(T client) {
     this();
     this.client = client;
   }
 
-  /**
-   * Constructs a new SwingEngine, rendering the provided XML into a javax.swing UI
-   *
-   * @param resource <code>String</code>
-   */
-  public SwingEngine(final String resource) {
-    this(SwingEngine.class.getClassLoader(), resource);
-  }
-
-  /**
-   * Constructs a new SwingEngine, rendering the provided XML into a javax.swing UI
-   *
-   * @param resource <code>String</code>
-   * @deprecated
-   */
-  public SwingEngine(ClassLoader cl, final String resource) {
-    this();
-    this.setClassLoader(cl);
-    Reader reader = null;
-    try {
-      InputStream in = cl.getResourceAsStream(resource);
-      if (in == null) {
-        throw new IOException(IO_ERROR_MSG + resource);
-      }
-      reader = new InputStreamReader(in);
-      render(reader);
-    } catch (Exception e) {
-      if (SwingEngine.DEBUG_MODE)
-        System.err.println(e);
-    } finally {
-      try {
-        reader.close();
-      } catch (Exception e) {
-        // intentionally empty
-      }
-    }
-  }
 
   /**
    * Gets the parsing of the XML started.
@@ -297,9 +272,9 @@ public class SwingEngine {
    * @param resource <code>String</code> xml-file path info
    * @return <code>Object</code>- instanced swing object tree root
    */
-  public Container render(final String resource) throws Exception {
+  public T render(final String resource) throws Exception {
     Reader reader = null;
-    Container obj = null;
+    T obj = null;
     try {
       InputStream in = cl.getResourceAsStream(resource);
       if (in == null) {
@@ -336,7 +311,7 @@ public class SwingEngine {
    * @param xml_reader <code>Reader</code> xml-file path info
    * @return <code>Object</code>- instanced swing object tree root
    */
-  public Container render(final Reader xml_reader) throws Exception {
+  public T render(final Reader xml_reader) throws Exception {
     if (xml_reader == null) {
       throw new IOException();
     }
@@ -356,10 +331,10 @@ public class SwingEngine {
    * @param jdoc <code>Document</code> xml gui descritptor
    * @return <code>Object</code>- instanced swing object tree root
    */
-  public Container render(final Document jdoc) throws Exception {
+  public T render(final Document jdoc) throws Exception {
     idmap.clear();
     try {
-      root = (Container) parser.parse(jdoc);
+      parser.parse(jdoc, client);
     } catch (Exception e) {
       if (SwingEngine.DEBUG_MODE)
         System.err.println(e);
@@ -370,10 +345,10 @@ public class SwingEngine {
     // initialize all client fields with UI components by their id
     mapMembers(client);
     
-    if (Frame.class.isAssignableFrom(root.getClass())) {
-      SwingEngine.setAppFrame((Frame) root);
+    if (Frame.class.isAssignableFrom(client.getClass())) {
+      SwingEngine.setAppFrame((Frame) client);
     }
-    return root;
+    return client;
   }
 
   /**
@@ -398,8 +373,7 @@ public class SwingEngine {
    * @param container <code>Container</code> target, the swing obj, are added to.
    * @throws Exception
    */
-  public void insert(final URL url, final Container container)
-          throws Exception {
+  public void insert(final URL url, final T container) throws Exception {
     Reader reader = null;
     try {
       InputStream in = url.openStream();
@@ -439,7 +413,7 @@ public class SwingEngine {
    * @param container <code>Container</code> target, the swing obj, are added to.
    * @throws Exception
    */
-  public void insert(final Reader reader, final Container container)
+  public void insert(final Reader reader, final T container)
           throws Exception {
     if (reader == null) {
       throw new IOException();
@@ -469,7 +443,7 @@ public class SwingEngine {
    * @param container <code>Container</code> target, the swing obj, are added to.
    * @throws Exception
    */
-  public void insert(final String resource, final Container container) throws Exception {
+  public void insert(final String resource, final T container) throws Exception {
     Reader reader = null;
     try {
       InputStream in = cl.getResourceAsStream(resource);
@@ -512,9 +486,9 @@ public class SwingEngine {
    * @param container <code>Container</code> target, the swing obj, are added to
    * @throws Exception <code>Exception</code> exception thrown by the parser
    */
-  public void insert(final Document jdoc, final Container container)
+  public void insert(final Document jdoc, final T container)
           throws Exception {
-    root = container;
+    client = container;
     try {
       parser.parse(jdoc, container);
     } catch (Exception e) {
@@ -590,22 +564,13 @@ public class SwingEngine {
   }
 
   /**
-   * Returns the root component of the generated Swing UI.
-   *
-   * @return <code>Component</code>- the root component of the javax.swing ui
-   */
-  public Container getRootComponent() {
-    return root;
-  }
-
-  /**
    * Returns an Iterator for all parsed GUI components.
    *
    * @return <code>Iterator</code> GUI components itearator
    */
   public Iterator<Component> getAllComponentItertor() {
     if (components == null) {
-      traverse(root, components = new ArrayList<Component>());
+      traverse(client, components = new ArrayList<Component>());
     }
     return components.iterator();
   }
@@ -642,10 +607,10 @@ public class SwingEngine {
    * @return <code>int</code> number of removed componentes.
    */
   public int cleanup() {
-    List zombies = new ArrayList();
-    Iterator it = idmap.keySet().iterator();
+    List<Object> zombies = new ArrayList<Object>();
+    Iterator<String> it = idmap.keySet().iterator();
     while (it != null && it.hasNext()) {
-      Object key = it.next();
+      String key = it.next();
       Object obj = idmap.get(key);
       if (obj instanceof Component && !((Component) obj).isDisplayable()) {
         zombies.add(key);
@@ -789,8 +754,8 @@ public class SwingEngine {
    *          </p>
    * @return <code>Iterator</code> to walk all components, not just the id components.
    */
-  public Iterator getDescendants(final Component c) {
-    List list = new ArrayList(12);
+  public Iterator<Component> getDescendants(final Component c) {
+    List<Component> list = new ArrayList<Component>(12);
     SwingEngine.traverse(c, list);
     return list.iterator();
   }
@@ -809,7 +774,7 @@ public class SwingEngine {
     }
   }
 
-  private void mapMembers(Object obj, Class cls) {
+  private void mapMembers(Object obj, Class<?> cls) {
     boolean fullaccess = true;
 
     if (obj != null && cls != null && !Object.class.equals(cls)) {
@@ -948,14 +913,14 @@ public class SwingEngine {
         System.exit(0);
       }
     };
-    if (root != null) {
-      if (JFrame.class.isAssignableFrom(root.getClass())
-              || JDialog.class.isAssignableFrom(root.getClass())) {
-        ((Window) root).addWindowListener(wl);
-        root.setVisible(true);
+    if (client != null) {
+      if (JFrame.class.isAssignableFrom(client.getClass())
+              || JDialog.class.isAssignableFrom(client.getClass())) {
+        ((Window) client).addWindowListener(wl);
+        client.setVisible(true);
       } else {
         JFrame jf = new JFrame("SwiXml Test");
-        jf.getContentPane().add(root);
+        jf.getContentPane().add(client);
         jf.pack();
         jf.addWindowListener(wl);
         jf.setVisible(true);
