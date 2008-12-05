@@ -51,6 +51,8 @@
 
 package org.swixml;
 
+import static org.swixml.LogUtil.logger;
+
 import java.awt.event.ActionEvent;
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -81,8 +83,8 @@ import org.swixml.jsr295.BindingUtils;
  * @see org.swixml.SwingTagLibrary
  * @see org.swixml.ConverterLibrary
  */
-@SuppressWarnings({"unchecked", "deprecation"})
-public class Parser extends LogUtil {
+@SuppressWarnings({"unchecked"})
+public class Parser {
 
   //
   //  Custom Attributes
@@ -202,7 +204,7 @@ public class Parser extends LogUtil {
   /**
    * set the bind target
    */
-  public static final String ATTR_BIND_TO = "bindTo";
+  public static final String ATTR_BIND_WITH = "bindWith";
   
   //
   //  Private Members
@@ -395,10 +397,10 @@ public class Parser extends LogUtil {
    * @return <code>java.awt.Container</code> representing the GUI impementation of the XML tag.
    * @throws Exception - if parsing fails
    */
-  @SuppressWarnings({"RedundantArrayCreation", "NullArgumentToVariableArgMethod"})
   Object getSwing(Element element, Object obj) throws Exception {
 
     Factory factory = engine.getTaglib().getFactory(element.getName());
+    
     //  look for <id> attribute value
     String id = element.getAttribute(Parser.ATTR_ID) != null ? element.getAttribute(Parser.ATTR_ID).getValue().trim() : null;
     //  either there is no id or the id is not user so far
@@ -508,7 +510,7 @@ public class Parser extends LogUtil {
         }
       }
 
-      obj = initParameter != null ? factory.newInstance(new Object[]{initParameter}) : factory.newInstance( attributes );
+      obj = initParameter != null ? factory.newInstance(initParameter) : factory.newInstance( attributes );
       constructed = true;
       //
       //  put newly created object in the map if it has an <id> attribute (uniqueness is given att this point)
@@ -518,6 +520,13 @@ public class Parser extends LogUtil {
       }
     }
 
+    //
+    // add extra property
+    //
+    if( obj instanceof JComponent ) {
+    	((JComponent)obj).putClientProperty( SwingEngine.CLIENT_PROPERTY, engine.getClient());
+    }
+    
     //
     // handle "layout" element or attribute
     //
@@ -656,13 +665,9 @@ public class Parser extends LogUtil {
           Attribute attr = (Attribute) it.next();
           if (JComponent.class.isAssignableFrom(obj.getClass())) {
             ((JComponent) obj).putClientProperty(attr.getName(), attr.getValue());
-            if (SwingEngine.DEBUG_MODE) {
-             logger.info("ClientProperty put: " + obj.getClass().getName() + "(" + id + "): " + attr.getName() + "=" + attr.getValue());
-            }
+             logger.fine( String.format( "putClientProperty %s ( %s ): %s=%s", obj.getClass().getName(), id, attr.getName(), attr.getValue()) );
           } else {
-            if (SwingEngine.DEBUG_MODE) {
-              logger.info(attr.getName() + " not applied for tag: <" + element.getName() + ">");
-            }
+             logger.fine( String.format( "%s not applied for tag: <%s>", attr.getName(), element.getName()));
           }
         }
       }
@@ -703,6 +708,19 @@ public class Parser extends LogUtil {
             para = converter.convert(paraType, attr, engine.getLocalizer());
         }
       return para;
+  }
+
+  /**
+   * 
+   * @return
+   */
+  private boolean isVariable( Attribute attr ) {
+     
+	  final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
+      final boolean isBound = ATTR_BIND_WITH.equalsIgnoreCase(attr.getName());
+      
+      return ( isVariable && !isBound ) ;
+
   }
   
   /**
@@ -777,9 +795,9 @@ public class Parser extends LogUtil {
       
       
       /////////////////////////
-      final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
-      
-      if( isVariable && !ATTR_BIND_TO.equalsIgnoreCase(attr.getName())) {
+  
+      if( isVariable( attr )) {
+    	  
           Object owner = engine.getClient(); // we can use also Application.getInstance();
           
           try {
@@ -836,10 +854,15 @@ public class Parser extends LogUtil {
 
             } catch (NoSuchFieldException e) {
                 // useful for extra attributes
-                logger.fine( "property " + attr.getName() + " doesn't exist!");
+                logger.warning( "property " + attr.getName() + " doesn't exist!");
                 list.add(attr);
             } catch (InvocationTargetException e) {
-                //
+                
+            	Throwable cause = e.getCause();
+            	if( cause!=null ) {
+            		logger.warning( "exception during invocation of " + attr.getName() + ": " + cause.getMessage());
+            	}
+            	//
                 // The JFrame class is slightly incompatible with Frame.
                 // Like all other JFC/Swing top-level containers, a JFrame contains a JRootPane as its only child.
                 // The content pane provided by the root pane should, as a rule, contain all the non-menu components

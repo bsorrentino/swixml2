@@ -50,18 +50,22 @@
 */
 package org.swixml;
 
-import java.beans.PropertyChangeListener;
-import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
+
+import javax.swing.AbstractAction;
+
 import org.jdesktop.application.ApplicationAction;
 import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SwingComponent;
 
 /**
  * XAction, Action Wrapper to generate Actions on  the fly.
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
  */
 
+@SuppressWarnings("serial")
 public class XAction extends AbstractAction {
   Method method;
   Object client;
@@ -69,9 +73,9 @@ public class XAction extends AbstractAction {
   
   public XAction(Object client, String methodName) throws NoSuchMethodException {
     this.client= client;
-    if( client instanceof SwingApplication ) {
-        SwingApplication app = (SwingApplication)client;
-        delegate = (ApplicationAction)app.getAction(methodName);
+    if( client instanceof SwingComponent ) {
+        SwingComponent app = (SwingComponent)client;
+        delegate = (ApplicationAction)app.getComponentAction(methodName);
         
     }
     else {

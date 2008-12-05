@@ -5,6 +5,8 @@
 
 package org.swixml;
 
+import static org.swixml.LogUtil.logger;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -14,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import org.jdom.Attribute;
-import static org.swixml.SwingEngine.logger;
 
 /**
  *
@@ -46,7 +47,7 @@ public class BeanFactory implements Factory {
         }
     }
 
-    public Class getTemplate() {
+    public Class<?> getTemplate() {
         return template;
     }
 
@@ -62,7 +63,7 @@ public class BeanFactory implements Factory {
     /**
      * 
      */
-    public Object newInstance(Object[] parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public Object newInstance(Object... parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Class<?> types[] = new Class<?>[ parameter.length ];
         int i=0;
         for( Object p : parameter ) {
@@ -86,7 +87,7 @@ public class BeanFactory implements Factory {
         return nameMap.values();
     }
 
-    public Method getSetter(Class template) {
+    public Method getSetter(Class<?> template) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -117,6 +118,8 @@ public class BeanFactory implements Factory {
         if( null==m ) throw new NoSuchMethodException(name);
         
         m.invoke(bean, value);
+        
+        
                 
     }
 

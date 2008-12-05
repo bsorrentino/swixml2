@@ -52,6 +52,8 @@
 */
 package org.swixml;
 
+import static org.swixml.LogUtil.logger;
+
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 
@@ -78,14 +80,18 @@ import java.util.List;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.5 $
  */
-public class SwingEngine extends LogUtil {
-  //
-  //  Static Constants
-  //
-  /**
-   * Mac OSX identifier in System.getProperty(os.name)
-   */
-  public static final String MAC_OSX_OS_NAME = "mac os x";
+public class SwingEngine {
+
+	//
+	//  Static Constants
+	//
+  
+	public static final String CLIENT_PROPERTY = "org.swixml.client";
+	
+	/**
+	 * Mac OSX identifier in System.getProperty(os.name)
+	 */
+	public static final String MAC_OSX_OS_NAME = "mac os x";
 
   /**
    * Mac OSX locale variant to localize strings like quit etc.
@@ -169,7 +175,7 @@ public class SwingEngine extends LogUtil {
   /**
    * Flattened Swing object tree, contains all object, even the ones without an id.
    */
-  private Collection components = null;
+  private Collection<Component> components = null;
   /**
    * access to taglib to let overwriting class add and remove tags.
    */
@@ -363,6 +369,7 @@ public class SwingEngine extends LogUtil {
     components = null;
     // initialize all client fields with UI components by their id
     mapMembers(client);
+    
     if (Frame.class.isAssignableFrom(root.getClass())) {
       SwingEngine.setAppFrame((Frame) root);
     }
@@ -546,7 +553,11 @@ public class SwingEngine extends LogUtil {
    * Sets the SwingEngine's global application frame variable, to be used as a parent for all child dialogs.
    *
    * @param frame <code>Window</code> the parent for all future dialogs.
+   * 
+   * useless 
+   * @see SingleFrameApplication#setMainFrame()
    */
+  @Deprecated
   public static void setAppFrame(Frame frame) {
     if (frame != null) {
       if (SwingEngine.appFrame == null) {
@@ -557,7 +568,10 @@ public class SwingEngine extends LogUtil {
 
   /**
    * @return <code>Window</code> a parent for all dialogs.
+   * 
+   * use Application.getInstance(SwingApplication.class).getMainFrame()
    */
+  @Deprecated
   public static Frame getAppFrame() {
     return SwingEngine.appFrame;
   }
@@ -589,9 +603,9 @@ public class SwingEngine extends LogUtil {
    *
    * @return <code>Iterator</code> GUI components itearator
    */
-  public Iterator getAllComponentItertor() {
+  public Iterator<Component> getAllComponentItertor() {
     if (components == null) {
-      traverse(root, components = new ArrayList());
+      traverse(root, components = new ArrayList<Component>());
     }
     return components.iterator();
   }
@@ -601,7 +615,7 @@ public class SwingEngine extends LogUtil {
    *
    * @return <code>Iterator</code> GUI components itearator
    */
-  public Iterator getIdComponentItertor() {
+  public Iterator<?> getIdComponentItertor() {
     return idmap.values().iterator();
   }
 
@@ -878,7 +892,7 @@ public class SwingEngine extends LogUtil {
    *                   those object that were provided with an <em>id</em>attribute, which hold an unique id
    *                   </p>
    */
-  protected static void traverse(final Component c, Collection collection) {
+  protected static void traverse(final Component c, Collection<Component> collection) {
     if (c != null) {
       collection.add(c);
       if (c instanceof JMenu) {
