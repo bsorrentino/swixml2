@@ -53,9 +53,7 @@
 
 package org.swixml;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -138,50 +136,16 @@ public abstract class TagLibrary {
    * @return <code>Factory</code> - regsitered for the given tag name
    */
   public Factory getFactory( Class<?> template ) {
-    Factory factory = null;
-    Iterator<Factory> it = tags.values().iterator();
-    while (it != null && it.hasNext()) {
-      Factory f = it.next();
-      if (f.getTemplate().equals( template )) {
-        factory = f;
-        break;
-      }
-    }
-    return factory;
+
+	  for( Factory f : tags.values() ) {
+	      if (f.getTemplate().equals( template )) {
+	    	  return f;
+	      }
+	  }
+	  return null;
+   
   }
 
-  /**
-   * Returns a setter method by name for a specified template class
-   * @param template <code>Class</code> template class
-   * @param name <code>Sting</code> method name
-   * @return <code>Method</code> - a setter method for the given class.
-   * @see #guessSetter(Class, String)
-   * @see org.swixml.Factory#getSetter(String)
-   */
-  protected Method getSetter( Class<?> template, String name ) {
-    Method method = null;
-    Factory factory = getFactory( template.getName() );
-    if (factory != null) {
-      method = factory.getSetter( name );
-    }
-    return method;
-  }
 
-  /**
-   * Returns a setter method by name for a specified template class
-   * @param template <code>Class</code> template class
-   * @param name <code>Sting</code> attribute name
-   * @return <code>Method</code> - a setter method for the given class, able to modify the property.
-   * @see #getSetter(Class, String)
-   * @see org.swixml.Factory#guessSetter(String)
-   */
-  protected Method guessSetter( Class<?> template, String name ) {
-    Method method = null;
-    Factory factory = getFactory( template.getName() );
-    if (factory != null) {
-      method = factory.guessSetter( name );
-    }
-    return method;
-  }
 
 }

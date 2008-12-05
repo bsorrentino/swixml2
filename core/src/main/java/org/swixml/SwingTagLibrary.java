@@ -55,7 +55,6 @@ package org.swixml;
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -83,6 +82,7 @@ import javax.swing.JToolBar;
 import javax.swing.table.JTableHeader;
 
 import org.swixml.BoxFactory.Type;
+import org.swixml.jsr.widgets.JCheckBoxEx;
 import org.swixml.jsr.widgets.JLabelEx;
 import org.swixml.jsr.widgets.JPasswordFieldEx;
 import org.swixml.jsr.widgets.JTableEx;
@@ -126,7 +126,6 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "ButtonGroup", ButtonGroup.class );
     registerTag( "HBox", XHBox.class );
     registerTag( "VBox", XVBox.class );
-    registerTag( "Checkbox", JCheckBox.class );
     registerTag( "CheckBoxMenuItem", JCheckBoxMenuItem.class );
     registerTag( "ComboBox", JComboBox.class );
     registerTag( "Component", JComponent.class );
@@ -161,6 +160,8 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Toolbar", JToolBar.class );
 
 // LET'S INTRODUCE (JSR295) BINDING AND (JSR296) ACTION SUPPORT     
+    //registerTag( "Checkbox", JCheckBox.class );
+    registerTag( "Checkbox", JCheckBoxEx.class );
     //registerTag( "PasswordField", JPasswordField.class );
     registerTag( "PasswordField", JPasswordFieldEx.class );
     //registerTag( "TextArea", JTextArea.class );

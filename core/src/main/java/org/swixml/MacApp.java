@@ -171,30 +171,30 @@ int sequence;
   }
 
 
-  public void update( Map action_map ) {
+  public void update( Map<String,Action> action_map ) {
 
     if (action_map.containsKey( Parser.ATTR_MACOS_ABOUT )) {
-      aboutAction = (Action) action_map.get( Parser.ATTR_MACOS_ABOUT );
+      aboutAction = action_map.get( Parser.ATTR_MACOS_ABOUT );
       this.setEnabledAboutMenu( aboutAction != null );
     }
     if (action_map.containsKey( Parser.ATTR_MACOS_PREF )) {
-      prefAction = (Action) action_map.get( Parser.ATTR_MACOS_PREF );
+      prefAction = action_map.get( Parser.ATTR_MACOS_PREF );
       this.setEnabledPreferencesMenu( prefAction != null );
     }
     if (action_map.containsKey( Parser.ATTR_MACOS_OPENAPP )) {
-      appAction = (Action) action_map.get( Parser.ATTR_MACOS_OPENAPP );
+      appAction = action_map.get( Parser.ATTR_MACOS_OPENAPP );
     }
     if (action_map.containsKey( Parser.ATTR_MACOS_REOPEN )) {
-      reopenAction = (Action) action_map.get( Parser.ATTR_MACOS_REOPEN );
+      reopenAction = action_map.get( Parser.ATTR_MACOS_REOPEN );
     }
     if (action_map.containsKey( Parser.ATTR_MACOS_OPENFILE )) {
-      fileAction = (Action) action_map.get( Parser.ATTR_MACOS_OPENFILE );
+      fileAction = action_map.get( Parser.ATTR_MACOS_OPENFILE );
     }
     if (action_map.containsKey( Parser.ATTR_MACOS_PRINT )) {
-      printAction = (Action) action_map.get( Parser.ATTR_MACOS_PRINT );
+      printAction = action_map.get( Parser.ATTR_MACOS_PRINT );
     }
     if (action_map.containsKey( Parser.ATTR_MACOS_QUIT )) {
-      quitAction = (Action) action_map.get( Parser.ATTR_MACOS_QUIT );
+      quitAction = action_map.get( Parser.ATTR_MACOS_QUIT );
     }
   }
 }

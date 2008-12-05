@@ -27,6 +27,7 @@ public class BeanFactory implements Factory {
     final Class<?> template;
     
     public BeanFactory( Class<?> beanClass ) {
+		if( null==beanClass) throw new IllegalArgumentException( "beanClass is null!");
         this.template = beanClass;
         
         Method[] mm = beanClass.getMethods();
@@ -52,11 +53,6 @@ public class BeanFactory implements Factory {
     }
 
     public Object newInstance( List<Attribute> attributes ) throws Exception {
-        return template.newInstance();
-    }
-
-    public Object newInstance() throws Exception {
-        logger.warning("invoked a deprecated method newInstance(Object parameter)");
         return template.newInstance();
     }
 
@@ -87,19 +83,11 @@ public class BeanFactory implements Factory {
         return nameMap.values();
     }
 
-    public Method getSetter(Class<?> template) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Method getSetter(String name) {
+    private Method getSetter(String name) {
         if( null==name ) throw new IllegalArgumentException("name is null!");
         return nameMap.get( name.toLowerCase());
     }
 
-    public Method guessSetter(String name) {
-        return getSetter(name);
-    }
-    
     public Class<?> getPropertyType( Object bean, String name )  {
         Method m = getSetter(name);
         

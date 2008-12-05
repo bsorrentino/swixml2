@@ -60,6 +60,7 @@ import java.awt.*;
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
  * @since Swixml 1.5 #147
  */
+@SuppressWarnings("serial")
 public class XScrollPane extends JScrollPane {
   /**
    * Sets the background color of this component's viewport.

@@ -61,6 +61,7 @@ import javax.swing.*;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
+@SuppressWarnings("serial")
 public class XHBox extends Box {
 
   public XHBox() {
