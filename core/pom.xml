@@ -16,8 +16,8 @@
 </properties>	
 
   <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
-    <url>https://swixml2.googlecode.com/svn/trunk/core</url>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/tags/swixml22</developerConnection>  
+    <url>https://swixml2.googlecode.com/svn/tags/swixml22</url>
   </scm>
 
   <dependencies>
