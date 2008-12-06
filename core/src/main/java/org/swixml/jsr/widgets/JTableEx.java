@@ -122,7 +122,6 @@ public class JTableEx extends JTable {
             BindingUtils.initTableBinding( null, UpdateStrategy.READ_WRITE, this, beanList, beanClass);
       
 
-        System.out.printf( "addNotify beanClass=%s beanList=%s\n", beanClass, beanList);
         super.addNotify();
     }
 

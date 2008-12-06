@@ -30,11 +30,10 @@ public class BoxFactory extends BeanFactory {
     @SuppressWarnings("serial")
 	public static class VGapBox extends Box {
 
-        int gap;
+        int gap = 0;
 
         public VGapBox() {
             super(BoxLayout.Y_AXIS);
-            gap=1;
         }
 
         public int getGap() { return gap; }
@@ -44,7 +43,9 @@ public class BoxFactory extends BeanFactory {
         @Override
         public Component add(Component comp) {
              Component result = super.add(comp);
-             super.add( Box.createVerticalStrut(gap) );
+             if( gap>0 ) {
+            	 super.add( Box.createVerticalStrut(gap) );
+             }
 
              return result;
         }
@@ -57,11 +58,10 @@ public class BoxFactory extends BeanFactory {
     @SuppressWarnings("serial")
 	public static class HGapBox extends Box {
 
-        int gap;
+        int gap = 0;
 
         public HGapBox() {
             super(BoxLayout.X_AXIS);
-            gap=1;
         }
 
         public int getGap() { return gap; }
@@ -71,7 +71,9 @@ public class BoxFactory extends BeanFactory {
         @Override
         public Component add(Component comp) {
              Component result = super.add(comp);
-             super.add( Box.createHorizontalStrut(gap) );
+             if( gap>0 ) {
+                 super.add( Box.createHorizontalStrut(gap) );            	 
+             }
              return result;
         }
     }
