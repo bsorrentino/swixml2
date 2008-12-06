@@ -1,3 +1,14 @@
+* * * * * * 2.2  * * * * *
+CHANGES
+-------
+
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <checkbox> from class JCheckBox to class  org.swixml.jsr.widget.JCheckBoxEx
+ <combobox> from class JComboBox to class org.swixml.jsr.widget.JComboBoxEx
+ <list> from class JList to class org.swixml.jsr.widget.JListEx
+
+add gap attribute to HBox & VBox
+
 * * * * * * 2.1  * * * * *
 NEW
 ---

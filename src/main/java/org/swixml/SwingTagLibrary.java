@@ -55,7 +55,6 @@ package org.swixml;
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -83,7 +82,10 @@ import javax.swing.JToolBar;
 import javax.swing.table.JTableHeader;
 
 import org.swixml.BoxFactory.Type;
+import org.swixml.jsr.widgets.JCheckBoxEx;
+import org.swixml.jsr.widgets.JComboBoxEx;
 import org.swixml.jsr.widgets.JLabelEx;
+import org.swixml.jsr.widgets.JListEx;
 import org.swixml.jsr.widgets.JPasswordFieldEx;
 import org.swixml.jsr.widgets.JTableEx;
 import org.swixml.jsr.widgets.JTextAreaEx;
@@ -124,11 +126,7 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Applet", JApplet.class );
     registerTag( "Button", JButton.class );
     registerTag( "ButtonGroup", ButtonGroup.class );
-    registerTag( "HBox", XHBox.class );
-    registerTag( "VBox", XVBox.class );
-    registerTag( "Checkbox", JCheckBox.class );
     registerTag( "CheckBoxMenuItem", JCheckBoxMenuItem.class );
-    registerTag( "ComboBox", JComboBox.class );
     registerTag( "Component", JComponent.class );
     registerTag( "DesktopPane", JDesktopPane.class );
     registerTag( "Dialog", XDialog.class );
@@ -138,7 +136,6 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Glue", XGlue.class );
     registerTag( "GridBagConstraints", XGridBagConstraints.class );
     registerTag( "InternalFrame", JInternalFrame.class );
-    registerTag( "List", JList.class );
     registerTag( "Menu", JMenu.class );
     registerTag( "Menubar", JMenuBar.class );
     registerTag( "Menuitem", JMenuItem.class );
@@ -161,6 +158,12 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "Toolbar", JToolBar.class );
 
 // LET'S INTRODUCE (JSR295) BINDING AND (JSR296) ACTION SUPPORT     
+    //registerTag( "List", JList.class );
+    registerTag( "List", JListEx.class );
+    //registerTag( "ComboBox", JComboBox.class );
+    registerTag( "ComboBox", JComboBoxEx.class );
+    //registerTag( "Checkbox", JCheckBox.class );
+    registerTag( "Checkbox", JCheckBoxEx.class );
     //registerTag( "PasswordField", JPasswordField.class );
     registerTag( "PasswordField", JPasswordFieldEx.class );
     //registerTag( "TextArea", JTextArea.class );
@@ -183,6 +186,10 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag("box.rigidarea", new BoxFactory(Type.RIGIDAREA));
     registerTag("vgapbox", BoxFactory.VGapBox.class);
     registerTag("hgapbox", BoxFactory.HGapBox.class);
+    //registerTag( "HBox", XHBox.class );
+    registerTag( "HBox", BoxFactory.HGapBox.class );
+    //registerTag( "VBox", XVBox.class );
+    registerTag( "VBox", BoxFactory.VGapBox.class );
 	
   }
 }
