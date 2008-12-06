@@ -13,7 +13,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JTable;
 
 import org.apache.commons.beanutils.MethodUtils;
@@ -25,6 +27,8 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.Property;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.swingbinding.JComboBoxBinding;
+import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
@@ -138,7 +142,7 @@ public class BindingUtils  {
             
     		PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
         
-            JTableBinding tb = SwingBindings.createJTableBinding( startegy, beanList, table);
+            JTableBinding binding = SwingBindings.createJTableBinding( startegy, beanList, table);
             
             if( null==pp ) {
                 logger.warning("getPropertyDescriptors has returned null!");
@@ -170,7 +174,7 @@ public class BindingUtils  {
                 
                 Property bp = BeanProperty.create(name);
 
-                ColumnBinding cb = tb.addColumnBinding( bp) ;
+                ColumnBinding cb = binding.addColumnBinding( bp) ;
                 
                 final String displayName = p.getDisplayName();
                 
@@ -195,13 +199,61 @@ public class BindingUtils  {
             }
 
             if( null!=group ) {
-            	group.addBinding(tb);
+            	group.addBinding(binding);
             }
             else {
-            	tb.bind();
+            	binding.bind();
             }
             
     }
     
-            
+    /**
+     * 
+     * @param group
+     * @param startegy
+     * @param combo
+     * @param beanList
+     */
+	@SuppressWarnings("unchecked")
+	public static void initComboBinding( BindingGroup group, UpdateStrategy strategy, JComboBox combo, List<?> beanList ) {
+		if( null==combo )		throw new IllegalArgumentException( "combo argument is null!");
+		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
+        
+    
+		JComboBoxBinding binding = SwingBindings.createJComboBoxBinding(strategy, beanList, combo);
+        
+
+        if( null!=group ) {
+        	group.addBinding(binding);
+        }
+        else {
+        	binding.bind();
+        }
+        
+	}
+           
+	/**
+	 * 
+	 * @param group
+	 * @param strategy
+	 * @param list
+	 * @param beanList
+	 */
+	@SuppressWarnings("unchecked")
+	public static void initListBinding( BindingGroup group, UpdateStrategy strategy, JList list, List<?> beanList ) {
+		if( null==list )		throw new IllegalArgumentException( "list argument is null!");
+		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
+        
+    
+		JListBinding binding = SwingBindings.createJListBinding(strategy, beanList, list);
+        
+
+        if( null!=group ) {
+        	group.addBinding(binding);
+        }
+        else {
+        	binding.bind();
+        }
+        
+	}
 }

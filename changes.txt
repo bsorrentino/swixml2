@@ -1,3 +1,8 @@
+* * * * * * 2.5  * * * * *
+NEW
+---
+change render method of SwingApplication to accept JDialog, JFrame previously instantiated 
+
 * * * * * * 2.1  * * * * *
 NEW
 ---
