@@ -11,11 +11,11 @@ import org.swixml.jsr295.BindingUtils;
 public class JListEx extends JList {
 	private List<?> beanList;
 
-	public final List<?> getBeanList() {
+	public final List<?> getBindList() {
 		return beanList;
 	}
 
-	public final void setBeanList(List<?> beanList) {
+	public final void setBindList(List<?> beanList) {
 		this.beanList = beanList;
 	}
 
