@@ -8,6 +8,8 @@ package org.swixml.jsr296;
 import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.Reader;
 
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
@@ -43,12 +45,43 @@ public abstract class SwingApplication extends SingleFrameApplication {
     }
         
     public final <T extends Container> T render( T container, String resource) throws Exception {
+    	if( null==resource ) throw new IllegalArgumentException( "resource is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
 		getContext().getResourceMap().injectFields(container);
 
 		return engine.render(resource);
+	}
+
+    public final <T extends Container> T render( T container, Reader reader) throws Exception {
+    	if( null==reader ) throw new IllegalArgumentException( "reader is null!");
+    	final SwingEngine<T> engine = new SwingEngine<T>( container );
+		engine.setClassLoader( getClass().getClassLoader() );
+
+		getContext().getResourceMap().injectFields(container);
+
+		return engine.render(reader);
+	}
+
+    public final <T extends Container> T render( T container, File xmlFile) throws Exception {
+    	if( null==xmlFile ) throw new IllegalArgumentException( "xmlFile is null!");
+    	final SwingEngine<T> engine = new SwingEngine<T>( container );
+		engine.setClassLoader( getClass().getClassLoader() );
+
+		getContext().getResourceMap().injectFields(container);
+
+		return engine.render(xmlFile);
+	}
+
+    public final <T extends Container> T render( T container, java.net.URL url) throws Exception {
+    	if( null==url ) throw new IllegalArgumentException( "url is null!");
+    	final SwingEngine<T> engine = new SwingEngine<T>( container );
+		engine.setClassLoader( getClass().getClassLoader() );
+
+		getContext().getResourceMap().injectFields(container);
+
+		return engine.render(url);
 	}
     
 }

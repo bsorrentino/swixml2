@@ -246,9 +246,9 @@ public class SwingEngine<T extends Container> {
    * @return <code>Object</code>- instanced swing object tree root
    * @throws Exception
    */
-  public Container render(final URL url) throws Exception {
+  public T render(final URL url) throws Exception {
     Reader reader = null;
-    Container obj = null;
+    T obj = null;
     try {
       InputStream in = url.openStream();
       if (in == null) {
@@ -298,7 +298,7 @@ public class SwingEngine<T extends Container> {
    * @param xml_file <code>File</code> xml-file
    * @return <code>Object</code>- instanced swing object tree root
    */
-  public Container render(final File xml_file) throws Exception {
+  public T render(final File xml_file) throws Exception {
     if (xml_file == null) {
       throw new IOException();
     }
@@ -316,7 +316,7 @@ public class SwingEngine<T extends Container> {
       throw new IOException();
     }
     try {
-      return render(new SAXBuilder().build(xml_reader));
+      return render(new SAXBuilder().build(xml_reader), false);
     } catch (org.xml.sax.SAXParseException e) {
       System.err.println(e);
     } catch (org.jdom.input.JDOMParseException e) {
@@ -331,7 +331,7 @@ public class SwingEngine<T extends Container> {
    * @param jdoc <code>Document</code> xml gui descritptor
    * @return <code>Object</code>- instanced swing object tree root
    */
-  public T render(final Document jdoc) throws Exception {
+  private T render(final Document jdoc, boolean createRoot) throws Exception {
     idmap.clear();
     try {
       parser.parse(jdoc, client);
