@@ -50,15 +50,19 @@
 */
 package org.swixml;
 
+import static org.swixml.LogUtil.logger;
+
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
 
 import org.jdesktop.application.ApplicationAction;
+import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ApplicationContext;
 import org.swixml.jsr296.SwingApplication;
-
 /**
  * XAction, Action Wrapper to generate Actions on  the fly.
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
@@ -73,26 +77,37 @@ public class XAction extends AbstractAction {
   public XAction(Object client, String methodName) throws NoSuchMethodException {
     this.client= client;
 
-    
-	delegate = (ApplicationAction)SwingApplication.getInstance().getContext().getActionMap(client).get(methodName);
+    try {
+    	ApplicationContext ctx = SwingApplication.getInstance().getContext();
+    	
+    	ApplicationActionMap actionMap =ctx.getActionMap(client);
+    	
+    	delegate = (ApplicationAction)actionMap.get(methodName);
 
-	if( delegate==null ) {
-      method= client.getClass().getMethod(methodName);
+    	if( delegate==null ) {
+    		method= client.getClass().getMethod(methodName);
+    	}
+	
+    } catch( Exception e ) {
+    	// @TODO
+    	//logger.log( Level.WARNING, "erron on Action initialization", e);
+    	logger.warning( String.format( "error on Action initialization [%s]", e.getMessage()));
     }
+    
 
   }
   
   public void actionPerformed(ActionEvent e) {
     try {
         if( null==delegate ) {
-            this.method.invoke(client);
+        	if( this.method!=null ) this.method.invoke(client);
         }
         else {
             delegate.actionPerformed(e);
         }
         
     } catch (Exception e1) {
-      e1.printStackTrace();
+    	e1.printStackTrace();
     } 
   }
 
