@@ -7,6 +7,7 @@
 package org.jdesktop.application;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
@@ -96,13 +97,17 @@ public class ResourceManager extends AbstractBean {
      * earlier in the list shadow resources with the same name that
      * appear bundles that come later.
      */
-    private List<String> allBundleNames(Class startClass, Class stopClass) {
-	List<String> bundleNames = new ArrayList<String>();
-        Class limitClass = stopClass.getSuperclass(); // could be null
-	for(Class c = startClass; c != limitClass; c = c.getSuperclass()) {
-            bundleNames.addAll(getClassBundleNames(c));
-	}
+    private List<String> allBundleNames(Class<?> startClass, Class<?> stopClass) {
+    	List<String> bundleNames = new ArrayList<String>();
+        Class<?> limitClass = stopClass.getSuperclass(); // could be null
+
+        for(Class<?> c = startClass; c != limitClass; c = c.getSuperclass()) {
+	            bundleNames.addAll(getClassBundleNames(c));
+		}
+        
+        
         return Collections.unmodifiableList(bundleNames);
+
     }
 
     private String bundlePackageName(String bundleName) {
@@ -372,20 +377,20 @@ public class ResourceManager extends AbstractBean {
      * complex rules for inner classes would be a burden for
      * developers.
      */
-    private String classBundleBaseName(Class cls) {
-	String className = cls.getName();
-	StringBuffer sb = new StringBuffer();
-	int i = className.lastIndexOf('.');
-	if (i > 0) {
-	    sb.append(className.substring(0, i));
-	    sb.append(".resources.");
-	    sb.append(cls.getSimpleName());
-	}
-	else {
-	    sb.append("resources.");
-	    sb.append(cls.getSimpleName());
-	}
-	return sb.toString();
+    private String classBundleBaseName(Class<?> cls) {
+    	String className = cls.getName();
+    	StringBuffer sb = new StringBuffer();
+    	int i = className.lastIndexOf('.');
+    	if (i > 0) {
+    		sb.append(className.substring(0, i));
+    		sb.append(".resources.");
+    		sb.append(cls.getSimpleName());
+    	}
+    	else {
+    		sb.append("resources.");
+    		sb.append(cls.getSimpleName());
+    	}
+    	return sb.toString();
     }
 
     /**
@@ -418,9 +423,11 @@ public class ResourceManager extends AbstractBean {
      * @see #getResourceMap
      * @see #getApplicationBundleNames
      */
-    protected List<String> getClassBundleNames(Class cls) {
+    protected List<String> getClassBundleNames(Class<?> cls) {
 	String bundleName = classBundleBaseName(cls);
-	return Collections.singletonList(bundleName);
+	return Arrays.asList( cls.getSimpleName(), bundleName );
+	// Commented by bsorrentino 
+	//return Collections.singletonList(bundleName);
     }
 
     /**
