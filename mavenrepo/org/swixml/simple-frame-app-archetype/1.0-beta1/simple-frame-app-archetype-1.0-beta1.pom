@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.swixml</groupId>
+  <artifactId>simple-frame-app-archetype</artifactId>
+  <packaging>maven-archetype</packaging>
+  <name>example-archetype</name>
+  <version>1.0-beta1</version>
+  
+  <scm>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/simple-frame-app-archetype</developerConnection>  
+    <url>https://swixml2.googlecode.com/svn/trunk/simple-frame-app-archetype</url>
+  </scm>
+  
+<build>
+
+<extensions>
+
+<extension>
+  <groupId>org.jvnet.wagon-svn</groupId>
+  <artifactId>wagon-svn</artifactId>
+  <version>1.8</version>
+</extension>
+  
+<extension>
+  <groupId>org.apache.maven.archetype</groupId>
+  <artifactId>archetype-packaging</artifactId>
+  <version>2.0-alpha-4</version>
+</extension>
+
+</extensions>
+
+<plugins>
+  <plugin>
+    <artifactId>maven-archetype-plugin</artifactId>
+    <version>2.0-alpha-4</version>
+    <extensions>true</extensions>
+  </plugin>
+</plugins>
+  </build>
+
+<distributionManagement>
+    <repository>
+        <id>google-project</id>
+        <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
+    </repository>
+    <snapshotRepository>
+        <id>google-project</id>
+        <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
+    </snapshotRepository>
+</distributionManagement>
+  
+</project>
