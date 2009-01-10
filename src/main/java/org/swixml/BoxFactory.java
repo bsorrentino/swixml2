@@ -5,17 +5,16 @@
 
 package org.swixml;
 
+import static org.swixml.LogUtil.logger;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+
 import org.jdom.Attribute;
-import org.swixml.BeanFactory;
-import org.swixml.Converter;
-import org.swixml.ConverterLibrary;
-import org.swixml.SwingEngine;
-import static org.swixml.SwingEngine.logger;
 
 
 /**
@@ -28,13 +27,13 @@ public class BoxFactory extends BeanFactory {
     *
     * @author sorrentino
     */
-    public static class VGapBox extends Box {
+    @SuppressWarnings("serial")
+	public static class VGapBox extends Box {
 
-        int gap;
+        int gap = 0;
 
         public VGapBox() {
             super(BoxLayout.Y_AXIS);
-            gap=1;
         }
 
         public int getGap() { return gap; }
@@ -44,7 +43,9 @@ public class BoxFactory extends BeanFactory {
         @Override
         public Component add(Component comp) {
              Component result = super.add(comp);
-             super.add( Box.createVerticalStrut(gap) );
+             if( gap>0 ) {
+            	 super.add( Box.createVerticalStrut(gap) );
+             }
 
              return result;
         }
@@ -54,13 +55,13 @@ public class BoxFactory extends BeanFactory {
     *
     * @author sorrentino
     */
-    public static class HGapBox extends Box {
+    @SuppressWarnings("serial")
+	public static class HGapBox extends Box {
 
-        int gap;
+        int gap = 0;
 
         public HGapBox() {
             super(BoxLayout.X_AXIS);
-            gap=1;
         }
 
         public int getGap() { return gap; }
@@ -70,7 +71,9 @@ public class BoxFactory extends BeanFactory {
         @Override
         public Component add(Component comp) {
              Component result = super.add(comp);
-             super.add( Box.createHorizontalStrut(gap) );
+             if( gap>0 ) {
+                 super.add( Box.createHorizontalStrut(gap) );            	 
+             }
              return result;
         }
     }
@@ -180,15 +183,4 @@ public class BoxFactory extends BeanFactory {
     }
     
     
-    public static void register( SwingEngine engine ) {
-        engine.getTaglib().registerTag("box.glue", new BoxFactory(Type.GLUE));
-        engine.getTaglib().registerTag("box.hglue", new BoxFactory(Type.HGLUE));
-        engine.getTaglib().registerTag("box.vglue", new BoxFactory(Type.VGLUE));
-        engine.getTaglib().registerTag("box.hstrut", new BoxFactory(Type.HSTRUT));
-        engine.getTaglib().registerTag("box.vstrut", new BoxFactory(Type.VSTRUT));
-        engine.getTaglib().registerTag("box.rigidarea", new BoxFactory(Type.RIGIDAREA));
-        engine.getTaglib().registerTag("vgapbox", BoxFactory.VGapBox.class);
-        engine.getTaglib().registerTag("hgapbox", BoxFactory.HGapBox.class);
-
-    }
 }

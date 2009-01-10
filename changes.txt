@@ -1,12 +1,62 @@
-* * * * * * 2.0 rc1 * * * * *
+* * * * * * 2.5  * * * * *
 NEW
 ---
-
-NEW TAGs
--------
+change render method of SwingApplication to accept JDialog, JFrame previously instantiated 
 
 CHANGES
 -------
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <list> from class JList to class  org.swixml.jsr.widget.JListEx
+ <combobox> from class JComboBox to class  org.swixml.jsr.widget.JComboBoxEx
+
+added to the JSR296 resource convention <package name>.resources.<class name> also the <class name> that simplify the project management and archetype creation 
+
+* * * * * * 2.1  * * * * *
+NEW
+---
+integrated source code of JSR296 1.03
+integrated source code of JSR295 1.2.1
+included classes from com.applet.eawt jar
+
+Added a SwingComponent interface and SwingComponentBase implementation to allow to split application in several modules
+
+Added useful instance methods 
+===============================
+SwingApplication.renderFrame
+SwingApplication.renderDialog
+SwingComponentBase.renderFrame
+SwingComponentBase.renderDialog
+
+
+NEW TAGs
+-------
+<box.glue>
+<box.hglue>
+<box.vglue>
+<box.hstrut>
+<box.vstrut>
+<box.rigidarea>
+<vgapbox>
+<hgapbox>
+
+
+CHANGES
+-------
+
+SwingApplication inherits from org.jdesktop.application.SingleFrameApplication
+
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <Label> from class JLabel to class  org.swixml.jsr.widget.JLabelEx
+ <Table> from class JTable to class  org.swixml.jsr.widget.JTableEx
+ <TextArea> from class JTextArea to class  org.swixml.jsr.widget.JTextAreaEx
+ <TextField> from class JTextField to class  org.swixml.jsr.widget.JTextFieldEx
+ <PasswordField> from class JPasswordField to class  org.swixml.jsr.widget.JPasswordFieldEx
+ <Tree> from class JTree to class  org.swixml.jsr.widget.JTreeEx
+
+Deprecated: 
+
+SwingEngine.setAppFrame()
+SwingEngine.getAppFrame()
 
 BUG FIXES
 ---------

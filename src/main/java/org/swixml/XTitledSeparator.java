@@ -63,6 +63,7 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
  * 
  * @author Karl Tauber
  */
+@SuppressWarnings("serial")
 public class XTitledSeparator extends JComponent {
 
   private String text;

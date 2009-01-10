@@ -53,9 +53,7 @@
 
 package org.swixml;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -70,7 +68,7 @@ import java.util.Map;
  */
 public abstract class TagLibrary {
 
-  private Map tags = new HashMap();
+  private Map<String,Factory> tags = new HashMap<String,Factory>(100);
 
   /**
    * Constructs a new TagLibrary and regisiters all factories.
@@ -90,7 +88,7 @@ public abstract class TagLibrary {
    * @param name <code>String</code> the tag's name
    * @param template <code>Class</code> the java class that represents the tag
    */
-  public void registerTag( String name, Class template ) {
+  public void registerTag( String name, Class<?> template ) {
     //registerTag( name, new DefaultFactory( template ) );
     registerTag( name, new BeanFactory( template ) );
   }
@@ -119,7 +117,7 @@ public abstract class TagLibrary {
    * @return <code>Map</code> - all registered tags.
    * <pre>Use athe tag names to get to the factories</pre>
    */
-  public Map getTagClasses() {
+  public Map<String,Factory> getTagClasses() {
     return tags;
   }
 
@@ -137,51 +135,17 @@ public abstract class TagLibrary {
    * @param template <code>Class</code>
    * @return <code>Factory</code> - regsitered for the given tag name
    */
-  public Factory getFactory( Class template ) {
-    Factory factory = null;
-    Iterator it = tags.values().iterator();
-    while (it != null && it.hasNext()) {
-      Factory f = (Factory) it.next();
-      if (f.getTemplate().equals( template )) {
-        factory = f;
-        break;
-      }
-    }
-    return factory;
+  public Factory getFactory( Class<?> template ) {
+
+	  for( Factory f : tags.values() ) {
+	      if (f.getTemplate().equals( template )) {
+	    	  return f;
+	      }
+	  }
+	  return null;
+   
   }
 
-  /**
-   * Returns a setter method by name for a specified template class
-   * @param template <code>Class</code> template class
-   * @param name <code>Sting</code> method name
-   * @return <code>Method</code> - a setter method for the given class.
-   * @see #guessSetter(Class, String)
-   * @see org.swixml.Factory#getSetter(String)
-   */
-  protected Method getSetter( Class template, String name ) {
-    Method method = null;
-    Factory factory = getFactory( template.getName() );
-    if (factory != null) {
-      method = factory.getSetter( name );
-    }
-    return method;
-  }
 
-  /**
-   * Returns a setter method by name for a specified template class
-   * @param template <code>Class</code> template class
-   * @param name <code>Sting</code> attribute name
-   * @return <code>Method</code> - a setter method for the given class, able to modify the property.
-   * @see #getSetter(Class, String)
-   * @see org.swixml.Factory#guessSetter(String)
-   */
-  protected Method guessSetter( Class template, String name ) {
-    Method method = null;
-    Factory factory = getFactory( template.getName() );
-    if (factory != null) {
-      method = factory.guessSetter( name );
-    }
-    return method;
-  }
 
 }

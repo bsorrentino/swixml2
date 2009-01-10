@@ -61,6 +61,7 @@ import java.awt.*;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
+@SuppressWarnings("serial")
 public class XGridBagConstraints extends GridBagConstraints {
 
   public int getAnchor() {

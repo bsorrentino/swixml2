@@ -72,13 +72,13 @@ public interface Converter {
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    *
    */
-  Object convert( final Class type, final Attribute attr, final Localizer localizer ) throws Exception;
+  Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception;
 
   /**
    * A <code>Converters</code> conversTo method informs about the Class type the converter
    * is returning when its <code>convert</code> method is called
    * @return <code>Class</code> - the Class the converter is returning when its convert method is called
    */
-  Class convertsTo();
+  Class<?> convertsTo();
 
 }
