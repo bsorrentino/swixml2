@@ -1,0 +1,73 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8" ?>
+<frame size="${symbol_dollar}{frameSize}" resizable="true" alwaysOnTop="true" title="Client Attribute Sample" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+
+<panel layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+<panel name="commons" layout="FlowLayout(FlowLayout.LEFT)">
+<vbox gap="20">
+
+	<hbox>
+	<checkbox text="test button enabled" bindWith="connected" />
+	<box.hglue/>
+	</hbox>
+	
+	<hbox gap="5">
+	<label text="texField Binding"/>
+	<textfield id="tv" bindWith="testValue" columns="20" ></textfield>
+	<box.hglue/>
+	</hbox>
+
+	<hbox>
+	<combobox  bindList="${symbol_dollar}{comboList}" action="comboAction"/>
+	<box.hglue/>
+	</hbox>
+
+	<hbox>
+	<scrollpane>
+	<list  bindList="${symbol_dollar}{comboList}" action="listAction" cellRenderer="${symbol_dollar}{listRenderer}" />
+	</scrollpane>
+	<box.glue/>	
+	</hbox>
+      
+	<hbox gap="10">        
+	<button id="btn" Text="Show Client Attributes" X="Client" Y="Attribute" action="show"/>
+	
+	<button action="test">Test Button</button>
+
+    </hbox>     
+       
+</vbox>
+</panel>
+
+<panel name="table-tree" layout="BorderLayout">
+<splitpane constraints="BorderLayout.CENTER">
+<scrollpane>
+<tree model="${symbol_dollar}{myTree}" action="selectNode"/>
+</scrollpane>
+
+<scrollpane>
+<table id="testTable" action="selectRow" cellSelectionEnabled="true" bindList="${symbol_dollar}{myData}" bindClass="${symbol_dollar}{myDataClass}" />
+</scrollpane>
+
+</splitpane>
+</panel>
+
+</tabbedpane>        
+
+    <vbox constraints="BorderLayout.SOUTH" background="blue">
+   
+        <scrollpane >
+            <textarea bindWith="message" rows="3"></textarea>
+        </scrollpane>
+
+        <box.vstrut height="5"/>
+		<hbox>
+        <label id="statusbar" bindWith="status" foreground="gray">status</label><box.hglue/>
+    	</hbox>
+    </vbox>
+  </panel>
+</frame>
