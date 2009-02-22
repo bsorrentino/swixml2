@@ -83,6 +83,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 
+import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
@@ -138,7 +139,7 @@ public class SwingEngine<T extends Container> {
   /**
    * main frame
    */
-  private static Frame appFrame;
+  //private static Frame appFrame;
   /**
    * static resource bundle
    */
@@ -316,7 +317,7 @@ public class SwingEngine<T extends Container> {
       throw new IOException();
     }
     try {
-      return render(new SAXBuilder().build(xml_reader), false);
+      return render(new SAXBuilder().build(xml_reader));
     } catch (org.xml.sax.SAXParseException e) {
       System.err.println(e);
     } catch (org.jdom.input.JDOMParseException e) {
@@ -331,24 +332,35 @@ public class SwingEngine<T extends Container> {
    * @param jdoc <code>Document</code> xml gui descritptor
    * @return <code>Object</code>- instanced swing object tree root
    */
-  private T render(final Document jdoc, boolean createRoot) throws Exception {
+  private T render(final Document jdoc) throws Exception {
+    T result = null;
+
     idmap.clear();
     try {
-      parser.parse(jdoc, client);
+        if( client!=null ) {
+            parser.parse(jdoc, client);
+            result = client;
+        }
+        else {
+            result = (T)parser.parse(jdoc, null);
+        }
+
     } catch (Exception e) {
       if (SwingEngine.DEBUG_MODE)
         System.err.println(e);
       throw (e);
     }
+
+
     // reset components collection
     components = null;
     // initialize all client fields with UI components by their id
-    mapMembers(client);
+    mapMembers(result);
     
-    if (Frame.class.isAssignableFrom(client.getClass())) {
-      SwingEngine.setAppFrame((Frame) client);
-    }
-    return client;
+    //if (Frame.class.isAssignableFrom(client.getClass())) {
+    //  SwingEngine.setAppFrame((Frame) client);
+    //}
+    return result;
   }
 
   /**
@@ -524,30 +536,12 @@ public class SwingEngine<T extends Container> {
   }
 
   /**
-   * Sets the SwingEngine's global application frame variable, to be used as a parent for all child dialogs.
-   *
-   * @param frame <code>Window</code> the parent for all future dialogs.
-   * 
-   * useless 
-   * @see SingleFrameApplication#setMainFrame()
-   */
-  @Deprecated
-  public static void setAppFrame(Frame frame) {
-    if (frame != null) {
-      if (SwingEngine.appFrame == null) {
-        SwingEngine.appFrame = frame;
-      }
-    }
-  }
-
-  /**
    * @return <code>Window</code> a parent for all dialogs.
    * 
    * use Application.getInstance(SwingApplication.class).getMainFrame()
    */
-  @Deprecated
   public static Frame getAppFrame() {
-    return SwingEngine.appFrame;
+    return Application.getInstance(SingleFrameApplication.class).getMainFrame();
   }
 
   /**
