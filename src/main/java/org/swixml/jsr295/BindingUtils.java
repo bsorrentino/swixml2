@@ -56,6 +56,24 @@ public class BindingUtils  {
         return Pattern.matches(pattern, value);
     }
     
+    public static void setTableColumnIndex( PropertyDescriptor pd, int index ) {
+    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
+    	
+    	pd.setValue(BindingUtils.TABLE_COLUMN_INDEX, index);
+    }
+    
+    public static void setTableColumnIsBound( PropertyDescriptor pd, boolean bind ) {
+    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
+    	
+    	pd.setValue(BindingUtils.TABLE_COLUMN_IS_BOUND, bind);
+    }
+    
+    public static void setTableColumnEditable( PropertyDescriptor pd, boolean editable ) {
+    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
+    	
+    	pd.setValue(BindingUtils.TABLE_COLUMN_EDITABLE, editable);
+    }
+
     /**
      * parse bind for UpdateStrategy.READ_WRITE
      * 
