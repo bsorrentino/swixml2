@@ -3,6 +3,9 @@ NEW
 ---
 change render method of SwingApplication to accept JDialog, JFrame previously instantiated 
 
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <radiobutton> from class JRadioButton to class  org.swixml.jsr.widget.JRadioButtonEx
+
 CHANGES
 -------
 substitute tags to add binding, action and resource management as described in JSR295,JSR296

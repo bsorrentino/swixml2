@@ -88,6 +88,8 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 
+import static org.swixml.LogUtil.logger;
+
 /**
  * The SwingEngine class is the rendering engine able to convert an XML descriptor into a java.swing UI.
  * <p/>
@@ -541,7 +543,13 @@ public class SwingEngine<T extends Container> {
    * use Application.getInstance(SwingApplication.class).getMainFrame()
    */
   public static Frame getAppFrame() {
-    return Application.getInstance(SingleFrameApplication.class).getMainFrame();
+	  SingleFrameApplication app = Application.getInstance(SingleFrameApplication.class);
+	  if( app==null ) {
+		  logger.warning("Application getInstance() has returned null!" );
+		  return null;
+	  }
+
+	  return app.getMainFrame();
   }
 
   /**
