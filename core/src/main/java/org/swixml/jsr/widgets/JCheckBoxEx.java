@@ -19,6 +19,7 @@ public class JCheckBoxEx extends JCheckBox {
     }
 
     public void setBindWith(String bindWith) {
+        
         this.bindWith = bindWith;
         if( null!=bindWith) {
             BindingUtils.parseBind( this, "selected", bindWith );
