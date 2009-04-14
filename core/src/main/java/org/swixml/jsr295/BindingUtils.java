@@ -55,6 +55,24 @@ public class BindingUtils  {
         if( null==value ) return false;
         return Pattern.matches(pattern, value);
     }
+
+    /**
+     * 
+     * @param beanClass
+     * @param propertyName
+     * @return
+     */
+    public static PropertyDescriptor findProperty( Class<?> beanClass, String propertyName ) {
+
+    	if( null==propertyName ) throw new IllegalArgumentException( "propertyName param is null!");
+    	PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
+    	for( PropertyDescriptor pd : pp ) {
+    		if( propertyName.equalsIgnoreCase(pd.getName()) ) {
+    	    	return pd;
+    		}
+    	}
+    	return null;
+    }
     
     public static void setTableColumnIndex( PropertyDescriptor pd, int index ) {
     	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
