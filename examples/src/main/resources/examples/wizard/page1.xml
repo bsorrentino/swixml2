@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<panel Size="500,500" resizable="false" title="Simple Dialog"  defaultCloseOperation="JFrame.DO_NOTHING_ON_CLOSE">
+
+<vbox>
+
+    <checkbox id="cb" text="You must select me to finish" selected="false" action="cbSelect" />
+
+</vbox>
+
+</panel>
