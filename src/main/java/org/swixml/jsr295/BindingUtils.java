@@ -206,7 +206,7 @@ public class BindingUtils  {
             for( PropertyDescriptor p : pp ) {
                 
                 Boolean isBinded = (Boolean) p.getValue(TABLE_COLUMN_IS_BOUND);
-                if( null==isBinded && table.isAllPropertyBound()==false) {
+                if( null==isBinded && table.isAllPropertiesBound()==false) {
                 	continue;
                 }
                 if( (null!=isBinded && Boolean.FALSE.equals(isBinded)) ) {
