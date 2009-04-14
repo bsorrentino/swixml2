@@ -30,6 +30,7 @@ public class JTableEx extends JTable {
     private Action action;
     private Class<?> beanClass;
     private List<?> beanList;
+    private boolean allPropertyBound = true;
     
     public JTableEx() {
         super();
@@ -90,7 +91,17 @@ public class JTableEx extends JTable {
  */
     }
     
-    public Class<?> getBindClass() {
+    
+    
+    public final boolean isAllPropertyBound() {
+		return allPropertyBound;
+	}
+
+	public final void setAllPropertyBound(boolean allPropertyBound) {
+		this.allPropertyBound = allPropertyBound;
+	}
+
+	public Class<?> getBindClass() {
         return beanClass;
     }
 
@@ -119,7 +130,7 @@ public class JTableEx extends JTable {
 
         if( beanList!=null && beanClass!=null )
         	
-            BindingUtils.initTableBinding( null, UpdateStrategy.READ_WRITE, this, beanList, beanClass);
+            BindingUtils.initTableBinding( null, UpdateStrategy.READ_WRITE, this);
       
 
         super.addNotify();

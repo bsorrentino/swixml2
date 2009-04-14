@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
-import javax.swing.JTable;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -33,6 +32,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.swixml.SwingEngine;
+import org.swixml.jsr.widgets.JTableEx;
 
 /**
  *
@@ -46,6 +46,7 @@ public class BindingUtils  {
 
     private BindingUtils() {}
 
+    
     /**
      * 
      * @param value
@@ -73,6 +74,7 @@ public class BindingUtils  {
     	}
     	return null;
     }
+    
     
     public static void setTableColumnIndex( PropertyDescriptor pd, int index ) {
     	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
@@ -171,10 +173,14 @@ public class BindingUtils  {
      * @param beanList
      */
     @SuppressWarnings("unchecked")
-	public static void initTableBinding( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass ) {
+	public static void initTableBinding( BindingGroup group, UpdateStrategy startegy, JTableEx table ) {
     		if( null==table )		throw new IllegalArgumentException( "table argument is null!");
-    		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
-    		if( null==beanClass )	throw new IllegalArgumentException( "beanClass argument is null!");
+
+    		Class<?> beanClass = table.getBindClass();
+    		List<?> beanList = table.getBindList();
+    		
+    		if( null==beanList )	throw new IllegalStateException( "beanList argument is null!");
+    		if( null==beanClass )	throw new IllegalStateException( "beanClass argument is null!");
             
     		PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
         
@@ -195,13 +201,18 @@ public class BindingUtils  {
                     return ( i1-i2 );                   
                 }
             });
+            
+            
             for( PropertyDescriptor p : pp ) {
                 
                 Boolean isBinded = (Boolean) p.getValue(TABLE_COLUMN_IS_BOUND);
-                if( null!=isBinded && Boolean.FALSE.equals(isBinded)) {
+                if( null==isBinded && table.isAllPropertyBound()==false) {
+                	continue;
+                }
+                if( (null!=isBinded && Boolean.FALSE.equals(isBinded)) ) {
                     continue; // skip property
                 }
-                
+                	
                 final String name = p.getName();
                 
                 if( "class".equals(name)) {
