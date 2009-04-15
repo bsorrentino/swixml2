@@ -6,6 +6,8 @@
 package org.swixml.jsr.widgets;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.Action;
@@ -28,6 +30,8 @@ import org.swixml.jsr295.BindingUtils;
 public class JTableEx extends JTable {
 
     private Action action;
+    private Action dblClickAction = null;
+    
     private Class<?> beanClass;
     private List<?> beanList;
     private boolean allPropertiesBound = true;
@@ -44,7 +48,7 @@ public class JTableEx extends JTable {
     }
 
     private void onRowOrColSelection( ListSelectionEvent e ) {
-    		// ISSUE 5
+    		// ISSUE-5
     		if( e.getValueIsAdjusting() ) return;
 	        if( getSelectedRow()==-1 ) return;
 
@@ -65,7 +69,24 @@ public class JTableEx extends JTable {
             }
             
         });        
-        
+
+        // ISSUE-6
+        super.addMouseListener(new MouseAdapter(){
+            
+        	public void mouseClicked(MouseEvent e){
+        		if (e.getClickCount() == 2){
+        			Action a = getDblClickAction();
+        			
+        			if( a==null ) return;
+        			
+        			ActionEvent ev = new ActionEvent(e, 0, null );
+        			
+        			a.actionPerformed(ev);
+        			
+                }
+             }
+            } );
+         
         super.getColumnModel().addColumnModelListener( new TableColumnModelListener() {
 
             public void columnAdded(TableColumnModelEvent e) {
@@ -93,6 +114,7 @@ public class JTableEx extends JTable {
             }
         });
  */
+       
     }
     
     
@@ -129,7 +151,15 @@ public class JTableEx extends JTable {
         this.action = action;
     }
 
-    @Override
+    public final Action getDblClickAction() {
+		return dblClickAction;
+	}
+
+	public final void setDblClickAction(Action dblClickAction) {
+		this.dblClickAction = dblClickAction;
+	}
+
+	@Override
     public void addNotify() {
 
         if( beanList!=null && beanClass!=null )
