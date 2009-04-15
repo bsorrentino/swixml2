@@ -44,7 +44,11 @@ public class JTableEx extends JTable {
     }
 
     private void onRowOrColSelection( ListSelectionEvent e ) {
-            Action a = getAction();
+    		// ISSUE 5
+    		if( e.getValueIsAdjusting() ) return;
+	        if( getSelectedRow()==-1 ) return;
+
+	        Action a = getAction();
 
             if( null==a ) return;
 
