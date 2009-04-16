@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
+import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -42,6 +43,9 @@ public class BindingUtils  {
     public  static final String TABLE_COLUMN_EDITABLE = "column.editable";
 	public static final String TABLE_COLUMN_IS_BOUND = "bind";
 	public static final String TABLE_COLUMN_INDEX = "column.index";
+	public static final String TABLE_COLUMN_RENDERER = "column.renderer";
+	
+	
 	private static final String pattern =  "[$][{](.*)[}]";
 
     private BindingUtils() {}
@@ -75,6 +79,11 @@ public class BindingUtils  {
     	return null;
     }
     
+    public static void setTableColumnRenderer( PropertyDescriptor pd, TableCellRenderer renderer ) {
+    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
+    	
+    	pd.setValue(BindingUtils.TABLE_COLUMN_RENDERER, renderer);
+    }
     
     public static void setTableColumnIndex( PropertyDescriptor pd, int index ) {
     	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");

@@ -8,6 +8,7 @@ package org.swixml.jsr.widgets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyDescriptor;
 import java.util.List;
 
 import javax.swing.Action;
@@ -17,8 +18,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.swixml.jsr295.BindingUtils;
 
@@ -47,7 +50,23 @@ public class JTableEx extends JTable {
         
     }
 
-    private void onRowOrColSelection( ListSelectionEvent e ) {
+    @Override
+	public TableCellRenderer getCellRenderer(int row, int col) {
+    	if( beanClass!=null && beanList!=null ) {
+    		PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
+    		
+    		PropertyDescriptor p = pp[col];
+    		
+    		Object r = p.getValue(BindingUtils.TABLE_COLUMN_RENDERER);
+    		
+    		if( r instanceof TableCellRenderer ) {
+    			return (TableCellRenderer) r;
+    		}
+    	}
+		return super.getCellRenderer(row, col);
+	}
+
+	private void onRowOrColSelection( ListSelectionEvent e ) {
     		// ISSUE-5
     		if( e.getValueIsAdjusting() ) return;
 	        if( getSelectedRow()==-1 ) return;
@@ -163,6 +182,8 @@ public class JTableEx extends JTable {
     public void addNotify() {
 
         if( beanList!=null && beanClass!=null )
+        	
+        	
         	
             BindingUtils.initTableBinding( null, UpdateStrategy.READ_WRITE, this);
       
