@@ -52,11 +52,14 @@
 */
 package org.swixml;
 
-import com.apple.eawt.*;
-import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 import java.util.Map;
+
+import javax.swing.Action;
+
+import com.apple.eawt.Application;
+import com.apple.eawt.ApplicationAdapter;
+import com.apple.eawt.ApplicationEvent;
 
 /**
  * A MacApp object acompanies a SwingEngine generated UI, when run on a Mac.
@@ -65,15 +68,6 @@ import java.util.Map;
  * Action are available and fully funtional (loaded).
  */
 public class MacApp extends Application {
-  private static MacApp INSTANCE = null;
-
-  public synchronized static MacApp getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new MacApp();
-    }
-    return INSTANCE;
-  }
-
   //////////////////////////////////////////////////
 
   Action aboutAction = null;
@@ -83,11 +77,12 @@ public class MacApp extends Application {
   Action printAction = null;
   Action reopenAction = null;
   Action quitAction = null;
-int sequence;
+  
+  int sequence;
 
 
-  private MacApp() {
-      this.sequence = 0;
+  public MacApp() {
+    this.sequence = 0;
     addApplicationListener( new ApplicationAdapter() {
 
       public void handleAbout( ApplicationEvent event ) {
@@ -101,6 +96,7 @@ int sequence;
         }
       }
 
+      @Override
       public void handleOpenApplication( ApplicationEvent event ) {
         if (appAction != null) {
           appAction.actionPerformed( new ActionEvent(event.getSource(),
@@ -145,17 +141,6 @@ int sequence;
         }
       }
 
-      public void handleQuit( ApplicationEvent event ) {
-        if (quitAction != null) {
-          quitAction.actionPerformed( new ActionEvent(event.getSource(),
-                  MacApp.this.sequence++,
-                  Parser.ATTR_MACOS_QUIT) );
-          event.setHandled( true );
-        } else {
-          super.handleQuit( event );
-        }
-      }
-
       public void handleReOpenApplication( ApplicationEvent event ) {
         if (reopenAction != null) {
           reopenAction.actionPerformed( new ActionEvent(event.getSource(),
@@ -166,6 +151,20 @@ int sequence;
           super.handleReOpenApplication( event );
         }
       }
+
+      public void handleQuit( ApplicationEvent event ) {
+          if (quitAction != null) {
+            quitAction.actionPerformed( new ActionEvent(event.getSource(),
+                    MacApp.this.sequence++,
+                    Parser.ATTR_MACOS_QUIT) );
+            event.setHandled( true );
+          } else {
+            //super.handleQuit( event );
+        	// Default implementation end main application   
+        	org.jdesktop.application.Application.getInstance().exit();
+          }
+        }
+
 
     } );
   }

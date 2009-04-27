@@ -107,10 +107,6 @@ public class SwingEngine<T extends Container> {
   
 	public static final String CLIENT_PROPERTY = "org.swixml.client";
 	
-	/**
-	 * Mac OSX identifier in System.getProperty(os.name)
-	 */
-	public static final String MAC_OSX_OS_NAME = "mac os x";
 
   /**
    * Mac OSX locale variant to localize strings like quit etc.
@@ -151,10 +147,6 @@ public class SwingEngine<T extends Container> {
    */
   private static Locale default_locale = Locale.getDefault();
   /**
-   * Check is currently running on a Mac
-   */
-  private static boolean MAC_OSX = false;
-  /**
    * static Mac OS X Support, set to true to support Mac UI specialties
    */
   private static boolean MAC_OSX_SUPPORTED = true;
@@ -164,12 +156,7 @@ public class SwingEngine<T extends Container> {
   //
   /** display the swing release version to system out. */
   static {
-    System.out.println("SwixML @version@");
-    try {
-      MAC_OSX = System.getProperty("os.name").toLowerCase().startsWith(SwingEngine.MAC_OSX_OS_NAME);
-    } catch (Exception e) {
-      MAC_OSX = false;
-    }
+    System.out.println("SwixML 2.5");
   }
 
   //
@@ -215,20 +202,6 @@ public class SwingEngine<T extends Container> {
     this.setLocale(SwingEngine.default_locale);
     this.getLocalizer().setResourceBundle(SwingEngine.default_resource_bundle_name);
 
-    try {
-      if (SwingEngine.isMacOSXSupported() && SwingEngine.isMacOSX()) {
-        // Use apple's ScreenMenuBar instead of the MS-Window style
-        // application's own menu bar
-        System.setProperty("com.apple.macos.useScreenMenuBar", "true");
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-
-        // Don't let the growbox intrude other widgets
-        System.setProperty("apple.awt.showGrowBox", "true");
-        System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
-      }
-    } catch (AccessControlException e) {
-      // intentionally empty
-    }
   }
 
   /**
@@ -897,11 +870,14 @@ public class SwingEngine<T extends Container> {
 
   /**
    * Indicates if currently running on Mac OS X
+   * 
+   * use Application.getInstance().isMacOSX();
    *
    * @return <code>boolean</code>- indicating if currently running on a MAC
    */
+  @Deprecated
   public static boolean isMacOSX() {
-    return SwingEngine.MAC_OSX;
+    return Application.getInstance().isMacOSX();
   }
 
   /**
