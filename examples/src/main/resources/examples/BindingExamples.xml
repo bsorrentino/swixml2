@@ -48,7 +48,7 @@
 </scrollpane>
 
 <scrollpane>
-<table id="testTable" action="selectRow" cellSelectionEnabled="true" bindList="${myData}" bindClass="${myDataClass}" />
+<table id="testTable" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="true" bindList="${myData}" bindClass="${myDataClass}" />
 </scrollpane>
 
 </splitpane>

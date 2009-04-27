@@ -120,6 +120,13 @@ public List<SimpleBean> getMyData() {
     System.out.printf( "selectRow firstIndex=%d lastIndex=%d valueIsAdjusting=%b\n", ev.getFirstIndex(), ev.getLastIndex(), ev.getValueIsAdjusting());
     
   }
+
+  @Action
+  public void activateRow( ActionEvent e ) {
+    
+	    System.out.printf( "activate row [%d]\n", testTable.getSelectedRow());
+    
+  }
   
   @Action()
   public void show( ActionEvent e ) {

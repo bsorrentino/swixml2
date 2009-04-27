@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<frame size="640,480" title="Hello SWIXML World" bundle="locale.swix" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+<frame size="640,480" title="Hello SWIXML World" bundle="locale.swix_en" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
   <menubar name="menubar">
     <menu text="mus_Help">
       <menuitem name="mi_help" text="mis_Help" icon="img_Help" Action="actionHelp" Accelerator="acc_Help"/>
