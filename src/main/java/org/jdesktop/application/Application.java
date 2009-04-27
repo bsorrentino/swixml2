@@ -15,15 +15,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.PaintEvent;
 import java.beans.Beans;
 import java.lang.reflect.Constructor;
+import java.security.AccessControlException;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import org.swixml.MacApp;
+import org.swixml.SwingEngine;
 
 
 /**
@@ -124,10 +129,27 @@ import javax.swing.UIManager;
 @ProxyActions({"cut", "copy", "paste", "delete"})
 
 public abstract class Application extends AbstractBean {
-    private static final Logger logger = Logger.getLogger(Application.class.getName());
+	private static final String COM_APPLE_MRJ_APPLICATION_GROWBOX_INTRUDES = "com.apple.mrj.application.growbox.intrudes";
+
+	private static final String APPLE_AWT_SHOW_GROW_BOX = "apple.awt.showGrowBox";
+
+	private static final String APPLE_LAF_USE_SCREEN_MENU_BAR = "apple.laf.useScreenMenuBar";
+
+	private static final String COM_APPLE_MACOS_USE_SCREEN_MENU_BAR = "com.apple.macos.useScreenMenuBar";
+
+	/**
+	 * Mac OSX identifier in System.getProperty(os.name)
+	 */
+	public static final String MAC_OSX_OS_NAME = "mac os x";
+
+	private static final Logger logger = Logger.getLogger(Application.class.getName());
     private static Application application = null;
     private final List<ExitListener> exitListeners;
     private final ApplicationContext context;
+
+    // Mac application adapter
+    private MacApp macAppAdapter = null;
+    
 
     /**
      * Not to be called directly, see {@link #launch launch}.
@@ -139,10 +161,64 @@ public abstract class Application extends AbstractBean {
      * method.  
      */
     protected Application() {
-	exitListeners = new CopyOnWriteArrayList<ExitListener>();
-        context = new ApplicationContext();
+    	exitListeners = new CopyOnWriteArrayList<ExitListener>();
+    	context = new ApplicationContext();
+
+    	boolean macosx = false;
+
+        try {
+          macosx = System.getProperty("os.name").toLowerCase().startsWith(MAC_OSX_OS_NAME);
+        } catch (Exception e) {
+          macosx = false;
+        }
+    
+    	if( macosx ) {
+    	    System.out.println( "MAC_OSX detected");
+    	    
+    	    try {
+    	       
+	          // Use apple's ScreenMenuBar instead of the MS-Window style
+	          // application's own menu bar
+	          if( System.getProperty(COM_APPLE_MACOS_USE_SCREEN_MENU_BAR)==null)
+	        	  System.setProperty(COM_APPLE_MACOS_USE_SCREEN_MENU_BAR, "true");
+	          
+	          if( System.getProperty(APPLE_LAF_USE_SCREEN_MENU_BAR)==null)
+	        	  System.setProperty(APPLE_LAF_USE_SCREEN_MENU_BAR, "true");
+
+	          // Don't let the growbox intrude other widgets
+	          if( System.getProperty(APPLE_AWT_SHOW_GROW_BOX)==null)
+	        	  System.setProperty(APPLE_AWT_SHOW_GROW_BOX, "true");
+	          
+	          if( System.getProperty(COM_APPLE_MRJ_APPLICATION_GROWBOX_INTRUDES)==null)
+	        	  System.setProperty(COM_APPLE_MRJ_APPLICATION_GROWBOX_INTRUDES, "false");
+    	        
+			} catch (AccessControlException e) {
+			    // intentionally empty
+			}
+
+    		macAppAdapter = new MacApp();
+    	}
+    	
     }
 
+    /**
+     * Indicates if currently running on Mac OS X
+     *
+     * @return <code>boolean</code>- indicating if currently running on a MAC
+     */
+    public boolean isMacOSX() {
+      return null!=macAppAdapter;
+    }
+    
+    /**
+     * return MACOSX application adapter
+     * 
+     * @return com.apple.eawt.Application instance if we are running on macosx otherwise null 
+     */
+    public MacApp getMacApp() {
+    	return macAppAdapter;
+    }
+    
     /**
      * Creates an instance of the specified {@code Application}
      * subclass, sets the {@code ApplicationContext} {@code
@@ -167,7 +243,7 @@ public abstract class Application extends AbstractBean {
 	    public void run() {
 		try {
 		    application = create(applicationClass);
-                    application.initialize(args);
+            application.initialize(args);
 		    application.startup();
 		    		// raise an error on loading of Substance Look&Feel
                     //application.waitForReady();

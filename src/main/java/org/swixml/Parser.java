@@ -66,6 +66,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
+
+import org.jdesktop.application.Application;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyResolutionException;
@@ -362,7 +364,7 @@ public class Parser {
   private void supportMacOS() {
     if (SwingEngine.isMacOSXSupported() && SwingEngine.isMacOSX()) {
       try {
-        MacApp.getInstance().update(mac_map);
+        Application.getInstance().getMacApp().update(mac_map);
       } catch (Throwable t) {
         // intentionally empty
       }
