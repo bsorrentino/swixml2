@@ -6,6 +6,9 @@
 package org.swixml.jsr.widgets;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -23,6 +26,7 @@ import javax.swing.tree.TreeModel;
 public class JTreeEx extends JTree {
 
     private Action action;
+    private Action dblClickAction = null;
     private ImageIcon leafIcon = null;
     private ImageIcon openIcon = null;
     private ImageIcon closedIcon = null;
@@ -44,7 +48,8 @@ public class JTreeEx extends JTree {
 
     
     private void init() {
-        super.addTreeSelectionListener(new TreeSelectionListener(){
+
+    	super.addTreeSelectionListener(new TreeSelectionListener(){
 
             public void valueChanged(TreeSelectionEvent e) {
                 Action a = getAction();
@@ -57,7 +62,7 @@ public class JTreeEx extends JTree {
             }
             
         });        
-        
+
         if( null!=openIcon || null!=leafIcon || null!=closedIcon) {
             DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
             
@@ -67,9 +72,39 @@ public class JTreeEx extends JTree {
         
             setCellRenderer(renderer);
         }
+        
+        MouseListener ml = new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+            	int selRow = getRowForLocation(e.getX(), e.getY());
+                //TreePath selPath = getPathForLocation(e.getX(), e.getY());
+            	System.out.printf( "mousePressed selRow=[%d] clickCount=[%d]\n", selRow, e.getClickCount());
+                if(selRow != -1) {
+                    if(e.getClickCount() == 2) {
+            			Action a = getDblClickAction();
+            			
+            			if( a==null ) return;
+            			
+            			ActionEvent ev = new ActionEvent(e, 0, null );
+            			
+            			a.actionPerformed(ev);
+
+                    }
+                }
+            }
+        };
+        addMouseListener(ml);
+
     }
     
-    public ImageIcon getOpenIcon() {
+    public final Action getDblClickAction() {
+		return dblClickAction;
+	}
+
+	public final void setDblClickAction(Action dblClickAction) {
+		this.dblClickAction = dblClickAction;
+	}
+
+	public ImageIcon getOpenIcon() {
         return openIcon;
     }
 
