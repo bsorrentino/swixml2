@@ -1,9 +1,11 @@
+package legacy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -21,6 +23,16 @@ import org.swixml.SwingEngine;
  * @since swixml #065
  */
 public class Actions extends JFrame implements ActionListener {
+
+	public static class ComboModel extends DefaultComboBoxModel {
+		  /**
+		   * Constructs a DefaultComboBoxModel object.
+		   */
+		  public ComboModel() {
+		    super( new Object[]{"Bird", "Cat", "Dog", "Rabbit", "Pig"} );
+		  }
+	}
+	
   private SwingEngine swix;
 
   public JMenuItem mi_exit, mi_save;
@@ -59,6 +71,7 @@ public class Actions extends JFrame implements ActionListener {
    * Constructs a new Actions object, registering action handlers for center_panel components.
    */
   private Actions() {
+	  System.out.println( ComboModel.class.getName());
     try {
       swix = new SwingEngine( this );
       swix.render( "xml/actions.xml" );

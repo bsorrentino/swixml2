@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<frame	size="500,600" 
+		resizable="true" 
+		alwaysOnTop="false" 
+		title="SWIXML2 Explorer" 
+		defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+
+
+<panel name="explorer" layout="BorderLayout">
+
+<splitpane constraints="BorderLayout.CENTER">
+<scrollpane>
+<tree model="${applications}" action="selectNode" dblClickAction="runApplication" />
+</scrollpane>
+
+<panel id="contentPanel" name="contentPanel" layout="CardLayout">
+</panel>
+
+
+</splitpane>
+
+</panel>
+
+</frame>

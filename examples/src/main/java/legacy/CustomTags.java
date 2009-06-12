@@ -1,3 +1,4 @@
+package legacy;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;

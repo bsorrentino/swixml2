@@ -1,3 +1,7 @@
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JFrame;
 
 import org.swixml.SwingEngine;
@@ -24,6 +28,16 @@ public class XInclude extends JFrame {
       e.printStackTrace();
     }
   }
+  
+  
+  public Action okAction = new AbstractAction() {
+
+	    public void actionPerformed(ActionEvent e) {
+	      System.out.println( "ok" );
+	    }
+	    
+	  };
+
 
   public static void main( String[] args ) {
     new XInclude();

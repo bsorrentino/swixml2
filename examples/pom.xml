@@ -69,6 +69,17 @@
 </scm>
   
 <build>
+	<resources>
+		<resource>
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.java</include>
+			</includes>
+		</resource>
+		<resource>
+			<directory>src/main/resources</directory>
+		</resource>
+	</resources>
 
 <plugins>
     
@@ -111,16 +122,88 @@
 </executions>
 </plugin>
 
+<plugin>
+<groupId>org.codehaus.mojo.webstart</groupId>
+<artifactId>webstart-maven-plugin</artifactId>
+<version>1.0-alpha-2</version>
+
+<executions>
+<execution>
+<goals>
+<goal>jnlp</goal>
+</goals>
+<phase>install</phase>
+<configuration>
+
+	<dependencies>
+
+		<includes />
+		<excludes />
+
+	</dependencies>
+	<!-- 
+	<resourcesDirectory>${project.basedir}/src/jnlp/resources</resourcesDirectory>
+	-->
+	<resourcesDirectory>src/main/native</resourcesDirectory>
+	<jnlp>
+		<!-- we play with the resource path and template relative path to test MOJO-391	-->
+		<inputTemplateResourcePath>${project.basedir}/src/main</inputTemplateResourcePath>
+		<inputTemplate>jnlp/template.vm</inputTemplate>
+		<outputFile>swixml2.jnlp</outputFile>	
+		<mainClass>it.softphone.ad.Bootstrapper</mainClass>		
+	</jnlp>
+
+<!-- 
+=====================
+SIGNING
+
+defining this will automatically sign the jar and its dependencies 
+=====================
+-->
+	<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+	
+	<sign>
+		<alias>swixml2-examples</alias>
+		<validity>180</validity>
+	<!-- 
+		<dnameCn>ENI</dnameCn>
+		<dnameOu>None</dnameOu>
+		<dnameO>ExampleOrg</dnameO>
+		<dnameL>Seattle</dnameL>
+		<dnameSt>Washington</dnameSt>
+		<dnameC>US</dnameC>
+	-->
+		<verify>true</verify>
+        <keystore>${project.basedir}/bsc.keystore</keystore>
+        <dname>cn=http://code.google.com/p/swixml2, ou=None, L=Avellino, ST=Italy, o=ExampleOrg, c=IT</dname>
+        <keypass>bsc</keypass>
+        <storepass>bsc</storepass>
+
+		<keystoreConfig>
+			<delete>true</delete>
+			<gen>true</gen>
+		</keystoreConfig>
+	</sign>
+
+	<verbose>false</verbose>
+
+</configuration>
+
+</execution>
+
+</executions>
+
+</plugin>
 
 </plugins>
 
 </build>
 
-<pluginRepositories>
-    <pluginRepository>
+<repositories>
+    <repository>
       <id>google-swixml2</id>
       <url>http://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
-    </pluginRepository>
-</pluginRepositories>  
+    </repository>
+</repositories>  
 
 </project>

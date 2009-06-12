@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.5+" codebase="http://localhost:8080/report/bootstrapper-1.0/" >
+
+  <information>
+    <title>AGENT DESKTOP</title>
+	<vendor>ENI</vendor>    
+	
+	<shortcut>
+        <desktop/>
+    </shortcut>
+	<offline-allowed/> 
+	
+  </information>
+
+  <security>
+     <all-permissions/>
+  </security>
+
+  <resources>
+    <j2se version="1.5+" java-vm-args="-esa -Xnoclassgc" initial-heap-size="128m"  max-heap-size="256m" />
+     $dependencies
+  </resources>
+
+<resources>
+	<!-- Genesys Configuration Server infos (addr:port) -->
+	<property name="config_server.host" value="192.168.1.10:2020"/>
+	<property name="config_server_bak.host" value="192.168.1.10:2020"/>
+
+	<!-- Genesys Application Name -->
+	<property name="application.name" value="AILBartoloClient"/>
+
+	<!-- 
+	{0}=service request id
+	{1}=ticket type  
+	-->
+	<property name="remedy.openticketlistU" value="D:/GenesysTest/runmacro/leggiTicket.exe {0},{1}" />
+	<!-- 
+	{0}=login id
+	 -->
+	<property name="remedy.openticketlist" value="D:/GenesysTest/runmacro/apriElencoTicket.exe {0}" />
+
+	<!--
+	{0}=login id,{1}=nome,{2}=cognome,{3}=summary,{4}=tier1,{5}=tier2,{6}=tier3,{7}=dataic,{8}=dataiA,{9}=origine
+	-->
+	<property name="remedy.openticket" value="D:/GenesysTest/runmacro/creaTicket.exe {1},{3},{0},{2},{7},{8},{4},{5},{6},{9}" />
+
+	<property name="remedy.isavailable" value="D:\GenesysTest\runmacro\gockrmd.exe" />
+
+	<!-- nativelib href="native-1.0-dll.jar" /-->
+</resources>
+  
+  
+  <application-desc main-class="$mainClass">
+  	<argument>ENI</argument>
+  </application-desc>
+
+</jnlp>
