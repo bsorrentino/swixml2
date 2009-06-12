@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
+import org.apache.commons.beanutils.ConstructorUtils;
 import org.jdom.Attribute;
 
 /**
@@ -67,7 +69,8 @@ public class BeanFactory implements Factory {
         }
         try {
             // get runtime class of the parameter
-            return template.getConstructor(types).newInstance(parameter);
+            //return template.getConstructor(types).newInstance(parameter);
+        	return ConstructorUtils.invokeConstructor(template, parameter);
         } catch (NoSuchMethodException ex) {
             logger.log(Level.SEVERE, "newInstance", ex);
         } catch (SecurityException ex) {
