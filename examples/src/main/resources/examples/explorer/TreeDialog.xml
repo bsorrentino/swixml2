@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dialog	size="500,800" 
+		resizable="true" 
+		alwaysOnTop="false" 
+		title="SWIXML2 Tree example" 
+		defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
+
+
+<panel name="explorer" layout="BorderLayout">
+
+<splitpane constraints="BorderLayout.CENTER">
+<scrollpane minimumSize="150,800">
+<tree id="tree" model="${myModel}" action="selectNode" dblClickAction="activeNode" toolTipText="this is a tooltip" />
+</scrollpane>
+
+<panel id="contentPanel" name="contentPanel" layout="BorderLayout">
+<textarea constraints="BorderLayout.CENTER" bindWith="result" editable="false">
+</textarea>
+
+</panel>
+
+
+</splitpane>
+
+</panel>
+
+</dialog>

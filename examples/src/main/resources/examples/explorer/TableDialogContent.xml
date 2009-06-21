@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<panel  layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="XML Source" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/TableDialog.xml"></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="Java Source" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/TableExample.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="SimpleBean" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/SimpleBean.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="SimpleBeanInfo" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/SimpleBeanBeanInfo.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+</tabbedpane>
+
+</panel>

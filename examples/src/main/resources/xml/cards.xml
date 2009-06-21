@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<frame name="mainframe" layout="BorderLayout" size="640,480" title="S W I X M L" plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+<frame name="mainframe" layout="BorderLayout" size="640,480" title="S W I X M L" plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel" defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
   <panel id="pnl" Layout="CardLayout(10,10)" Border="EtchedBorder">
 
     <panel id="c1" Name="c1" abc="c1" Border="TitledBorder(Card 1)" constraints="c1" Background="red">

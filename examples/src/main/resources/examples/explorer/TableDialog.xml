@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<dialog 
+    minimumSize="400,240"
+	resizable="false" 
+	title="Example ComboBox usage" 
+	undecorated="false" 
+	alwaysOnTop="true"
+	defaultCloseOperation="JFrame.HIDE_ON_CLOSE" 
+	modal="false"
+	>
+
+<panel layout="BorderLayout">
+
+	<scrollpane constraints="BorderLayout.CENTER">
+		<table id="table" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="true" bindList="${myData}" bindClass="${myDataClass}" />
+	</scrollpane>
+</panel>
+
+</dialog>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<frame	size="500,600" 
+<frame	size="500,800" 
 		resizable="true" 
 		alwaysOnTop="false" 
 		title="SWIXML2 Explorer" 
@@ -9,8 +9,8 @@
 <panel name="explorer" layout="BorderLayout">
 
 <splitpane constraints="BorderLayout.CENTER">
-<scrollpane>
-<tree model="${applications}" action="selectNode" dblClickAction="runApplication" />
+<scrollpane minimumSize="150,800">
+<tree model="${applications}" action="selectNode" dblClickAction="runApplication" toolTipText="double clik to run demo" />
 </scrollpane>
 
 <panel id="contentPanel" name="contentPanel" layout="CardLayout">

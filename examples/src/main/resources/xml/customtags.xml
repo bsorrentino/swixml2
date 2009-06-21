@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<frame title="Swixml: Custom Tags" size="400,260" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+<frame title="Swixml: Custom Tags" size="400,260" defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
        <!--plaf="org.jvnet.substance.skin.SubstanceRavenLookAndFeel">                              -->
   <panel layout="BorderLayout">
     <panel  border="TitledBorder(JCalendar,0,1,VERDANA-BOLD-18)"   background="white" constraints="BorderLayout.NORTH">
