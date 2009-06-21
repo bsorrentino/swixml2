@@ -92,7 +92,7 @@
 </configuration>
 </plugin>
 
-
+<!--  
 <plugin>
 <groupId>org.apache.maven.plugins</groupId>
 <artifactId>maven-dependency-plugin</artifactId>
@@ -121,6 +121,7 @@
 </execution>
 </executions>
 </plugin>
+-->
 
 <plugin>
 <groupId>org.codehaus.mojo.webstart</groupId>
@@ -136,10 +137,8 @@
 <configuration>
 
 	<dependencies>
-
 		<includes />
 		<excludes />
-
 	</dependencies>
 	<!-- 
 	<resourcesDirectory>${project.basedir}/src/jnlp/resources</resourcesDirectory>
@@ -150,7 +149,7 @@
 		<inputTemplateResourcePath>${project.basedir}/src/main</inputTemplateResourcePath>
 		<inputTemplate>jnlp/template.vm</inputTemplate>
 		<outputFile>swixml2.jnlp</outputFile>	
-		<mainClass>it.softphone.ad.Bootstrapper</mainClass>		
+		<mainClass>examples.explorer.Swixml2Explorer</mainClass>		
 	</jnlp>
 
 <!-- 
@@ -165,23 +164,22 @@ defining this will automatically sign the jar and its dependencies
 	<sign>
 		<alias>swixml2-examples</alias>
 		<validity>180</validity>
-	<!-- 
-		<dnameCn>ENI</dnameCn>
+	
+		<dnameCn>Swixml2</dnameCn>
 		<dnameOu>None</dnameOu>
 		<dnameO>ExampleOrg</dnameO>
-		<dnameL>Seattle</dnameL>
-		<dnameSt>Washington</dnameSt>
-		<dnameC>US</dnameC>
-	-->
+		<dnameL>Avellino</dnameL>
+		<dnameSt>Italy</dnameSt>
+		<dnameC>IT</dnameC>
+	
 		<verify>true</verify>
         <keystore>${project.basedir}/bsc.keystore</keystore>
-        <dname>cn=http://code.google.com/p/swixml2, ou=None, L=Avellino, ST=Italy, o=ExampleOrg, c=IT</dname>
-        <keypass>bsc</keypass>
-        <storepass>bsc</storepass>
+        <keypass>googlebsc</keypass>
+        <storepass>googlebsc</storepass>
 
 		<keystoreConfig>
-			<delete>true</delete>
-			<gen>true</gen>
+			<delete>false</delete>
+			<gen>false</gen>
 		</keystoreConfig>
 	</sign>
 
