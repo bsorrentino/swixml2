@@ -5,12 +5,15 @@
 		title="SWIXML2 Explorer" 
 		defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
 
-
 <panel name="explorer" layout="BorderLayout">
+<toolbar constraints="BorderLayout.NORTH">
+     <button ToolTipText="run application" action="runApplication" icon="icons/new.gif" />
+</toolbar>
+
 
 <splitpane constraints="BorderLayout.CENTER">
 <scrollpane minimumSize="150,800">
-<tree model="${applications}" action="selectNode" dblClickAction="runApplication" toolTipText="double clik to run demo" />
+<tree model="${applications}" action="selectNode" dblClickAction="activeNode" toolTipText="double clik to run demo" />
 </scrollpane>
 
 <panel id="contentPanel" name="contentPanel" layout="CardLayout">

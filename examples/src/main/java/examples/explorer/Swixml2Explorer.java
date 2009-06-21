@@ -21,6 +21,7 @@ import legacy.Actions;
 import legacy.Cards;
 import legacy.CustomTags;
 import legacy.GridBag;
+import legacy.Layout;
 
 import org.jdesktop.application.Action;
 import org.swixml.SwingTagLibrary;
@@ -106,6 +107,7 @@ public class Swixml2Explorer extends SwingApplication  {
 	public class MyFrame extends JFrame {
 		
 		Set<PanelInfo> panels = new HashSet<PanelInfo>(100);
+		private Class<?> selectedApplicationClass = null;
 		
 		private final GenericTreeModel<PanelInfo> applications;
 		public JPanel contentPanel ;
@@ -149,6 +151,11 @@ public class Swixml2Explorer extends SwingApplication  {
 				}
 				{
 					PanelInfo p = new PanelInfo("GridBag", GridBag.class, "xml/gridbag.xml", "legacy/GridBag.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("Layout", Layout.class, "xml/funlayout.xml", "legacy/Layout.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
@@ -224,6 +231,17 @@ public class Swixml2Explorer extends SwingApplication  {
 			return applications;
 		}
 
+		public final Class<?> getSelectedApplicationClass() {
+			return selectedApplicationClass;
+		}
+
+
+		public final void setSelectedApplicationClass(Class<?> selectedApplicationClass) {
+			this.selectedApplicationClass = selectedApplicationClass;
+			firePropertyChange("runnable", null, null);
+		}
+
+
 		@Action
 		public void selectNode( ActionEvent ev ) {
 		
@@ -231,29 +249,47 @@ public class Swixml2Explorer extends SwingApplication  {
 			
 			PanelInfo info = applications.getSelectedObject( (TreeSelectionEvent) ev.getSource());
 
+			setSelectedApplicationClass( info.panelClass );
+
 			CardLayout l = (CardLayout) contentPanel.getLayout();
 		
 			l.show(contentPanel, info.name);
+			
+
 		}
 		
 		@Action
-		public void runApplication( ActionEvent ev ) {
+		public void activeNode( ActionEvent ev ) {
 		
 			logger.info( String.format("run application  [%s]\n", ev) );
 
 			PanelInfo info = applications.getSelectedObject( (MouseEvent) ev.getSource());
 
-			if( info.panelClass!=null ) {
+			setSelectedApplicationClass( info.panelClass );
+			
+			runApplication();
+			
+			
+		}
+		
+		public boolean isRunnable() {
+			return selectedApplicationClass!=null;
+		}
+		
+		@Action( enabledProperty="runnable")
+		public void runApplication() {
+		
+			if( !isRunnable() ) return;
+			logger.info( String.format("run application  [%s]\n", selectedApplicationClass) );
+
+			try {
+				Method main = getSelectedApplicationClass().getMethod("main", String[].class );
 				
-				try {
-					Method main = info.panelClass.getMethod("main", String[].class );
-					
-					Object args = new String[0];
-					main.invoke(null, args);
-					
-				} catch (Exception e) {
-					logger.log( Level.WARNING, "error on start application", e );
-				}
+				Object args = new String[0];
+				main.invoke(null, args);
+				
+			} catch (Exception e) {
+				logger.log( Level.WARNING, "error on start application", e );
 			}
 		}
 		
