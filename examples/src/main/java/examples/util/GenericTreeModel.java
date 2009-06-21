@@ -23,8 +23,8 @@ import javax.swing.tree.TreePath;
 @SuppressWarnings("serial")
 public class GenericTreeModel<T> extends DefaultTreeModel {
 
-    public GenericTreeModel( String rootName ) {
-        super( new DefaultMutableTreeNode(rootName), true);
+    public GenericTreeModel( T root ) {
+        super( new DefaultMutableTreeNode(root), true);
     }
 
     public GenericTreeModel(DefaultMutableTreeNode root, boolean asksAllowsChildren) {

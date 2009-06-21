@@ -1,3 +1,4 @@
+package legacy;
 import javax.swing.JFrame;
 
 import org.swixml.SwingEngine;

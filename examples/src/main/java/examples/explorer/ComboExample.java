@@ -1,4 +1,4 @@
-package examples;
+package examples.explorer;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -19,54 +19,53 @@ import org.swixml.jsr296.SwingApplication;
 
 
 @SuppressWarnings("serial")
-
-public class ComboApplication extends SwingApplication {
+public class ComboExample extends SwingApplication {
 
 	public static class ComboDialog extends JDialog {
 		private static final String VALID_PROPERTY = "valid";
 
-		public static String SWIXML_SOURCE = "examples/ComboDialog.xml";
+		public static String SWIXML_SOURCE = "examples/explorer/ComboDialog.xml";
 		
 		private static final String ENTER_ACTION = "ENTER";
 		private static final String ESCAPE_ACTION = "ESCAPE";
 
-		public JComboBox cmbCallResult;
-		public JComboBox cmbChain;
+		public JComboBox cmbResult; // Automatically bound
+		public JComboBox cmbTemplate; // Automatically bound
 		
-		final  List<String> callResultList ;
-		final  List<String> outboundChainList;
+		final  List<String> resultList ;
+		final  List<String> templateList;
 
-		private boolean personal = false;
+		private boolean removeOnSubmit = false;
 		
 		public ComboDialog() {
 
-			callResultList = Arrays.asList( "<select chain>", "Item1", "Item2", "Item3" );
-			outboundChainList = ObservableCollections.observableList( new ArrayList<String>(Arrays.asList(  "Item1", "Item2", "Item3" )) );
+			templateList = Arrays.asList( "<select item>", "Item1", "Item2", "Item3" );
+			resultList = ObservableCollections.observableList( new ArrayList<String>(Arrays.asList(  "Item1", "Item2", "Item3" )) );
 		}
 		
-		public final List<String> getCallResultList() {
-			return callResultList;
+		public final List<String> getResultList() {
+			return resultList;
 		}
 
-		public final List<String> getOutboundChainList() {
-			return outboundChainList;
+		public final List<String> getTemplateList() {
+			return templateList;
 		}
 
-		public final boolean isPersonal() {
-			return personal;
+		public final boolean isRemoveOnSubmit() {
+			return removeOnSubmit;
 		}
 
-		public final void setPersonal(boolean personal) {
-			this.personal = personal;
+		public final void setRemoveOnSubmit(boolean value) {
+			this.removeOnSubmit = value;
 		}
 
 		@Action
-		public void selectChain() {
+		public void selectTemplate() {
 			firePropertyChange(VALID_PROPERTY, null, null);		
 		}
 		
 		@Action
-		public void selectCallResult() {
+		public void selectResult() {
 			firePropertyChange(VALID_PROPERTY, null, null);		
 		}
 		
@@ -76,22 +75,22 @@ public class ComboApplication extends SwingApplication {
 
 		@Action(enabledProperty=VALID_PROPERTY)
 		public void submit() {
-			int chainIndex = cmbChain.getSelectedIndex();
-			//int resultIndex = cmbCallResult.getSelectedIndex();
+			String selectItem = (String) cmbTemplate.getSelectedItem();
+			
+			if( isRemoveOnSubmit() ) {
+				resultList.remove(selectItem);
+			}
 
-			System.out.println( "submit" );
-
-			outboundChainList.remove(chainIndex);
-			cmbCallResult.setSelectedIndex(0);
+			cmbTemplate.setSelectedIndex(0);				
 			
 			firePropertyChange(VALID_PROPERTY, null, null);
 		}
 		
 		public boolean isValid() {
 			
-			if( cmbCallResult==null || cmbChain==null ) return false;
+			if( cmbResult==null || cmbTemplate==null ) return false;
 			
-			return cmbCallResult.getSelectedIndex()>0 && cmbChain.getSelectedIndex()!=-1;
+			return cmbTemplate.getSelectedIndex()>0;
 		}
 		
 		protected JRootPane createRootPane() {
@@ -125,7 +124,7 @@ public class ComboApplication extends SwingApplication {
 	}
 
 	public static void main(String args []) {
-		SwingApplication.launch(ComboApplication.class, args);
+		SwingApplication.launch(ComboExample.class, args);
 	}
 	
 	

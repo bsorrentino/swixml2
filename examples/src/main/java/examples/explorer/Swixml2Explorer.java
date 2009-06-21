@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,11 +20,12 @@ import legacy.Accelerator;
 import legacy.Actions;
 import legacy.Cards;
 import legacy.CustomTags;
+import legacy.GridBag;
 
 import org.jdesktop.application.Action;
+import org.swixml.SwingTagLibrary;
 import org.swixml.jsr296.SwingApplication;
 
-import examples.ComboApplication;
 import examples.util.GenericTreeModel;
 
 
@@ -41,11 +41,11 @@ public class Swixml2Explorer extends SwingApplication  {
 		public final String sourceCodeUri; 
 		private String xmlPanel = "examples/explorer/Content.xml";
 		
-		public PanelInfo( String name, Class<?> panelClass, String swixmlUri ) {
+		public PanelInfo( String name, Class<?> panelClass ) {
 			super();
 			this.name = name;
 			this.panelClass = panelClass;
-			this.swixmlUri = swixmlUri;
+			this.swixmlUri = null;
 			this.sourceCodeUri = null;
 		}
 		public PanelInfo( String name, Class<?> panelClass, String swixmlUri, String sourceCodeUri ) {
@@ -107,14 +107,20 @@ public class Swixml2Explorer extends SwingApplication  {
 		
 		Set<PanelInfo> panels = new HashSet<PanelInfo>(100);
 		
-		private GenericTreeModel<PanelInfo> applications = new GenericTreeModel<PanelInfo>("applications");
-		
+		private final GenericTreeModel<PanelInfo> applications;
 		public JPanel contentPanel ;
 		
 		public MyFrame()  {
+
+			PanelInfo root = new PanelInfo( "Applications", null );
+			root.setXmlPanel("examples/explorer/Summary.xml");
+			panels.add( root );
+
+			applications = new GenericTreeModel<PanelInfo>(root);
+					
 			
 			{
-				PanelInfo pp = new PanelInfo("Legacy",null,null);
+				PanelInfo pp = new PanelInfo("Legacy", null);
 				pp.setXmlPanel("examples/explorer/Legacy.xml");
 				
 				panels.add( pp );
@@ -127,11 +133,6 @@ public class Swixml2Explorer extends SwingApplication  {
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Cards", Cards.class, "xml/cards.xml", "legacy/Cards.java");
-					panels.add( p );
-					applications.addNode(node, p );
-				}
-				{
 					PanelInfo p = new PanelInfo("CustomTags", CustomTags.class, "xml/customtags.xml", "legacy/CustomTags.java");
 					panels.add( p );
 					applications.addNode(node, p );
@@ -141,26 +142,44 @@ public class Swixml2Explorer extends SwingApplication  {
 					panels.add( p );
 					applications.addNode(node, p );
 				}
+				{
+					PanelInfo p = new PanelInfo("Cards", Cards.class, "xml/cards.xml", "legacy/Cards.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("GridBag", GridBag.class, "xml/gridbag.xml", "legacy/GridBag.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
 			}
 			
 			{
-				PanelInfo pp = new PanelInfo("NewFeatures",null,null);
+				PanelInfo pp = new PanelInfo("New Features",null);
 				pp.setXmlPanel("examples/explorer/NewFeatures.xml");
 				
 				panels.add( pp );
 				
 				MutableTreeNode node =  applications.addNodeToRoot( pp, true );
 				{
-					PanelInfo p = new PanelInfo("ComboBox", ComboApplication.class, "examples/ComboDialog.xml", "examples/ComboApplication.java");
+					PanelInfo p = new PanelInfo("Combo Example", ComboExample.class, "examples/explorer/ComboDialog.xml", "examples/explorer/ComboExample.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
-/*				
+			
 				{
-					PanelInfo p = new PanelInfo("Cards", Cards.class, "xml/cards.xml", "legacy/Cards.java");
+					PanelInfo p = new PanelInfo("Table Example", TableExample.class);
+					p.setXmlPanel("examples/explorer/TableDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
+				{
+					PanelInfo p = new PanelInfo("Tree Example", TableExample.class);
+					p.setXmlPanel("examples/explorer/TreeDialogContent.xml");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+/*
 				{
 					PanelInfo p = new PanelInfo("CustomTags", CustomTags.class, "xml/customtags.xml", "legacy/CustomTags.java");
 					panels.add( p );
@@ -173,6 +192,7 @@ public class Swixml2Explorer extends SwingApplication  {
 				}
 */				
 			}
+			
 		}
 
 
@@ -191,7 +211,13 @@ public class Swixml2Explorer extends SwingApplication  {
 				
 			}
 			
+			CardLayout l = (CardLayout) contentPanel.getLayout();
+			
+			l.show(contentPanel, "Applications");
+
+			
 			super.addNotify();
+			
 		}
 
 		public final GenericTreeModel<PanelInfo> getApplications() {
@@ -206,8 +232,8 @@ public class Swixml2Explorer extends SwingApplication  {
 			PanelInfo info = applications.getSelectedObject( (TreeSelectionEvent) ev.getSource());
 
 			CardLayout l = (CardLayout) contentPanel.getLayout();
+		
 			l.show(contentPanel, info.name);
-			
 		}
 		
 		@Action
@@ -252,26 +278,7 @@ public class Swixml2Explorer extends SwingApplication  {
 	}
 
 	public static String loadResource( String res ) {
-		if( res==null ) return null;
-		
-		java.io.InputStream is = Swixml2Explorer.class.getClassLoader().getResourceAsStream(res);
-		if( is==null ) {
-			logger.warning( String.format("resource [%s] not found!", res));
-		}
-		else {
-			java.io.StringWriter w = new java.io.StringWriter(4*1024);
-			int c;
-			try {
-				while( -1!=(c=is.read()) ) {
-					w.write(c);
-				}
-				w.flush();
-				return w.toString();
-			} catch (IOException e) {
-				logger.log( Level.WARNING, "error reading resource", e );
-			}
-		}
-		return null;
+		return FileTextArea.loadResource(res);
 	}
 	
 	/**
@@ -285,8 +292,10 @@ public class Swixml2Explorer extends SwingApplication  {
 	@Override
 	protected void startup() {
 		try {
-
-			MyFrame frame = render( new MyFrame(), "examples/Explorer.xml" );
+			
+			SwingTagLibrary.getInstance().registerTag("FileTextArea", FileTextArea.class);
+			
+			MyFrame frame = render( new MyFrame(), "examples/explorer/Explorer.xml" );
 
 			show( frame );
 				
