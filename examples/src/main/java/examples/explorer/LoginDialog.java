@@ -1,4 +1,4 @@
-package examples;
+package examples.explorer;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -59,7 +59,10 @@ public class LoginDialog extends JDialog  {
 	 */
 	@Action
 	public void close() {
-		SwingApplication.getInstance().exit();
+		// Exit from application
+		//Application.getInstance().exit();
+		
+		setVisible(false);
 	}
 
 	

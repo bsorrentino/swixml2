@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<frame name="mainframe" size="340,280" title="SWIXML FormLayout Sample Descriptor" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+<frame name="mainframe" size="340,280" title="SWIXML FormLayout Sample Descriptor" defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
 
   <panel id="formPanel1">
     <layout type="FormLayout"

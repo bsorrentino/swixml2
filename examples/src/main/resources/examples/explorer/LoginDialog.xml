@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="windows-1252"?>
 
-<dialog Size="500,500" resizable="false" title="Simple Dialog"  defaultCloseOperation="JFrame.DO_NOTHING_ON_CLOSE">
+<dialog Size="500,500" resizable="false" title="Login Dialog"  defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
 
 <vbox>
 

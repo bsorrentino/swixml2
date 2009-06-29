@@ -20,6 +20,8 @@ import legacy.Accelerator;
 import legacy.Actions;
 import legacy.Cards;
 import legacy.CustomTags;
+import legacy.Form;
+import legacy.FormLayout;
 import legacy.GridBag;
 import legacy.Layout;
 
@@ -159,6 +161,16 @@ public class Swixml2Explorer extends SwingApplication  {
 					panels.add( p );
 					applications.addNode(node, p );
 				}
+				{
+					PanelInfo p = new PanelInfo("Form", Form.class, "xml/form.xml", "legacy/Form.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("FormLayout", FormLayout.class, "xml/formlayout.xml", "legacy/FormLayout.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
 			}
 			
 			{
@@ -181,8 +193,14 @@ public class Swixml2Explorer extends SwingApplication  {
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Tree Example", TableExample.class);
+					PanelInfo p = new PanelInfo("Tree Example", TreeExample.class);
 					p.setXmlPanel("examples/explorer/TreeDialogContent.xml");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("Dialog Example", LoginExample.class);
+					p.setXmlPanel("examples/explorer/LoginDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}

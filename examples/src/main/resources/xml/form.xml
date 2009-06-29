@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <frame name="frame" size="400,200" title="JGoodies FormLayout Sample"
-    defaultCloseOperation="JFrame.EXIT_ON_CLOSE"
+    defaultCloseOperation="JFrame.HIDE_ON_CLOSE"
     plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
 
   <panel border="EmptyBorder(10,10,10,10)">
