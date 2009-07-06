@@ -78,9 +78,9 @@ import java.util.Map;
 public class PrimitiveConverter implements Converter, SwingConstants, ScrollPaneConstants, KeyEvent, InputEvent {
 
   /** converter's return type */
-  public static final Class TEMPLATE = Object.class;
+  public static final Class<?> TEMPLATE = Object.class;
   /** map contains all constant provider types */
-  private static Map<String, Class> dictionaries = new HashMap<String, Class>();
+  private static Map<String, Class<?>> dictionaries = new HashMap<String, Class<?>>();
   /**
    * Static Initializer, setting up the initial constant providers
    */
@@ -95,6 +95,8 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
     PrimitiveConverter.addConstantProvider( JDialog.class );
     PrimitiveConverter.addConstantProvider( JFrame.class );
     PrimitiveConverter.addConstantProvider( TitledBorder.class );
+    PrimitiveConverter.addConstantProvider( JComponent.class );
+    
   }
   /**
    * Converts String into java primitive type
@@ -105,7 +107,7 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
    * @throws NoSuchFieldException in case no class a field matching field name had been regsitered with this converter
    * @throws IllegalAccessException if a matching field can not be accessed
    */
-  public static Object conv( final Class type, final Attribute attr,  final Localizer localizer ) throws NoSuchFieldException, IllegalAccessException {
+  public static Object conv( final Class<?> type, final Attribute attr,  final Localizer localizer ) throws NoSuchFieldException, IllegalAccessException {
     Attribute a = (Attribute) attr.clone();
     Object obj = null;
     if ( Parser.LOCALIZED_ATTRIBUTES.contains( a.getName().toLowerCase() ))
@@ -131,7 +133,7 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
         try {
           String s = a.getValue();
           int k = s.indexOf( '.' );
-          Class pp = dictionaries.get( s.substring( 0, k ) );
+          Class<?> pp = dictionaries.get( s.substring( 0, k ) );
           obj = pp.getField( s.substring( k + 1 ) ).get( pp );
         } catch (Exception ex) {
           //
@@ -152,7 +154,7 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
    * @return <code>Object</code> primitive wrapped into wrapper object
    * @throws Exception
    */
-  public Object convert( final Class type, final Attribute attr, final Localizer localizer ) throws Exception {
+  public Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception {
     return PrimitiveConverter.conv( type, attr, localizer );
   }
 
@@ -161,7 +163,7 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
    * is returning when its <code>convert</code> method is called
    * @return <code>Class</code> - the Class the converter is returning when its convert method is called
    */
-  public Class convertsTo() {
+  public Class<?> convertsTo() {
     return TEMPLATE;
   }
 
@@ -169,7 +171,7 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
    * Adds a new class or interface to the dictionary of primitive providers.
    * @param clazz <code>Class</code> providing primitive constants / public (final) fields
    */
-  public static void addConstantProvider(final Class clazz) {
+  public static void addConstantProvider(final Class<?> clazz) {
     dictionaries.put( clazz.getSimpleName(), clazz );
   }
 }
