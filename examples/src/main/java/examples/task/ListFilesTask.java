@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package jsr296;
+package examples.task;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,42 +17,50 @@ import org.jdesktop.application.Task;
  *
  * @author Sorrentino
  */
-class ListFilesTask extends Task<Void, File> {
+public class ListFilesTask extends Task<Void, File> {
 	private final File root;
 	private final int bufferSize;
 	private final List<File> buffer;
 
 	public ListFilesTask(Application app, File root) {
-	    super(app, "ListFilesTask");
+	    super(app);
 	    this.root = root;
 	    bufferSize = 10;
 	    buffer = new ArrayList<File>(bufferSize);
 	}
-	private void expand(File root) {
+	private void expand(File file) {
 	    if (isCancelled()) {
-		return;
+	    	return;
 	    }
-	    if (root.isDirectory()) {
-		message("directoryMessage", root.toString());
-		for(File file : root.listFiles()) {
-		    expand(file);
+	    try {
+			Thread.sleep( 200 );
+		} catch (InterruptedException e) {
+			// TODO log condition
+			return;
 		}
+	    
+    	setMessage( file.toString() );
+	    if (file.isDirectory()) {
+		
+			for(File f : file.listFiles()) {
+			    expand(f);
+			}
 	    }
 	    else {
-		buffer.add(root);
-		if (buffer.size() >= bufferSize) {
-		    File bufferFiles[] = new File[buffer.size()];
-		    publish(buffer.toArray(bufferFiles));
-		    buffer.clear();
-		}
+			buffer.add(file);
+			if (buffer.size() >= bufferSize) {
+			    File bufferFiles[] = new File[buffer.size()];
+			    publish(buffer.toArray(bufferFiles));
+			    buffer.clear();
+			}
 	    }
 	}
 	public Void doInBackground() {
 	    expand(root);
 	    if (!isCancelled()) {
-		File bufferFiles[] = new File[buffer.size()];
-		publish(bufferFiles);
+	    	File bufferFiles[] = new File[buffer.size()];
+	    	publish(bufferFiles);
 	    }
 	    return null;
 	}
-    }
+}
