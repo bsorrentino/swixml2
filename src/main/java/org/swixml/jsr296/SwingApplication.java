@@ -21,6 +21,7 @@ import org.swixml.SwingEngine;
  */
 public abstract class SwingApplication extends SingleFrameApplication {
 
+/*
 	private PropertyChangeListener taskChangeListener = new PropertyChangeListener() {
 	
 	        public void propertyChange(PropertyChangeEvent e) {
@@ -32,10 +33,11 @@ public abstract class SwingApplication extends SingleFrameApplication {
 		    }
 	    }
 	};
-  
+*/
 	protected SwingApplication() {
 	}
 	
+/*	
     public final void setTaskChangeListener( Task<?,?> t ) {
         t.addPropertyChangeListener( taskChangeListener );
     }
@@ -43,7 +45,7 @@ public abstract class SwingApplication extends SingleFrameApplication {
     protected void progressMessage( final String message ) {
         
     }
-        
+*/        
     public final <T extends Container> T render( T container, String resource) throws Exception {
     	if( null==resource ) throw new IllegalArgumentException( "resource is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
