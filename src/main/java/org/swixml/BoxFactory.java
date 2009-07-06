@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 
 import org.jdom.Attribute;
 
@@ -23,32 +24,61 @@ import org.jdom.Attribute;
  */
 public class BoxFactory extends BeanFactory {
 
+	public interface GapBox {
+	
+		boolean isAlignmentChanged();
+	}
+	
     /**
     *
     * @author sorrentino
     */
     @SuppressWarnings("serial")
-	public static class VGapBox extends Box {
+	public static class VGapBox extends Box implements GapBox {
 
         int gap = 0;
-
+        boolean alignmentChanged = false;
+        
         public VGapBox() {
             super(BoxLayout.Y_AXIS);
+            
         }
 
-        public int getGap() { return gap; }
+        @Override
+		public void setAlignmentX(float alignmentX) {
+			super.setAlignmentX(alignmentX);
+			alignmentChanged = true;
+		}
+
+		public boolean isAlignmentChanged() {
+			return alignmentChanged;
+		}
+
+		public int getGap() { return gap; }
 
         public void setGap(int gap) { this.gap = gap; }
 
         @Override
         public Component add(Component comp) {
-             Component result = super.add(comp);
+        	boolean process = true;
+        	
+        	if( comp instanceof GapBox ) {
+        		process = !((GapBox)comp).isAlignmentChanged();
+        	}
+        	
+        	if(  process && comp instanceof JComponent ) {
+        		JComponent c = (JComponent) comp;
+        		c.setAlignmentX(super.getAlignmentX());
+        	}
+        	
+        	Component result = super.add(comp);
              if( gap>0 ) {
             	 super.add( Box.createVerticalStrut(gap) );
              }
-
              return result;
         }
+
+
     }
 
     /**
@@ -56,20 +86,46 @@ public class BoxFactory extends BeanFactory {
     * @author sorrentino
     */
     @SuppressWarnings("serial")
-	public static class HGapBox extends Box {
+	public static class HGapBox extends Box implements GapBox {
 
         int gap = 0;
-
+        boolean alignmentChanged = false;
+        
+        
         public HGapBox() {
             super(BoxLayout.X_AXIS);
         }
 
-        public int getGap() { return gap; }
+        
+        public boolean isAlignmentChanged() {
+			return alignmentChanged;
+		}
+
+
+		@Override
+		public void setAlignmentX(float alignmentX) {
+			super.setAlignmentX(alignmentX);
+			alignmentChanged = true;
+		}
+
+
+		public int getGap() { return gap; }
 
         public void setGap(int gap) { this.gap = gap; }
 
         @Override
         public Component add(Component comp) {
+        	boolean process = true;
+        	
+        	if( comp instanceof GapBox ) {
+        		process = !((GapBox)comp).isAlignmentChanged();
+        	}
+        	
+        	if(  process && comp instanceof JComponent ) {
+        		JComponent c = (JComponent) comp;
+        		c.setAlignmentX(super.getAlignmentX());
+        	}
+        	
              Component result = super.add(comp);
              if( gap>0 ) {
                  super.add( Box.createHorizontalStrut(gap) );            	 
