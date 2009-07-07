@@ -6,7 +6,6 @@ import java.io.File;
 import java.util.Date;
 
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 import org.jdesktop.application.Action;
@@ -40,10 +39,6 @@ public class BackgroundTaskDialog extends JDialog  {
     @Override
 	public void addNotify() {
 		super.addNotify();
-		
-		progressBar.setIndeterminate(false);
-		progressBar.setValue(0);
-		
     }
 
 

@@ -6,13 +6,13 @@
 
 <panel name="XML Source" layout="BorderLayout">
 <scrollpane>
-<textarea id="xmlSource" bindWith="xmlSource"></textarea>
+<textarea id="xmlSource" bindWith="xmlSource" font="Courier-PLAIN-13"></textarea>
 </scrollpane>
 </panel>
 
-<panel name="Java Source" layout="BorderLayout">
+<panel name="Java Source" layout="BorderLayout" >
 <scrollpane>
-<textarea id="javaSource" bindWith="javaSource" ></textarea>
+<textarea id="javaSource" bindWith="javaSource" font="Courier-PLAIN-13"></textarea>
 </scrollpane>
 </panel>
 

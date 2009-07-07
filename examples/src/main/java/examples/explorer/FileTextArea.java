@@ -1,16 +1,23 @@
 package examples.explorer;
 
+import static org.swixml.LogUtil.logger;
+
+import java.awt.Font;
 import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.swing.JTextArea;
-import static org.swixml.LogUtil.logger;
 
 @SuppressWarnings("serial")
 public class FileTextArea extends JTextArea {
 
 	
 	private String source;
+
+	public FileTextArea() {
+		super();
+		setFont( new Font("Courier",Font.PLAIN, 13));
+	}
 
 	public final String getSource() {
 		return source;

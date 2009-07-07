@@ -204,18 +204,12 @@ public class Swixml2Explorer extends SwingApplication  {
 					panels.add( p );
 					applications.addNode(node, p );
 				}
-/*
 				{
-					PanelInfo p = new PanelInfo("CustomTags", CustomTags.class, "xml/customtags.xml", "legacy/CustomTags.java");
+					PanelInfo p = new PanelInfo("Background task Example", BackgroundTaskExample.class);
+					p.setXmlPanel("examples/explorer/BackgroundTaskDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
-				{
-					PanelInfo p = new PanelInfo("Actions", Actions.class, "xml/actions.xml", "legacy/Actions.java");
-					panels.add( p );
-					applications.addNode(node, p );
-				}
-*/				
 			}
 			
 		}

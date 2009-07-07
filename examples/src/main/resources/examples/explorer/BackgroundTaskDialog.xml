@@ -18,10 +18,12 @@
 	<button id="btnShowTime" Text="Retrieve Time" action="retrieveTime"/>	
 	</hbox>
 	
-	<!-- panel layout="GridLayout(2,1)" maximumSize="500,60" -->
 	<vbox >
 	<label border="EmptyBorder(1,1,1,1)" bindWith="file" />	
-	<hbox><progressbar id="progressBar" stringPainted="true"/><button  Text="Scan Dir" action="scanDir"/></hbox> 
+	<hbox>
+		<progressbar id="progressBar" stringPainted="false" />
+		<button  Text="Scan User Dir" action="scanDir"/>
+	</hbox> 
 	</vbox>
     
 </vbox>

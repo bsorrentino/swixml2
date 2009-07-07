@@ -16,7 +16,7 @@
 <tree model="${applications}" action="selectNode" dblClickAction="activeNode" toolTipText="double clik to run demo" />
 </scrollpane>
 
-<panel id="contentPanel" name="contentPanel" layout="CardLayout">
+<panel id="contentPanel" name="contentPanel" layout="CardLayout" >
 </panel>
 
 
