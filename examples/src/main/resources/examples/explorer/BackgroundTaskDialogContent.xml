@@ -6,19 +6,19 @@
 
 <panel name="XML Source" layout="BorderLayout">
 <scrollpane>
-<filetextarea source="examples/explorer/BackGroundTaskDialog.xml"></filetextarea>
+<filetextarea source="examples/explorer/BackgroundTaskDialog.xml"></filetextarea>
 </scrollpane>
 </panel>
 
 <panel name="Java Source (Application)" layout="BorderLayout">
 <scrollpane>
-<filetextarea source="examples/explorer/BackGroundTaskExample.java" ></filetextarea>
+<filetextarea source="examples/explorer/BackgroundTaskExample.java" ></filetextarea>
 </scrollpane>
 </panel>
 
 <panel name="Java Source (Dialog)" layout="BorderLayout">
 <scrollpane>
-<filetextarea source="examples/explorer/BackGroundTaskDialog.java" ></filetextarea>
+<filetextarea source="examples/explorer/BackgroundTaskDialog.java" ></filetextarea>
 </scrollpane>
 </panel>
 
