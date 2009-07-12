@@ -18,6 +18,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
+import org.swixml.jsr295.BindingUtils;
+
 /**
  *
  * @author sorrentino
@@ -36,6 +38,7 @@ public class JTreeEx extends JTree {
      */
     public JTreeEx() {
         super();
+        init();
     }
     
     /**
@@ -44,6 +47,7 @@ public class JTreeEx extends JTree {
      */
     public JTreeEx(TreeModel newModel) {
         super(newModel);
+        init();
     }
 
     
@@ -63,16 +67,6 @@ public class JTreeEx extends JTree {
             
         });        
 
-        if( null!=openIcon || null!=leafIcon || null!=closedIcon) {
-            DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-            
-            if(null!=leafIcon) renderer.setLeafIcon(leafIcon);
-            if(null!=openIcon) renderer.setOpenIcon(openIcon);
-            if(null!=closedIcon) renderer.setClosedIcon(closedIcon);
-        
-            setCellRenderer(renderer);
-        }
-        
         MouseListener ml = new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
             	int selRow = getRowForLocation(e.getX(), e.getY());
@@ -147,7 +141,20 @@ public class JTreeEx extends JTree {
 
     @Override
     public void addNotify() {
-        init();
+    	
+    	if( !BindingUtils.isBound(this)) {
+	        if( null!=openIcon || null!=leafIcon || null!=closedIcon) {
+	            DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+	            
+	            if(null!=leafIcon) renderer.setLeafIcon(leafIcon);
+	            if(null!=openIcon) renderer.setOpenIcon(openIcon);
+	            if(null!=closedIcon) renderer.setClosedIcon(closedIcon);
+	        
+	            setCellRenderer(renderer);
+	            
+	            BindingUtils.setBound(this, true);
+	        }
+    	}
         super.addNotify();
     }
 

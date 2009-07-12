@@ -181,13 +181,12 @@ public class JTableEx extends JTable {
 	@Override
     public void addNotify() {
 
-        if( beanList!=null && beanClass!=null )
-        	
-        	
-        	
+        if( beanList!=null && beanClass!=null  && !BindingUtils.isBound(this) ) {
+        	  	
             BindingUtils.initTableBinding( null, UpdateStrategy.READ_WRITE, this);
       
-
+            BindingUtils.setBound(this, true);
+        }
         super.addNotify();
     }
 
