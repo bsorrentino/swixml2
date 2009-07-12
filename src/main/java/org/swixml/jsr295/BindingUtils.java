@@ -50,7 +50,20 @@ public class BindingUtils  {
 
     private BindingUtils() {}
 
+    public static void setBound( JComponent comp, boolean value ) {
+    	if( comp==null) throw new IllegalArgumentException( "comp argument is null!");
+    	
+    	final String name = comp.getClass().getName().concat(".bound");
+    	comp.putClientProperty( name , value);
+    }
     
+    public static boolean isBound( JComponent comp ) {
+    	if( comp==null) throw new IllegalArgumentException( "comp argument is null!");
+
+    	final String name = comp.getClass().getName().concat(".bound");
+    	
+    	return Boolean.TRUE.equals( comp.getClientProperty(name) );
+    }
     /**
      * 
      * @param value
