@@ -13,10 +13,28 @@ import org.swixml.jsr295.BindingUtils;
 
 @SuppressWarnings("serial")
 public class JListEx extends JList {
+
 	private List<?> beanList;
 	private javax.swing.Action action;
 	
 	public JListEx() {
+		super.addListSelectionListener(new ListSelectionListener(){
+
+			public void valueChanged(ListSelectionEvent e) {
+                if( e.getValueIsAdjusting() ) return;
+                if( getSelectedIndex()==-1 ) return;
+                
+				Action a = getAction();
+
+                if( null==a ) return;
+
+                ActionEvent ev = new ActionEvent( e, 0, null );
+
+                a.actionPerformed(ev);
+				
+			}
+			
+		});
 	
 	}
 
@@ -46,26 +64,11 @@ public class JListEx extends JList {
 
 	@Override
 	public void addNotify() {
-		super.addListSelectionListener(new ListSelectionListener(){
-
-			public void valueChanged(ListSelectionEvent e) {
-                if( e.getValueIsAdjusting() ) return;
-                if( getSelectedIndex()==-1 ) return;
-                
-				Action a = getAction();
-
-                if( null==a ) return;
-
-                ActionEvent ev = new ActionEvent( e, 0, null );
-
-                a.actionPerformed(ev);
-				
-			}
-			
-		});
-        if( beanList!=null ) {
+        if( beanList!=null && !BindingUtils.isBound(this)  ) {
         	
             BindingUtils.initListBinding( null, UpdateStrategy.READ_WRITE, this, beanList );
+            BindingUtils.setBound(this, true);
+
         }
 
 		super.addNotify();

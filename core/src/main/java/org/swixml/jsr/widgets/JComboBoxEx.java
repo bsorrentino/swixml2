@@ -13,9 +13,10 @@ import org.swixml.jsr295.BindingUtils;
 public class JComboBoxEx extends JComboBox {
 
 	private List<?> beanList;
-
+	
 	public JComboBoxEx() {
 		super();
+		
 	}
 
 	public JComboBoxEx(ComboBoxModel model) {
@@ -38,11 +39,14 @@ public class JComboBoxEx extends JComboBox {
 		this.beanList = beanList;
 	}
 
+	
 	@Override
 	public void addNotify() {
-        if( beanList!=null ) {
+	
+        if( beanList!=null && !BindingUtils.isBound(this) ) {
         	
             BindingUtils.initComboBinding( null, UpdateStrategy.READ_WRITE, this, beanList );
+            BindingUtils.setBound(this, true);
         }
 
 		super.addNotify();
