@@ -1,14 +1,19 @@
 package org.swixml.test;
 
 import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 
+import junit.framework.Assert;
+
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.junit.Test;
 
@@ -16,8 +21,14 @@ import org.junit.Test;
 public class BindingTest {
 
 	private String testValue = "TEST";
+	private Map<String,Object> map = new  HashMap<String,Object>();
 	
 	
+	public final Map<String, Object> getMap() {
+		return map;
+	}
+
+
 	public final String getTestValue() {
 		return testValue;
 	}
@@ -30,8 +41,41 @@ public class BindingTest {
 
 
 	@Test
-	public void dummy() {
+	public void elProperty() {
 		
+		ELProperty<Object,String> p = ELProperty.create("${testValue}");
+		
+		String value =  p.getValue( this );
+		
+		Assert.assertEquals(testValue, value);
+	}
+
+	@Test
+	public void elLocalMap() {
+		
+		Map<String,Object> localMap = new HashMap<String,Object>();
+		
+		localMap.put("testValue", testValue);
+		localMap.put("testValue2", "xxx");
+		
+		ELProperty<Object,String> p = ELProperty.create("${testValue2}");
+		
+		String value =  p.getValue( localMap );
+		
+		Assert.assertEquals("xxx", value);
+	}
+	
+	@Test
+	public void elPropertyMap() {
+		
+		map.put("testValue", testValue);
+		map.put("testValue2", "xxx");
+		
+		ELProperty<Object,String> p = ELProperty.create("${map.testValue2}");
+		
+		String value =  p.getValue( this );
+		
+		Assert.assertEquals("xxx", value);
 	}
 	
 	public static void main(String[] args) {
