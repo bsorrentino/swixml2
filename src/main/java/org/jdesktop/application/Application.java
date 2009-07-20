@@ -16,6 +16,7 @@ import java.awt.event.PaintEvent;
 import java.beans.Beans;
 import java.lang.reflect.Constructor;
 import java.security.AccessControlException;
+import java.util.Arrays;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
@@ -26,9 +27,9 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.swixml.MacApp;
-import org.swixml.SwingEngine;
 
 
 /**
@@ -129,12 +130,15 @@ import org.swixml.SwingEngine;
 @ProxyActions({"cut", "copy", "paste", "delete"})
 
 public abstract class Application extends AbstractBean {
+	private static final String DEFAULT_LOOK_AND_FEEL = "default";
+	private static final String CROSSPLATFORM_LOOK_AND_FEEL = "crossplatform";
+	private static final String SYSTEM_LOOK_AND_FEEL = "system";
+	private static final String APPLICATION_LOOK_AND_FEEL = "Application.lookAndFeel";
+
+	
 	private static final String COM_APPLE_MRJ_APPLICATION_GROWBOX_INTRUDES = "com.apple.mrj.application.growbox.intrudes";
-
 	private static final String APPLE_AWT_SHOW_GROW_BOX = "apple.awt.showGrowBox";
-
 	private static final String APPLE_LAF_USE_SCREEN_MENU_BAR = "apple.laf.useScreenMenuBar";
-
 	private static final String COM_APPLE_MACOS_USE_SCREEN_MENU_BAR = "com.apple.macos.useScreenMenuBar";
 
 	/**
@@ -317,21 +321,40 @@ public abstract class Application extends AbstractBean {
              * Application.lookAndFeel resource.  If the the resource
              * isn't defined we default to "system".
              */
-            String key = "Application.lookAndFeel";
+            String key = APPLICATION_LOOK_AND_FEEL;
             String lnfResource = appResourceMap.getString(key);
-            String lnf = (lnfResource == null) ? "system" : lnfResource;
-            try {
-                if (lnf.equalsIgnoreCase("system")) {
-                    String name = UIManager.getSystemLookAndFeelClassName();
-                    UIManager.setLookAndFeel(name);
-                }
-                else if (!lnf.equalsIgnoreCase("default")) {
-                    UIManager.setLookAndFeel(lnf);
-                }
+            
+            String lnf = (lnfResource == null) ? SYSTEM_LOOK_AND_FEEL : lnfResource;
+
+            if( DEFAULT_LOOK_AND_FEEL.equalsIgnoreCase(lnf)) {
+            	return application;
             }
-            catch(Exception e) {
-                String s = "Couldn't set LookandFeel " + key + " = \"" + lnfResource + "\"";
-                logger.log(Level.WARNING, s, e);
+            
+        	String lfName = null;
+            if (SYSTEM_LOOK_AND_FEEL.equalsIgnoreCase(lnf)) {
+            	lfName = UIManager.getSystemLookAndFeelClassName();
+            }
+            else if( CROSSPLATFORM_LOOK_AND_FEEL.equalsIgnoreCase(lnf) ) {
+            	lfName = UIManager.getCrossPlatformLookAndFeelClassName();
+            }
+            else  {
+            	lfName = lnf;
+                for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+
+                    if (lnf.equalsIgnoreCase(laf.getName())) {
+                    	lfName = laf.getClassName();
+                    	break;
+                    }
+                }            
+            }
+            if( lfName!=null ) {
+                try {
+                    UIManager.setLookAndFeel( lfName );
+                } catch (Exception ex) {
+                    String s = String.format("Couldn't set Look&Feel %s=[%s]", key,lnfResource);
+                    logger.log(Level.WARNING, s, ex);
+                }
+
             }
         }
 
@@ -342,7 +365,7 @@ public abstract class Application extends AbstractBean {
      * either "osx" or "default".
      */
     private static String platform() {
-        String platform = "default";
+        String platform = DEFAULT_LOOK_AND_FEEL;
         try {
             String osName = System.getProperty("os.name");
             if ((osName != null) && osName.toLowerCase().startsWith("mac os x")) {
