@@ -16,7 +16,6 @@ import java.awt.event.PaintEvent;
 import java.beans.Beans;
 import java.lang.reflect.Constructor;
 import java.security.AccessControlException;
-import java.util.Arrays;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
