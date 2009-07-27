@@ -28,6 +28,12 @@
 </scrollpane>
 </panel>
 
+<panel name="SimpleBean2" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/SimpleBean2.java" ></filetextarea>
+</scrollpane>
+</panel>
+
 </tabbedpane>
 
 </panel>

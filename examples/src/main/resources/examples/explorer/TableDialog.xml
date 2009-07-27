@@ -2,7 +2,7 @@
 
 <dialog 
     minimumSize="400,240"
-	resizable="false" 
+	resizable="true" 
 	title="Example ComboBox usage" 
 	undecorated="false" 
 	alwaysOnTop="true"
@@ -12,9 +12,23 @@
 
 <panel layout="BorderLayout">
 
+	<splitpane constraints="BorderLayout.CENTER" orientation="JSplitPane.VERTICAL_SPLIT">
+	
+	<panel layout="BorderLayout" >
+	<label constraints="BorderLayout.NORTH" text="Table using meta data from external beanInfo" />
 	<scrollpane constraints="BorderLayout.CENTER">
 		<table id="table" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="true" bindList="${myData}" bindClass="${myDataClass}" />
 	</scrollpane>
+	</panel>
+	
+	<panel layout="BorderLayout" >
+	<label constraints="BorderLayout.NORTH" text="Table using meta data from implicit beanInfo" />
+	<scrollpane constraints="BorderLayout.CENTER">
+		<table id="table2" action="selectRow" dblClickAction="activateRow2" cellSelectionEnabled="true" bindList="${myData2}" bindClass="${myDataClass2}" />
+	</scrollpane>
+	</panel>
+
+	</splitpane>
 </panel>
 
 </dialog>

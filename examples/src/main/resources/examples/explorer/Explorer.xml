@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<frame	size="500,800" 
+<frame	size="500,700" 
 		resizable="true" 
 		alwaysOnTop="false" 
-		title="SWIXML2 Explorer" 
+		title="SWIXM2 Explorer (Release 2.5-SNAPSHOT)" 
 		defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
 
 <panel name="explorer" layout="BorderLayout">

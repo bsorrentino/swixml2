@@ -20,25 +20,34 @@ public class SimpleBeanBeanInfo extends SimpleBeanInfo {
 
     private static final int PROPERTY_age = 0;
     private static final int PROPERTY_name = 1;
+    private static final int PROPERTY_field3 = 2;
+    private static final int PROPERTY_field4 = 3;
 
     public PropertyDescriptor[] getPropertyDescriptors(){
-        PropertyDescriptor[] properties = new PropertyDescriptor[2];
-    
         try {
-            properties[PROPERTY_age] = new PropertyDescriptor ( "age", examples.SimpleBean.class, "getAge", "setAge" ); // NOI18N
-            properties[PROPERTY_name] = new PropertyDescriptor ( "name", examples.SimpleBean.class, "getName", "setName" ); // NOI18N
+	        PropertyDescriptor[] properties = new PropertyDescriptor[] {
+	            new PropertyDescriptor ( "age", examples.SimpleBean.class, "getAge", "setAge" ), 
+	            new PropertyDescriptor ( "name", examples.SimpleBean.class, "getName", "setName" ), 
+	            new PropertyDescriptor ( "field3", examples.SimpleBean.class, "getField3", "setField3" ), 
+	            new PropertyDescriptor ( "field4", examples.SimpleBean.class, "getField4", "setField4" ), 
+	        };
 
-            // SWIXML2 extension
+	        // SWIXML2 extension
             BindingUtils.setTableColumnIndex(properties[PROPERTY_age], 2);
             BindingUtils.setTableColumnIndex(properties[PROPERTY_name], 1);
             BindingUtils.setTableColumnEditable(properties[PROPERTY_name], true);
             
+            properties[PROPERTY_field3].setDisplayName("3rd field" );
+            properties[PROPERTY_field4].setDisplayName("4th field" );
+
+            return properties;     
+           
         }
         catch(IntrospectionException e) {
             e.printStackTrace();
         }
         
-        return properties;     
+        return null;
     }
 
 

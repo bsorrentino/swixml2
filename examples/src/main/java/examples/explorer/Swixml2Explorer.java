@@ -187,7 +187,7 @@ public class Swixml2Explorer extends SwingApplication  {
 				}
 			
 				{
-					PanelInfo p = new PanelInfo("Table Example", TableExample.class);
+					PanelInfo p = new PanelInfo("Table Binding Example", TableExample.class);
 					p.setXmlPanel("examples/explorer/TableDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
@@ -346,7 +346,7 @@ public class Swixml2Explorer extends SwingApplication  {
 			MyFrame frame = render( new MyFrame(), "examples/explorer/Explorer.xml" );
 
 			show( frame );
-				
+			
 		} catch (Exception e) {
 
 			e.printStackTrace();
