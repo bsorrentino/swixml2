@@ -40,27 +40,8 @@ public class TableExample extends SwingApplication {
 				myData2.add( new SimpleBean2() );
 			}
 			
-			initTable2MetaData();
 		}
 		
-		/**
-		 * Init table2 meta data using the implicit beanInfo
-		 */
-		private void initTable2MetaData() {
-			Map<String,PropertyDescriptor> pMap = BindingUtils.getPropertyMap(getMyDataClass2());
-			
-			{
-			PropertyDescriptor pd = pMap.get("field1");
-			BindingUtils.setTableColumnIndex(pd, 1);
-			pd.setDisplayName("index");
-			}
-			
-			{
-			PropertyDescriptor pd = pMap.get("field3");
-			BindingUtils.setTableColumnEditable(pd, true);
-			pd.setDisplayName("field3 [editable]");
-			}
-		}
 		/**
 		 * list bound
 		 */
@@ -81,13 +62,6 @@ public class TableExample extends SwingApplication {
 			return myData2;
 		}
 		
-		/**
-		 * indicate type of list bound
-		 */
-		public Class<?> getMyDataClass2() {
-		      return SimpleBean2.class;
-		}
-
 		/**
 		 * event raised when a row is selected on table
 		 */

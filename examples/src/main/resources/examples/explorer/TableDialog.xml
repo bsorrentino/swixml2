@@ -20,14 +20,17 @@
 		<table id="table" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="true" bindList="${myData}" bindClass="${myDataClass}" />
 	</scrollpane>
 	</panel>
-	
 	<panel layout="BorderLayout" >
-	<label constraints="BorderLayout.NORTH" text="Table using meta data from implicit beanInfo" />
+	<label constraints="BorderLayout.NORTH" text="Table using new sub-tag tableColumn" />
+
 	<scrollpane constraints="BorderLayout.CENTER">
-		<table id="table2" action="selectRow" dblClickAction="activateRow2" cellSelectionEnabled="true" bindList="${myData2}" bindClass="${myDataClass2}" />
+		<table id="table2" action="selectRow" dblClickAction="activateRow2" cellSelectionEnabled="true" bindList="${myData2}" >
+			<tableColumn bindWith="field2" type="java.lang.Boolean" maxWidth="20" resizable="false" headerValue="X"  editable="true"  />
+			<tableColumn bindWith="field1" type="java.lang.Integer" headerValue="#" maxWidth="50"  resizable="false"  />
+			<tableColumn bindWith="field3" preferredWidth="20"  editable="true" resizable="true"/>
+		</table>
 	</scrollpane>
 	</panel>
-
 	</splitpane>
 </panel>
 

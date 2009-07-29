@@ -2,7 +2,7 @@ package examples;
 
 public class SimpleBean2 {
     private int field1;
-    private String field2;
+    private boolean field2;
     private String field3;
     private String field4;
     
@@ -10,7 +10,7 @@ public class SimpleBean2 {
     
     public SimpleBean2() {
         this.field1 = ++numOfInstance;
-        field2 = String.format("<value%d field2>", numOfInstance);
+        field2 = false;
         field3 = String.format("<value%d field3>", numOfInstance);
         field4 = String.format("<value%d field4>", numOfInstance);
     }
@@ -32,11 +32,11 @@ public class SimpleBean2 {
         this.field1 = value;
     }
 
-    public String getFiedl2() {
+    public boolean isField2() {
         return field2;
     }
 
-    public void setField2(String value) {
+    public void setField2(boolean value) {
         this.field2 = value;
     }
 
