@@ -89,6 +89,7 @@ import org.swixml.jsr.widgets.JTableEx;
 import org.swixml.jsr.widgets.JTextAreaEx;
 import org.swixml.jsr.widgets.JTextFieldEx;
 import org.swixml.jsr.widgets.JTreeEx;
+import org.swixml.jsr295.BindingUtils;
 
 /**
  * The SwingTagLibrary contains Factories for all Swing Objects that can be instatiated by
@@ -190,6 +191,7 @@ public final class SwingTagLibrary extends TagLibrary {
     //registerTag( "VBox", XVBox.class );
     registerTag("HBox", BoxFactory.HGapBox.class);
 	
+    registerTag("tableColumn", BindingUtils.Column.class );
   }
 }
 

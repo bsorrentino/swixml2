@@ -81,6 +81,7 @@ public class JTableEx extends JTable {
     }
     
     private void init() {
+    	
         super.getSelectionModel().addListSelectionListener( new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
@@ -181,13 +182,22 @@ public class JTableEx extends JTable {
 	@Override
     public void addNotify() {
 
-        if( beanList!=null && beanClass!=null  && !BindingUtils.isBound(this) ) {
+        if( beanList!=null && !BindingUtils.isBound(this) ) {
         	  	
-            BindingUtils.initTableBinding( null, UpdateStrategy.READ_WRITE, this);
-      
+        	if( beanClass!=null ) {
+        		BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, getBindList(), getBindClass(), isAllPropertiesBound());
+        	}
+        	else {
+        	    super.setAutoCreateColumnsFromModel(false);
+
+        		BindingUtils.initTableBindingFromTableColumns( null, UpdateStrategy.READ_WRITE, this, getBindList() );        		
+        	}
             BindingUtils.setBound(this, true);
         }
+       
+        
         super.addNotify();
+        
     }
 
     
