@@ -253,7 +253,7 @@ public class Parser {
   /**
    * the calling engine
    */
-  private SwingEngine engine;
+  private SwingEngine<?> engine;
 
   /**
    * ConverterLib, to access COnverters, converting String in all kinds of things
@@ -303,7 +303,7 @@ public class Parser {
    *
    * @param engine <code>SwingEngine</code>
    */
-  public Parser(SwingEngine engine) {
+  public Parser(SwingEngine<?> engine) {
     this.engine = engine;
   }
 
@@ -588,8 +588,7 @@ public class Parser {
         }
       }
 
-      if (lm != null)
-        ((Container) obj).setLayout(lm);
+      if (lm != null)  setLayoutManager(obj, lm);
     }
 
     //
@@ -613,7 +612,8 @@ public class Parser {
     //  process child tags
     //
 
-    LayoutManager layoutMgr = obj instanceof Container ? ((Container) obj).getLayout() : null;
+    LayoutManager layoutMgr = getLayoutManager(obj);
+
 
     Iterator it = element.getChildren().iterator();
     while (it != null && it.hasNext()) {
@@ -1203,5 +1203,41 @@ public class Parser {
         putIntoBtnGrp(jp.getComponent(i), grp);
       }
     } // otherwise just do nothing ...
+  }
+
+
+  /**
+   * 
+   * @param obj
+   * @param lm
+   */
+  private static void setLayoutManager( Object obj, LayoutManager lm  ) {
+    if( obj == null ) throw new IllegalArgumentException( "obj is null");
+    if( lm == null ) throw new IllegalArgumentException( "lm is null");
+
+    if( obj instanceof RootPaneContainer ) {
+        ((RootPaneContainer) obj).getContentPane().setLayout(lm);
+    }
+    else if( obj instanceof Container ) {
+        ((Container) obj).setLayout(lm);
+    }
+  }
+
+  /**
+   *
+   * @param obj
+   * @return
+   */
+  private LayoutManager getLayoutManager( Object obj ) {
+    if( obj == null ) throw new IllegalArgumentException( "obj is null");
+
+    if( obj instanceof RootPaneContainer ) {
+        return ((RootPaneContainer) obj).getContentPane().getLayout();
+    }
+    else if( obj instanceof Container ) {
+        return ((Container) obj).getLayout();
+    }
+
+    return null;
   }
 }
