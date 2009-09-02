@@ -181,6 +181,11 @@ public class Swixml2Explorer extends SwingApplication  {
 				
 				MutableTreeNode node =  applications.addNodeToRoot( pp, true );
 				{
+					PanelInfo p = new PanelInfo("Layout", LayoutExample.class, "example/explorer/LayoutFrame.xml", "examples/explorer/LayoutExample.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
 					PanelInfo p = new PanelInfo("Combo Example", ComboExample.class, "examples/explorer/ComboDialog.xml", "examples/explorer/ComboExample.java");
 					panels.add( p );
 					applications.addNode(node, p );
