@@ -19,11 +19,13 @@
 
     <internalframe Title="Vertical Box" Bounds="10,170,180,250" Layout="GridLayout(1,2)" Visible="true" Resizable="true">
 
-      <vbox border="TitledBorder(with glue)">
+      <vbox border="TitledBorder(with filler)">
         <button text="1"/>
+        <box.vstrut height="15" />
         <button text="2"/>
+        <box.rigidarea size="7,10" />
         <button text="3"/>
-        <glue/>
+        <box.vglue/>
         <button text="4"/>
       </vbox>
 
@@ -38,11 +40,13 @@
     
 
     <internalframe Title="Horizontal Box" Bounds="180,170,400,180" Layout="GridLayout(2,1)" Visible="true" Resizable="true">
-      <hbox border="TitledBorder(with glue)">
+      <hbox border="TitledBorder(with filler">
         <button text="1"/>
+        <box.hstrut width="5" />
         <button text="2"/>
+        <box.rigidarea size="10,7" />
         <button text="3"/>
-        <glue/>
+        <box.hglue/>
         <button text="4"/>
       </hbox>
       <hbox gap="10" border="TitledBorder(with gap)">
