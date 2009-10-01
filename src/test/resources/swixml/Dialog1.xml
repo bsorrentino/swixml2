@@ -7,7 +7,16 @@
 
 <menubutton id="btnMenu" text="test" ></menubutton>
 
-<animatedbutton id="btnAnimated" name="btnAnimated"></animatedbutton>
+<!-- READ ICONS FROM RESOURCE FILE -->
+<animatedbutton id="btnAnimated" name="btnAnimated" iconCount="2" ></animatedbutton>
+
+<!-- READ ICONS FROM ATTRIBUTES -->
+<animatedbutton id="btnAnimated2" name="btnAnimated2"
+    text=""
+    action="button2"
+    iconCount="2"
+    icon0="/images/RecAni1.png"
+    icon1="/images/RecAni1_gray.png" ></animatedbutton>
 
 </vbox>
 

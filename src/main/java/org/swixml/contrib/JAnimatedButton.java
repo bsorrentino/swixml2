@@ -13,7 +13,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceConverter;
+import org.jdesktop.application.ResourceConverter.ResourceConverterException;
 import org.jdesktop.application.ResourceMap;
+import org.swixml.LogUtil;
 
 /**
  *
@@ -26,22 +29,18 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
     private final javax.swing.Timer timer = new javax.swing.Timer( DEFAULT_START_DELAY, this);
     private ImageIcon[] icons = null;
     private int imageIconIndex = 0;
+    private int iconCount = 0;
 
-    private ItemListener itemListener = new ItemListener() {
+    private ItemListener _itemListener = new ItemListener() {
 
             public void itemStateChanged(ItemEvent e) {
 
-                int state = e.getStateChange();
-
-                System.out.printf( "ItemEvent state=[%d %d %s] [%b]\n", state , ItemEvent.SELECTED, ItemEvent.DESELECTED, isSelected() );
-
-                if( isSelected() ) {
-                    start();
-                }
-                else {
+                if( timer.isRunning() ) {
                     stop();
                 }
-
+                else {
+                    start();
+                }
 
             }
             
@@ -52,6 +51,15 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
         timer.setInitialDelay(DEFAULT_START_DELAY);
         timer.setDelay(DEFAULT_DELAY);
 
+    }
+
+    public int getIconCount() {
+        return iconCount;
+    }
+
+    public void setIconCount(int imageCount) {
+        if( imageCount<0 ) throw new IllegalArgumentException("imageCount is less than 0!");
+        this.iconCount = imageCount;
     }
 
     public void setDelay( int delay ) {
@@ -78,6 +86,7 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
     }
     
     protected void stop() {
+        if( !isAnimationValid() ) return;
         
         timer.stop();
 
@@ -86,42 +95,73 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
         setIcon( icons[imageIconIndex] );
     }
 
-    @Override
-    public void addNotify() {
-        super.addNotify();
+    private void loadFromResource() {
+        if( iconCount<=0 ) {
+            throw new IllegalStateException( "icon Count value is invalid" );
+        }
 
         String name = super.getName();
         if( name==null ) throw new IllegalStateException("name is null!");
 
         Application app = Application.getInstance();
-        if( name==null ) throw new IllegalStateException("application is not present!");
+        if( app==null ) throw new IllegalStateException("application is not present!");
 
         ApplicationContext context = app.getContext();
 
         ResourceMap rm = context.getResourceMap();
 
-        final String iconLength = name + ".icon.length";
-
-        int iconCount = rm.getInteger( iconLength );
-
-        if( iconCount<=0 ) {
-            throw new IllegalStateException( String.format("respurce [%s] isn't defined or contains aa invalid number", iconLength));
-        }
-
         icons = new ImageIcon[iconCount];
+
+        ResourceConverter converter = ResourceConverter.forType( ImageIcon.class );
 
         for( int i=0; i<iconCount ; ++i ) {
 
-            final String icon = String.format( "%s.icon[%d]", name,  i);
+            final String iconIndex = String.format( "icon%d", i);
 
-            icons[i] = rm.getImageIcon( icon );
+            final String icon = String.format( "%s.%s", name,  iconIndex);
+
+            if( rm.containsKey(icon)) {
+                icons[i] = rm.getImageIcon( icon );
+            }
+            else {
+
+                String iconPath = (String)super.getClientProperty(iconIndex);
+                
+                if (converter!=null && iconPath!=null ) {
+
+                    try {
+
+                        icons[i] = (ImageIcon) converter.parseString(iconPath, rm);
+
+                    } catch (ResourceConverterException ex) {
+                        LogUtil.logger.warning( String.format( "icon [%s] not found ", iconPath ));
+                        icons[i] = null;
+                    }
+                }
+                else {
+                    icons[i] = null;
+                }
+            }
+        
         }
 
         imageIconIndex = 0;
 
         setIcon( icons[imageIconIndex] );
 
-        addItemListener( itemListener );
+    }
+
+
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+
+        if( iconCount <=0 ) return;
+
+        loadFromResource();
+
+        addItemListener( _itemListener );
 
     }
 
@@ -131,7 +171,7 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
 
         icons = null;
 
-        removeItemListener(itemListener);
+        removeItemListener(_itemListener);
         
         super.removeNotify();
 
