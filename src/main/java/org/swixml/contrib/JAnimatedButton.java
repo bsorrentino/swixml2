@@ -77,7 +77,7 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
         return (icons!=null && icons.length>1 );
     }
 
-    protected void start() {
+    public final void start() {
         if( !isAnimationValid() ) return;
 
         imageIconIndex = 1;
@@ -85,7 +85,7 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
         timer.restart();
     }
     
-    protected void stop() {
+    public final void stop() {
         if( !isAnimationValid() ) return;
         
         timer.stop();
