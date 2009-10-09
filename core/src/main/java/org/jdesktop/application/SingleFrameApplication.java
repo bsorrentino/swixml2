@@ -179,7 +179,10 @@ public abstract class SingleFrameApplication extends Application {
      * @see #show(JDialog)
      */
     protected void configureWindow(Window root) {
-	getContext().getResourceMap().injectComponents(root);
+		ResourceMap rootMap = getContext().getResourceMap();
+		
+		rootMap.injectComponents(root);
+		
     }
 
     private void initRootPaneContainer(RootPaneContainer c) {
