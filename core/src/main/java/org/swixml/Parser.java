@@ -457,6 +457,7 @@ public class Parser {
       cloneAttributes(element);
       element.removeAttribute(Parser.ATTR_REFID);
     } else if (element.getAttribute(Parser.ATTR_USE) != null) {
+      logger.warning( String.format("Attribute [%s] for element [%s] is deprecated!", Parser.ATTR_USE, element.getName()));
       element = (Element) element.clone();
       cloneAttributes(element);
       element.removeAttribute(Parser.ATTR_USE);
@@ -836,8 +837,9 @@ public class Parser {
         continue;
       if (Parser.ATTR_REFID.equals(attr.getName()))
         continue;
-      if (Parser.ATTR_USE.equals(attr.getName()))
-        continue;
+      if (Parser.ATTR_USE.equals(attr.getName())) {
+          continue;
+      }
 
       if (action != null && attr.getName().startsWith(Parser.ATTR_MACOS_PREFIX)) {
         mac_map.put(attr.getName(), action);
@@ -1021,7 +1023,8 @@ public class Parser {
     if (target.getAttribute(Parser.ATTR_REFID) != null) {
       source = find(jdoc.getRootElement(), target.getAttribute(Parser.ATTR_REFID).getValue().trim());
     } else if (target.getAttribute(Parser.ATTR_USE) != null) {
-      source = find(jdoc.getRootElement(), target.getAttribute(Parser.ATTR_USE).getValue().trim());
+        logger.warning( String.format("Attribute [%s] for Element [%s] is deprecated!", Parser.ATTR_USE, target.getName()));
+        source = find(jdoc.getRootElement(), target.getAttribute(Parser.ATTR_USE).getValue().trim());
     }
     if (source != null) {
       Iterator it = source.getAttributes().iterator();
