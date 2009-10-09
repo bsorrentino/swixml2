@@ -111,8 +111,8 @@ public class ResourceManager extends AbstractBean {
     }
 
     private String bundlePackageName(String bundleName) {
-	int i = bundleName.lastIndexOf(".");
-	return (i == -1) ? "" : bundleName.substring(0, i);
+    	int i = bundleName.lastIndexOf(".");
+    	return (i == -1) ? "" : bundleName.substring(0, i);
     }
 
     /* Creates a parent chain of ResourceMaps for the specfied
@@ -126,21 +126,24 @@ public class ResourceManager extends AbstractBean {
 	    return root;
 	}
 	else {
+	    List<String> rmNames = new ArrayList<String>(2);
 	    String bundleName0 = names.next();
-	    String rmBundlePackage = bundlePackageName(bundleName0);
-	    List<String> rmNames = new ArrayList<String>();
+	    String rmBundlePackage = bundlePackageName(bundleName0);	   
 	    rmNames.add(bundleName0); 
-            while(names.hasNext()) {
-                String bundleName = names.next();
-                if (rmBundlePackage.equals(bundlePackageName(bundleName))) {
-                    rmNames.add(bundleName);
-                }
-                else {
-                    names.previous();
-                    break;
-                }
+        
+	    while(names.hasNext()) {
+            String bundleName = names.next();
+            String bpn = bundlePackageName(bundleName);
+            if (rmBundlePackage.equals(bpn)) {
+                rmNames.add(bundleName);
             }
+            else {
+                names.previous();
+                break;
+            }
+        }
 	    ResourceMap parent = createResourceMapChain(cl, root, names);
+	    
 	    return createResourceMap(cl, parent, rmNames);
 	}
     }
@@ -424,10 +427,10 @@ public class ResourceManager extends AbstractBean {
      * @see #getApplicationBundleNames
      */
     protected List<String> getClassBundleNames(Class<?> cls) {
-	String bundleName = classBundleBaseName(cls);
-	return Arrays.asList( cls.getSimpleName(), bundleName );
-	// Commented by bsorrentino 
-	//return Collections.singletonList(bundleName);
+    	String bundleName = classBundleBaseName(cls);
+    	// Commented by bsorrentino
+    	//return Collections.singletonList(bundleName);
+    	return Arrays.asList( cls.getSimpleName(), bundleName );    		
     }
 
     /**
