@@ -153,7 +153,6 @@ public abstract class Application extends AbstractBean {
     // Mac application adapter
     private MacApp macAppAdapter = null;
     
-
     /**
      * Not to be called directly, see {@link #launch launch}.
      * <p>
@@ -204,7 +203,7 @@ public abstract class Application extends AbstractBean {
     	
     }
 
-    /**
+	/**
      * Indicates if currently running on Mac OS X
      *
      * @return <code>boolean</code>- indicating if currently running on a MAC
@@ -245,7 +244,7 @@ public abstract class Application extends AbstractBean {
 	Runnable doCreateAndShowGUI = new Runnable() {
 	    public void run() {
 		try {
-		    application = create(applicationClass);
+		    application = create(applicationClass);		    
             application.initialize(args);
 		    application.startup();
 		    		// raise an error on loading of Substance Look&Feel
@@ -355,6 +354,9 @@ public abstract class Application extends AbstractBean {
                 }
 
             }
+
+            appResourceMap.injectFields(application);
+
         }
 
         return application;
