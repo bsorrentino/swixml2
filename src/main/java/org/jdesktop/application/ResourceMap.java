@@ -1305,24 +1305,36 @@ public class ResourceMap {
      * @see #getObject
      */
     public void injectFields(Object target) {
-	if (target == null) {
-	    throw new IllegalArgumentException("null target");
-	}
-	Class targetType = target.getClass();
-	if (targetType.isArray()) {
-	    throw new IllegalArgumentException("array target");
-	}
-	String keyPrefix = targetType.getSimpleName() + ".";
-	for (Field field : targetType.getDeclaredFields()) {
-	    Resource resource = field.getAnnotation(Resource.class);
-	    if (resource != null) {
-		String rKey = resource.key();
-		String key = (rKey.length() > 0) ? rKey : keyPrefix + field.getName();
-		injectField(field, target, key);
-	    }
-	}
-    }
 
+    	if (target == null) throw new IllegalArgumentException("target is null!");
+    	Class<?> targetType = target.getClass();
+    	if (targetType.isArray()) {
+    	    throw new IllegalArgumentException("array target");
+    	}
+  	
+    	String	prefix = (target instanceof Application) ? "Application" : targetType.getSimpleName();
+    	
+    	for (Field field : targetType.getDeclaredFields()) {
+    	
+    		Resource resource = field.getAnnotation(Resource.class);
+    	    if (resource != null) {
+    	    	String rKey = resource.key();
+    	    	String key;
+    	    	if( rKey.length() > 0) {
+    	    		key = rKey;
+    	    	}
+    	    	else {
+    	    		key = new StringBuilder(50)
+							.append(prefix)
+							.append('.')
+							.append(field.getName())
+							.toString();
+    	    	}
+    	    	injectField(field, target, key);
+    	    }
+    	}
+    }
+    
     /* Register ResourceConverters that are defined in this class
      * and documented here.
      */
