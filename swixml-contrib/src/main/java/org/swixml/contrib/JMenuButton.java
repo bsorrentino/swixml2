@@ -18,8 +18,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 
+import java.util.Arrays;
+import java.util.Collections;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -42,10 +46,9 @@ public class JMenuButton extends JPanel {
 	private JButton button;
 	private JButton arrowButton;
 	private JPopupMenu popupMenu;
-	private Action[] actions;
+	private java.util.List<Action> actions = Collections.emptyList();
 
         public JMenuButton() {
-            actions = new Action[0];
             initGui();
         }
 
@@ -67,7 +70,16 @@ public class JMenuButton extends JPanel {
 	 * 
 	 */
 	public JMenuButton(String text, Icon icon, Action[] menuItems) {
-		actions = menuItems == null ? new Action[0] : menuItems;
+
+                super.addPropertyChangeListener("enabled", new PropertyChangeListener() {
+
+                    public void propertyChange(PropertyChangeEvent ev) {
+                        button.setEnabled( (Boolean)ev.getNewValue());
+                    }
+                });
+		if( menuItems!=null ) {
+                    actions = Arrays.asList(menuItems);
+                }
 		if (text == null && icon != null) {
 			button = new JButton(icon);
 		} else if (text != null && icon == null) {
@@ -77,7 +89,50 @@ public class JMenuButton extends JPanel {
 		}
 		initGui();
 	}
-	
+
+        @Override
+        public void addNotify() {
+            super.addNotify();
+
+            initGui();
+        }
+
+        @Override
+        public Component add(Component c) {
+            if( c instanceof JPopupMenu ) {
+                this.popupMenu = (JPopupMenu) c;
+                return c;
+            }
+            return super.add(c);
+        }
+
+
+        public String getText() {
+            return button.getText();
+        }
+
+        public void setText(String text) {
+            button.setText(text);
+        }
+
+        public Icon getIcon() {
+            return button.getIcon();
+        }
+
+        public void setIcon(Icon icon) {
+            button.setIcon(icon);
+        }
+
+        public Icon getDisabledIcon() {
+            return button.getDisabledIcon();
+        }
+
+        public void setDisabledIcon(Icon icon) {
+            button.setDisabledIcon(icon);
+        }
+
+
+
 	private void initGui() {
 		//if the button is null, create an empty button
 		if (button == null) {
@@ -96,14 +151,7 @@ public class JMenuButton extends JPanel {
 		//set a border for this whole panel such as mimicing the buttons
 		setBorder(BorderFactory.createRaisedBevelBorder());
 
-                if( actions!=null && actions.length>0 ) {
-                    //create the popup menu
-                    popupMenu = new JPopupMenu();
-                    for (int i=0; i<actions.length; i++) {
-                            popupMenu.add(actions[i]);
-                    }
-		}
-		//put them both on the panel
+                //put them both on the panel
 		setLayout(new BorderLayout());
 		add(button, BorderLayout.CENTER);
 		add(arrowButton, BorderLayout.EAST);
@@ -112,8 +160,8 @@ public class JMenuButton extends JPanel {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//fire the first action in the popup menu
-				if (actions.length > 0) {
-					actions[0].actionPerformed(e);
+				if (!actions.isEmpty()) {
+					actions.get(0).actionPerformed(e);
 				}
 			}
 		});
@@ -122,15 +170,20 @@ public class JMenuButton extends JPanel {
 		final Component me = this;
 		arrowButton.addMouseListener(new MouseAdapter() {
 
+                    @Override
                     public void mousePressed(MouseEvent e) {
                         maybeShowPopup(e);
                     }
 
+                    @Override
                     public void mouseReleased(MouseEvent e) {
                         maybeShowPopup(e);
                     }
 
                     private void maybeShowPopup(MouseEvent e) {
+
+                        if( !isEnabled() ) return;
+
                         Point p = new Point(getLocation());
 
                         SingleFrameApplication app = Application.getInstance(SingleFrameApplication.class);
@@ -170,33 +223,6 @@ public class JMenuButton extends JPanel {
             public int getIconWidth()	{ return WIDTH; }
             public int getIconHeight() { return HEIGHT; }
       }
-
-    public Action[] getActions() {
-        return actions;
-    }
-
-    public void setActions(Action[] actions) {
-        this.actions = actions;
-        if( actions!=null && actions.length>0 ) {
-            //create the popup menu
-            popupMenu = new JPopupMenu();
-            for (int i=0; i<actions.length; i++) {
-                    popupMenu.add(actions[i]);
-            }
-        }
-    }
-
-    public void addActions( Action... actions ) {
-        setActions( (Action[])actions );
-    }
-
-    public String getText() {
-        return button.getText();
-    }
-
-    public void setText(String text) {
-        button.setText(text);
-    }
 
 	/* (non-Javadoc)
 	 * @see javax.swing.JComponent#setOpaque(boolean)
