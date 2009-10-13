@@ -53,6 +53,19 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
 
     }
 
+    public boolean isStateChangedEnabled() {
+        return Boolean.TRUE.equals(getClientProperty("stateChangedEnabled"));
+    }
+
+    public void setStateChangedEnabled(boolean value) {
+        putClientProperty("stateChangedEnabled", value );
+    }
+
+
+    public final boolean isRunning() {
+        return timer.isRunning();
+    }
+
     public int getIconCount() {
         return iconCount;
     }
@@ -161,7 +174,8 @@ public class JAnimatedButton extends JToggleButton implements ActionListener {
 
         loadFromResource();
 
-        addItemListener( _itemListener );
+        if( isStateChangedEnabled() )
+            addItemListener( _itemListener );
 
     }
 
