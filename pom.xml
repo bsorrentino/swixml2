@@ -120,7 +120,7 @@
 <plugin>
 	<artifactId>maven-release-plugin</artifactId>
 	<configuration>
-		<goals>clean,deploy</goals>
+		<goals>clean deploy</goals>
 	</configuration>
 </plugin>
 
