@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<dialog 
+	modal="true" 
+	size="405,330" 
+	resizable="true" 
+	title="test"
+	defaultCloseOperation="JDialog.DISPOSE_ON_CLOSE">
+
+<panel layout="BorderLayout">
+
+<tabbedpane id="tabRubrica" constraints="BorderLayout.CENTER">    
+<panel name="TAB1" layout="BorderLayout" >
+
+	<scrollpane constraints="BorderLayout.CENTER">
+		<table id="table1" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="false" bindList="${items}" >
+			<tableColumn bindWith="description" type="java.lang.String"  resizable="true" headerValue="Nome"  editable="false" />
+			<tableColumn bindWith="dn" type="java.lang.String" headerValue="Numero"   resizable="false"  />
+		</table>
+ 	</scrollpane>
+
+</panel>
+<panel name="TAB2" layout="BorderLayout" >
+
+	<scrollpane constraints="BorderLayout.CENTER">
+		<table id="table2" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="false" bindList="${selectItems}" >
+			<tableColumn bindWith="description" type="java.lang.String"  resizable="true" headerValue="Nome"  editable="false" />
+			<tableColumn bindWith="dn" type="java.lang.String" headerValue="Numero"   resizable="false"  />
+		</table>
+ 	</scrollpane>
+
+</panel>
+</tabbedpane>
+
+<panel border="EmptyBorder(10,1,1,1)" id="commandBar" constraints="BorderLayout.SOUTH"  >
+	<button text="Annulla" action="cancel" />
+	<button text="Esci" action="close" />
+</panel>
+    	
+
+</panel>
+  
+</dialog>

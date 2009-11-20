@@ -9,34 +9,36 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
 
 @SuppressWarnings("serial")
-public class JListEx extends JList {
+public class JListEx extends JList implements BindableListWidget {
 
-	private List<?> beanList;
-	private javax.swing.Action action;
-	
-	public JListEx() {
-		super.addListSelectionListener(new ListSelectionListener(){
+    private List<?> beanList;
+    private javax.swing.Action action;
 
-			public void valueChanged(ListSelectionEvent e) {
-                if( e.getValueIsAdjusting() ) return;
-                if( getSelectedIndex()==-1 ) return;
-                
-				Action a = getAction();
+    public JListEx() {
+            super.addListSelectionListener(new ListSelectionListener(){
 
-                if( null==a ) return;
+                    public void valueChanged(ListSelectionEvent e) {
+            if( e.getValueIsAdjusting() ) return;
+            if( getSelectedIndex()==-1 ) return;
 
-                ActionEvent ev = new ActionEvent( e, 0, null );
+                            Action a = getAction();
 
-                a.actionPerformed(ev);
-				
-			}
-			
-		});
-	
-	}
+            if( null==a ) return;
+
+            ActionEvent ev = new ActionEvent( e, 0, null );
+
+            a.actionPerformed(ev);
+
+                    }
+
+            });
+
+    }
 
 	/**
      * 
@@ -54,24 +56,37 @@ public class JListEx extends JList {
         this.action = action;
     }
 	
-	public final List<?> getBindList() {
-		return beanList;
-	}
+    public final List<?> getBindList() {
+            return beanList;
+    }
 
-	public final void setBindList(List<?> beanList) {
-		this.beanList = beanList;
-	}
+    public final void setBindList(List<?> beanList) {
+            this.beanList = beanList;
+    }
 
-	@Override
-	public void addNotify() {
-        if( beanList!=null && !BindingUtils.isBound(this)  ) {
-        	
-            BindingUtils.initListBinding( null, UpdateStrategy.READ_WRITE, this, beanList );
+    public void setConverter(Converter<?, ?> converter) {
+        putClientProperty(CONVERTER_PROPERTY, converter);
+    }
+
+    public Converter<?, ?> getConverter() {
+        return (Converter<?, ?>) getClientProperty(CONVERTER_PROPERTY);
+    }
+
+
+    @Override
+    public void addNotify() {
+        if( getBindList()!=null && !BindingUtils.isBound(this)  ) {
+
+            Binding b = BindingUtils.initListBinding( null, UpdateStrategy.READ_WRITE, this, getBindList() );
             BindingUtils.setBound(this, true);
+
+            if( getConverter()!=null ) {
+                b.setConverter( getConverter() );
+            }
 
         }
 
-		super.addNotify();
-	}
+        super.addNotify();
+    }
 
 }

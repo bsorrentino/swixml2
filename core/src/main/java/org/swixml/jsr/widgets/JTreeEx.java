@@ -68,6 +68,8 @@ public class JTreeEx extends JTree {
         });        
 
         MouseListener ml = new MouseAdapter() {
+
+            @Override
             public void mousePressed(MouseEvent e) {
             	int selRow = getRowForLocation(e.getX(), e.getY());
                 //TreePath selPath = getPathForLocation(e.getX(), e.getY());
