@@ -23,6 +23,7 @@ import javax.swing.table.TableModel;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
 
 /**
@@ -30,7 +31,7 @@ import org.swixml.jsr295.BindingUtils;
  * @author sorrentino
  */
 @SuppressWarnings("serial")
-public class JTableEx extends JTable {
+public class JTableEx extends JTable implements BindableListWidget {
 
     private Action action;
     private Action dblClickAction = null;
@@ -51,33 +52,33 @@ public class JTableEx extends JTable {
     }
 
     @Override
-	public TableCellRenderer getCellRenderer(int row, int col) {
-    	if( beanClass!=null && beanList!=null ) {
-    		PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
-    		
-    		PropertyDescriptor p = pp[col];
-    		
-    		Object r = p.getValue(BindingUtils.TABLE_COLUMN_RENDERER);
-    		
-    		if( r instanceof TableCellRenderer ) {
-    			return (TableCellRenderer) r;
-    		}
-    	}
-		return super.getCellRenderer(row, col);
-	}
+    public TableCellRenderer getCellRenderer(int row, int col) {
+        if( beanClass!=null && beanList!=null ) {
+                PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
 
-	private void onRowOrColSelection( ListSelectionEvent e ) {
-    		// ISSUE-5
-    		if( e.getValueIsAdjusting() ) return;
-	        if( getSelectedRow()==-1 ) return;
+                PropertyDescriptor p = pp[col];
 
-	        Action a = getAction();
+                Object r = p.getValue(BindingUtils.TABLE_COLUMN_RENDERER);
 
-            if( null==a ) return;
+                if( r instanceof TableCellRenderer ) {
+                        return (TableCellRenderer) r;
+                }
+        }
+        return super.getCellRenderer(row, col);
+    }
 
-            ActionEvent ev = new ActionEvent( e, 0, null );
+    private void onRowOrColSelection( ListSelectionEvent e ) {
+        // ISSUE-5
+        if( e.getValueIsAdjusting() ) return;
+        if( getSelectedRow()==-1 ) return;
 
-            a.actionPerformed(ev);        
+        Action a = getAction();
+
+        if( null==a ) return;
+
+        ActionEvent ev = new ActionEvent( e, 0, null );
+
+        a.actionPerformed(ev);
     }
     
     private void init() {
@@ -143,11 +144,11 @@ public class JTableEx extends JTable {
 		return allPropertiesBound;
 	}
 
-	public final void setAllPropertiesBound(boolean allPropertyBound) {
-		this.allPropertiesBound = allPropertyBound;
-	}
+    public final void setAllPropertiesBound(boolean allPropertyBound) {
+            this.allPropertiesBound = allPropertyBound;
+    }
 
-	public Class<?> getBindClass() {
+    public Class<?> getBindClass() {
         return beanClass;
     }
 
@@ -161,6 +162,13 @@ public class JTableEx extends JTable {
 
     public void setBindList(List<?> beanList) {
         this.beanList = beanList;
+    }
+
+    public void setConverter(Converter<?, ?> converter) {
+    }
+
+    public Converter<?, ?> getConverter() {
+        return null;
     }
 
     public Action getAction() {

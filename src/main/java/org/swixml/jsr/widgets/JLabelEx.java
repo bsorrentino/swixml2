@@ -7,6 +7,8 @@ package org.swixml.jsr.widgets;
 
 import javax.swing.JLabel;
 
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
 
 /**
@@ -14,18 +16,40 @@ import org.swixml.jsr295.BindingUtils;
  * @author sorrentino
  */
 @SuppressWarnings("serial")
-public class JLabelEx extends JLabel {
-    String bindWith;
+public class JLabelEx extends JLabel implements BindableBasicWidget {
 
     public String getBindWith() {
-        return bindWith;
+        return (String) getClientProperty(BINDWITH_PROPERTY);
     }
 
     public void setBindWith(String bindWith) {
-        this.bindWith = bindWith;
-        if( null==bindWith || bindWith.length()==0 || bindWith.trim().length()==0) return ;
+        putClientProperty(BINDWITH_PROPERTY, bindWith);
+    }
 
-        BindingUtils.parseBindR( this, "text", bindWith );
+    public void setConverter(Converter<?, ?> converter) {
+        putClientProperty(CONVERTER_PROPERTY, converter);
+    }
+
+    public Converter<?, ?> getConverter() {
+        return (Converter<?, ?>) getClientProperty(CONVERTER_PROPERTY);
+    }
+
+    @Override
+    public void addNotify() {
+
+        final String bindWith = getBindWith();
+
+        if( null!=bindWith && bindWith.length()>0 && bindWith.trim().length()>0){
+
+            AutoBinding binding = BindingUtils.parseBindR( this, "text", bindWith );
+
+            if( getConverter()!=null ) {
+                binding.setConverter( getConverter() );
+            }
+
+        }
+
+        super.addNotify();
     }
     
 }

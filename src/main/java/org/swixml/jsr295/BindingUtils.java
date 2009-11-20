@@ -183,11 +183,11 @@ public class BindingUtils  {
      * @param owner
      * @param bind
      */
-    public static void parseBind( JComponent owner, String property, String bindProperty ) {    
+    public static AutoBinding parseBind( JComponent owner, String property, String bindProperty ) {
     
         Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
-        addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property );
+        return addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property );
         
     }
     
@@ -198,11 +198,11 @@ public class BindingUtils  {
      * @param owner
      * @param bind
      */
-    public static void parseBindR( JComponent owner, String property, String bindProperty ) {    
+    public static AutoBinding parseBindR( JComponent owner, String property, String bindProperty ) {
         
         Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
-        addAutoBinding( null, UpdateStrategy.READ, client, bindProperty, owner, property );
+        return addAutoBinding( null, UpdateStrategy.READ, client, bindProperty, owner, property );
         
     }
     
@@ -216,7 +216,7 @@ public class BindingUtils  {
      * @param targetProperty
      */
 	@SuppressWarnings("unchecked")
-	public static void addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
+	public static AutoBinding addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
 		if( null==source )			throw new IllegalArgumentException( "bean argument is null!");
 		if( null==target )			throw new IllegalArgumentException( "target argument is null!");
 		if( null==targetProperty )	throw new IllegalArgumentException( "targetProperty argument is null!");
@@ -236,7 +236,9 @@ public class BindingUtils  {
 			bindingGroup.addBinding(binding);
 		} else {
 			binding.bind();    	  
-		}  
+		}
+
+                return binding;
 	}
 
     /**
@@ -255,7 +257,7 @@ public class BindingUtils  {
      * @param beanList
      */
     @SuppressWarnings("unchecked")
-	public static void initTableBindingFromTableColumns( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList ) {
+	public static JTableBinding initTableBindingFromTableColumns( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList ) {
     		if( null==table )		throw new IllegalArgumentException( "table argument is null!");
     		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
  
@@ -328,14 +330,14 @@ public class BindingUtils  {
                 
                 if( null!=typeName ) {
                 	
-                    Class<?> typeClass = null;;
-					try {
-						typeClass = Class.forName(typeName);
+                    Class<?> typeClass = null;
+                    try {
+                            typeClass = Class.forName(typeName);
 
-						cb.setColumnClass(typeClass);
-					} catch (ClassNotFoundException e) {
-	            		logger.warning( String.format("column type [%s] is not valid java type. It will be ignored in binding!", typeName));
-					}
+                            cb.setColumnClass(typeClass);
+                    } catch (ClassNotFoundException e) {
+                        logger.warning( String.format("column type [%s] is not valid java type. It will be ignored in binding!", typeName));
+                    }
                                  	
                 }
               
@@ -355,6 +357,8 @@ public class BindingUtils  {
             else {
             	binding.bind();
             }
+
+            return binding;
             
     }
 
@@ -364,7 +368,7 @@ public class BindingUtils  {
      * @param beanList
      */
     @SuppressWarnings("unchecked")
-	public static void initTableBindingFromBeanInfo( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass, boolean isAllPropertiesBound ) {
+	public static JTableBinding initTableBindingFromBeanInfo( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass, boolean isAllPropertiesBound ) {
     		if( null==table )		throw new IllegalArgumentException( "table argument is null!");
     		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
     		if( null==beanClass )	throw new IllegalArgumentException( "beanClass argument is null!");
@@ -375,7 +379,7 @@ public class BindingUtils  {
             
             if( null==pp ) {
                 logger.warning("getPropertyDescriptors has returned null!");
-                return;
+                return null;
             }
             
             Arrays.sort( pp, new Comparator<PropertyDescriptor>() {
@@ -438,6 +442,8 @@ public class BindingUtils  {
             else {
             	binding.bind();
             }
+
+            return binding;
             
     }
     
@@ -449,7 +455,7 @@ public class BindingUtils  {
      * @param beanList
      */
 	@SuppressWarnings("unchecked")
-	public static void initComboBinding( BindingGroup group, UpdateStrategy strategy, JComboBox combo, List<?> beanList ) {
+	public static JComboBoxBinding initComboBinding( BindingGroup group, UpdateStrategy strategy, JComboBox combo, List<?> beanList ) {
 		if( null==combo )		throw new IllegalArgumentException( "combo argument is null!");
 		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
         
@@ -457,12 +463,14 @@ public class BindingUtils  {
 		JComboBoxBinding binding = SwingBindings.createJComboBoxBinding(strategy, beanList, combo);
         
 
-        if( null!=group ) {
-        	group.addBinding(binding);
-        }
-        else {
-        	binding.bind();
-        }
+                if( null!=group ) {
+                        group.addBinding(binding);
+                }
+                else {
+                        binding.bind();
+                }
+
+                return binding;
         
 	}
            
@@ -474,7 +482,7 @@ public class BindingUtils  {
 	 * @param beanList
 	 */
 	@SuppressWarnings("unchecked")
-	public static void initListBinding( BindingGroup group, UpdateStrategy strategy, JList list, List<?> beanList ) {
+	public static JListBinding initListBinding( BindingGroup group, UpdateStrategy strategy, JList list, List<?> beanList ) {
 		if( null==list )		throw new IllegalArgumentException( "list argument is null!");
 		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
         
@@ -482,12 +490,13 @@ public class BindingUtils  {
 		JListBinding binding = SwingBindings.createJListBinding(strategy, beanList, list);
         
 
-        if( null!=group ) {
-        	group.addBinding(binding);
-        }
-        else {
-        	binding.bind();
-        }
-        
+                if( null!=group ) {
+                        group.addBinding(binding);
+                }
+                else {
+                        binding.bind();
+                }
+
+                return binding;
 	}
 }

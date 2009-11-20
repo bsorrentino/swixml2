@@ -7,14 +7,21 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.swingbinding.JComboBoxBinding;
+import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
 
 @SuppressWarnings("serial")
-public class JComboBoxEx extends JComboBox {
+public class JComboBoxEx extends JComboBox implements BindableListWidget, BindableBasicWidget {
 
 	private List<?> beanList;
-	
-	public JComboBoxEx() {
+
+        public JComboBoxEx() {
 		super();
 		
 	}
@@ -39,17 +46,60 @@ public class JComboBoxEx extends JComboBox {
 		this.beanList = beanList;
 	}
 
+        public void setConverter(Converter<?, ?> converter) {
+            putClientProperty(CONVERTER_PROPERTY, converter);
+        }
+
+        public Converter<?, ?> getConverter() {
+            return (Converter<?, ?>) getClientProperty(CONVERTER_PROPERTY);
+        }
+
+        public String getBindWith() {
+            return (String) getClientProperty(BINDWITH_PROPERTY);
+        }
+
+        public void setBindWith(String bindWith) {
+            putClientProperty(BINDWITH_PROPERTY, bindWith);
+        }
+
 	
 	@Override
 	public void addNotify() {
 	
-        if( beanList!=null && !BindingUtils.isBound(this) ) {
-        	
-            BindingUtils.initComboBinding( null, UpdateStrategy.READ_WRITE, this, beanList );
-            BindingUtils.setBound(this, true);
-        }
+            if( getBindList()!=null && !BindingUtils.isBound(this) ) {
 
-		super.addNotify();
+                BindingGroup context = new BindingGroup();
+
+                JComboBoxBinding binding = BindingUtils.initComboBinding( context, UpdateStrategy.READ_WRITE, this, getBindList() );
+
+                BindingUtils.setBound(this, true);
+
+                if( getConverter()!=null ) {
+                    binding.setConverter( getConverter() );
+                }
+
+                if( getBindWith()!=null ) {
+                    
+                    Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
+
+                    Binding b = Bindings.createAutoBinding( UpdateStrategy.READ_WRITE,
+                        client,
+                        //ELProperty.create( "${testValue}"),
+                        BeanProperty.create( getBindWith() ),
+                        getEditor().getEditorComponent(),
+                        BeanProperty.create( "text")
+                        );
+                    if( getConverter()!=null ) {
+                        b.setConverter( getConverter() );
+                    }
+
+                    context.addBinding(b);
+                }
+
+                context.bind();
+            }
+
+            super.addNotify();
 	}
 
 }
