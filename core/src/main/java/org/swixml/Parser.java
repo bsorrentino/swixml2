@@ -634,6 +634,8 @@ public class Parser {
     	  
     	  final javax.swing.table.TableColumn tc = (TableColumn) getSwing( child, null);
 
+          tc.setModelIndex( table.getColumnModel().getColumnCount() );
+          
     	  table.getColumnModel().addColumn(tc);
     	  
     	  logger.info( String.format("column [%s] header=[%s] modelIndex=[%d] resizable=[%b] minWidth=[%s] maxWidth=[%d] preferredWidth=[%d]\n", 
