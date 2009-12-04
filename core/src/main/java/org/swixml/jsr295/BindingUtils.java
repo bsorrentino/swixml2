@@ -57,7 +57,7 @@ public class BindingUtils  {
 
     @SuppressWarnings("serial")
 	static public class Column extends TableColumn {
-    	private static int modelIndex = 0;
+    	private /*static*/ int modelIndex = 0;
     	
     	boolean editable = false;
     	String type = null;
