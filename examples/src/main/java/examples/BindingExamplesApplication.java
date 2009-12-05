@@ -5,10 +5,10 @@ import javax.swing.JFrame;
 import org.swixml.jsr296.SwingApplication;
 
 
-public class SimpleApplication extends SwingApplication {
+public class BindingExamplesApplication extends SwingApplication {
 
 	public static void main(String args []) {
-		SwingApplication.launch(SimpleApplication.class, args);
+		SwingApplication.launch(BindingExamplesApplication.class, args);
 	}
 	
 	
