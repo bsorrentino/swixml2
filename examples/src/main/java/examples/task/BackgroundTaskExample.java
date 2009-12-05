@@ -1,4 +1,4 @@
-package examples.explorer;
+package examples.task;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;

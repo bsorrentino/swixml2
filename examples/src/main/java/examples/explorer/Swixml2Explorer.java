@@ -1,5 +1,8 @@
 package examples.explorer;
 
+import examples.table.TableExample;
+import examples.task.BackgroundTaskExample;
+import examples.spinner.SpinnerSampleApplication;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -181,7 +184,7 @@ public class Swixml2Explorer extends SwingApplication  {
 				
 				MutableTreeNode node =  applications.addNodeToRoot( pp, true );
 				{
-					PanelInfo p = new PanelInfo("Layout", LayoutExample.class, "example/explorer/LayoutFrame.xml", "examples/explorer/LayoutExample.java");
+					PanelInfo p = new PanelInfo("Layout", LayoutExample.class, "examples/explorer/LayoutFrame.xml", "examples/explorer/LayoutExample.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
@@ -193,7 +196,7 @@ public class Swixml2Explorer extends SwingApplication  {
 			
 				{
 					PanelInfo p = new PanelInfo("Table Binding Example", TableExample.class);
-					p.setXmlPanel("examples/explorer/TableDialogContent.xml");
+					p.setXmlPanel("examples/table/TableDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
@@ -211,7 +214,13 @@ public class Swixml2Explorer extends SwingApplication  {
 				}
 				{
 					PanelInfo p = new PanelInfo("Background task Example", BackgroundTaskExample.class);
-					p.setXmlPanel("examples/explorer/BackgroundTaskDialogContent.xml");
+					p.setXmlPanel("examples/task/BackgroundTaskDialogContent.xml");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("Spinner Example", SpinnerSampleApplication.class);
+					p.setXmlPanel("examples/spinner/SpinnerDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}

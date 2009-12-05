@@ -6,13 +6,13 @@
 
 <panel name="XML Source" layout="BorderLayout">
 <scrollpane>
-<filetextarea source="examples/explorer/TableDialog.xml"></filetextarea>
+<filetextarea source="examples/table/TableDialog.xml"></filetextarea>
 </scrollpane>
 </panel>
 
 <panel name="Java Source" layout="BorderLayout">
 <scrollpane>
-<filetextarea source="examples/explorer/TableExample.java" ></filetextarea>
+<filetextarea source="examples/table/TableExample.java" ></filetextarea>
 </scrollpane>
 </panel>
 

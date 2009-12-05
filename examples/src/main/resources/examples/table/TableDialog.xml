@@ -14,14 +14,15 @@
 
 	<splitpane constraints="BorderLayout.CENTER" orientation="JSplitPane.VERTICAL_SPLIT">
 	
-	<panel layout="BorderLayout" >
-	<label constraints="BorderLayout.NORTH" text="Table using meta data from external beanInfo" />
+	<panel layout="BorderLayout" minimumSize="400,120">
+	<label constraints="BorderLayout.NORTH" text="Table using meta data from external beanInfo" font="VERDANA-BOLD-16" />
 	<scrollpane constraints="BorderLayout.CENTER">
 		<table id="table" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="true" bindList="${myData}" bindClass="${myDataClass}" />
 	</scrollpane>
 	</panel>
+
 	<panel layout="BorderLayout" >
-	<label constraints="BorderLayout.NORTH" text="Table using new sub-tag tableColumn" />
+	<label constraints="BorderLayout.NORTH" text="Table using new sub-tag tableColumn" font="VERDANA-BOLD-16"/>
 
 	<scrollpane constraints="BorderLayout.CENTER">
 		<table id="table2" action="selectRow" dblClickAction="activateRow2" cellSelectionEnabled="true" bindList="${myData2}" >

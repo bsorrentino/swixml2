@@ -92,7 +92,7 @@ public class SpinnerSampleApplication extends SwingApplication {
         public void setDateValue(Date date) {
             logger.info( "setDate " + date );
             this.dateValue = date;
-            firePropertyChange("spinnerValue", null,null);
+            firePropertyChange("dateValue", null,null);
         }
 
         /**
@@ -148,6 +148,10 @@ public class SpinnerSampleApplication extends SwingApplication {
 
         }
 
+        @Action
+        public void close() {
+            dispose();
+        }
     }
 
     /**

@@ -1,4 +1,4 @@
-package examples.explorer;
+package examples.table;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyDescriptor;

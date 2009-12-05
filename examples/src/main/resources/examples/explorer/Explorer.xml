@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<frame	size="500,700" 
+<frame	preferredSize="500,600"
 		resizable="true" 
-		alwaysOnTop="false" 
+		alwaysOnTop="false"
 		title="SWIXM2 Explorer (Release 2.5-SNAPSHOT)" 
 		defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
 
