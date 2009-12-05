@@ -13,7 +13,7 @@
 
 <splitpane constraints="BorderLayout.CENTER">
 <scrollpane minimumSize="150,800">
-<tree model="${applications}" action="selectNode" dblClickAction="activeNode" toolTipText="double clik to run demo" />
+<tree id="mainTree" model="${applications}" action="selectNode" dblClickAction="activeNode" toolTipText="double clik to run demo" />
 </scrollpane>
 
 <panel id="contentPanel" name="contentPanel" layout="CardLayout" >

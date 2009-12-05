@@ -1,8 +1,5 @@
 package examples.explorer;
 
-import examples.table.TableExample;
-import examples.task.BackgroundTaskExample;
-import examples.spinner.SpinnerSampleApplication;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -16,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.MutableTreeNode;
 
@@ -32,6 +30,9 @@ import org.jdesktop.application.Action;
 import org.swixml.SwingTagLibrary;
 import org.swixml.jsr296.SwingApplication;
 
+import examples.spinner.SpinnerSampleApplication;
+import examples.table.TableExample;
+import examples.task.BackgroundTaskExample;
 import examples.util.GenericTreeModel;
 
 
@@ -228,7 +229,8 @@ public class Swixml2Explorer extends SwingApplication  {
 			
 		}
 
-
+		JTree mainTree;
+		
 		@Override
 		public void addNotify() {
 			
@@ -248,6 +250,9 @@ public class Swixml2Explorer extends SwingApplication  {
 			
 			l.show(contentPanel, "Applications");
 
+			for( int i=1; i<=mainTree.getRowCount(); ++i ) {
+				mainTree.expandRow(i);
+			}
 			
 			super.addNotify();
 			
