@@ -71,8 +71,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
@@ -85,6 +83,8 @@ import org.swixml.jsr.widgets.JLabelEx;
 import org.swixml.jsr.widgets.JListEx;
 import org.swixml.jsr.widgets.JPasswordFieldEx;
 import org.swixml.jsr.widgets.JRadioButtonEx;
+import org.swixml.jsr.widgets.JSliderEx;
+import org.swixml.jsr.widgets.JSpinnerEx;
 import org.swixml.jsr.widgets.JTableEx;
 import org.swixml.jsr.widgets.JTextAreaEx;
 import org.swixml.jsr.widgets.JTextFieldEx;
@@ -145,8 +145,6 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "OptionPane", JOptionPane.class );
     registerTag( "ScrollPane", XScrollPane.class );
     registerTag( "Separator", JSeparator.class );
-    registerTag( "Slider", JSlider.class );
-    registerTag( "Spinner", JSpinner.class );
     registerTag( "SplitPane", XSplitPane.class );
     registerTag( "TabbedPane", XTabbedPane.class );
     registerTag( "TableHeader", JTableHeader.class );
@@ -176,6 +174,11 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "TextField", JTextFieldEx.class );
     //registerTag( "RadioButton", JRadioButton.class );
     registerTag( "RadioButton", JRadioButtonEx.class );
+    //registerTag( "Spinner", JSpinner.class );
+    registerTag( "Spinner", JSpinnerEx.class );
+    registerTag( "Spinner.Date", JSpinnerEx.Date.class );
+    //registerTag( "Slider", JSlider.class );
+    registerTag( "Slider", JSliderEx.class );
   
 // NEW TAGs
     registerTag("box.glue", new BoxFactory(Type.GLUE));
