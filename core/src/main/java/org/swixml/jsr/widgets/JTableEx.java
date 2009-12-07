@@ -25,6 +25,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
+import static org.swixml.SwingEngine.isDesignTime;
 
 /**
  *
@@ -190,7 +191,7 @@ public class JTableEx extends JTable implements BindableListWidget {
 	@Override
     public void addNotify() {
 
-        if( beanList!=null && !BindingUtils.isBound(this) ) {
+        if( !isDesignTime() && beanList!=null && !BindingUtils.isBound(this) ) {
         	  	
         	if( beanClass!=null ) {
         		BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, getBindList(), getBindClass(), isAllPropertiesBound());

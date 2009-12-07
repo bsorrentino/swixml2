@@ -39,6 +39,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.swixml.SwingEngine;
+import static org.swixml.SwingEngine.isDesignTime;
 
 /**
  *
@@ -182,7 +183,8 @@ public class BindingUtils  {
      * @param bind
      */
     public static AutoBinding parseBind( JComponent owner, String property, String bindProperty ) {
-    
+        if( isDesignTime() ) return null;
+
         Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
         return addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property );
@@ -197,6 +199,7 @@ public class BindingUtils  {
      * @param bind
      */
     public static AutoBinding parseBindR( JComponent owner, String property, String bindProperty ) {
+        if( isDesignTime() ) return null;
         
         Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
@@ -213,31 +216,33 @@ public class BindingUtils  {
      * @param target
      * @param targetProperty
      */
-	@SuppressWarnings("unchecked")
-	public static AutoBinding addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
-		if( null==source )			throw new IllegalArgumentException( "bean argument is null!");
-		if( null==target )			throw new IllegalArgumentException( "target argument is null!");
-		if( null==targetProperty )	throw new IllegalArgumentException( "targetProperty argument is null!");
-	
-		final Property tp = ( targetProperty.startsWith("$") ) 
-		      ? ELProperty.create(targetProperty) 
-		      : BeanProperty.create(targetProperty);
-		
-		final AutoBinding binding = Bindings.createAutoBinding(
-		      strategy, 
-		      source, 
-		      BeanProperty.create(beanProperty), 
-		      target, 
-		      tp);
-	  
-		if( null!=bindingGroup ) {
-			bindingGroup.addBinding(binding);
-		} else {
-			binding.bind();    	  
-		}
+    @SuppressWarnings("unchecked")
+    public static AutoBinding addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
+        if( null==source )			throw new IllegalArgumentException( "bean argument is null!");
+        if( null==target )			throw new IllegalArgumentException( "target argument is null!");
+        if( null==targetProperty )	throw new IllegalArgumentException( "targetProperty argument is null!");
 
-                return binding;
-	}
+        if( isDesignTime() ) return null;
+
+        final Property tp = ( targetProperty.startsWith("$") )
+              ? ELProperty.create(targetProperty)
+              : BeanProperty.create(targetProperty);
+
+        final AutoBinding binding = Bindings.createAutoBinding(
+              strategy,
+              source,
+              BeanProperty.create(beanProperty),
+              target,
+              tp);
+
+        if( null!=bindingGroup ) {
+                bindingGroup.addBinding(binding);
+        } else {
+                binding.bind();
+        }
+
+        return binding;
+    }
 
     /**
      * 
@@ -255,108 +260,109 @@ public class BindingUtils  {
      * @param beanList
      */
     @SuppressWarnings("unchecked")
-	public static JTableBinding initTableBindingFromTableColumns( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList ) {
-    		if( null==table )		throw new IllegalArgumentException( "table argument is null!");
-    		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
- 
-    		
-    		
-    		final TableColumnModel columnModel = table.getColumnModel();
+    public static JTableBinding initTableBindingFromTableColumns( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList ) {
+        if( null==table )		throw new IllegalArgumentException( "table argument is null!");
+        if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
 
-    		if( null==columnModel ) throw new IllegalStateException( "columnModel is not set!" );
-    		
-            Enumeration<TableColumn> tableColumns = columnModel.getColumns();
 
-            if( null==tableColumns ) throw new IllegalStateException( "columnModel hasn't not tableColumns!" );
-    		
-            JTableBinding binding = SwingBindings.createJTableBinding( startegy, beanList, table);
-            
-            while( tableColumns.hasMoreElements() ) {
-            	
-            	TableColumn tc = tableColumns.nextElement();
-            	
-            	if( !(tc instanceof Column) ) {
-            		
-            		logger.warning( String.format("column [%s] is not valid. It will be ignored in binding!", tc.getIdentifier()));
-            		continue;
-            	}
-            	
-            	Column c = (Column) tc;
-   
-          	  
-          	  logger.info( String.format("column [%s] header=[%s] modelIndex=[%d] resizable=[%b] minWidth=[%s] maxWidth=[%d] preferredWidth=[%d]\n", 
-          			  tc.getIdentifier(),
-          			  tc.getHeaderValue(),
-          			  tc.getModelIndex(),
-          			  tc.getResizable(),
-          			  tc.getMinWidth(),
-          			  tc.getMaxWidth(),
-          			  tc.getPreferredWidth()
-          			  ));
-            	
-                final String propertyName = c.getBindWith();
-                
-                if( null==propertyName ) {
-            		logger.warning( String.format("column [%s] has not set bindWith property. It will be ignored in binding!", tc.getIdentifier()));
-            		continue;
-                	
-                }
-                
-                //
-                // Property Binding
-                //
-                Property bp = BeanProperty.create(propertyName);
+        if( isDesignTime() ) return null;
 
-                ColumnBinding cb = binding.addColumnBinding( bp) ;
+        final TableColumnModel columnModel = table.getColumnModel();
+
+        if( null==columnModel ) throw new IllegalStateException( "columnModel is not set!" );
+    		
+        Enumeration<TableColumn> tableColumns = columnModel.getColumns();
+
+        if( null==tableColumns ) throw new IllegalStateException( "columnModel hasn't not tableColumns!" );
+
+        JTableBinding binding = SwingBindings.createJTableBinding( startegy, beanList, table);
+
+        while( tableColumns.hasMoreElements() ) {
+
+            TableColumn tc = tableColumns.nextElement();
+
+            if( !(tc instanceof Column) ) {
+
+                    logger.warning( String.format("column [%s] is not valid. It will be ignored in binding!", tc.getIdentifier()));
+                    continue;
+            }
+
+            Column c = (Column) tc;
+
+
+              logger.info( String.format("column [%s] header=[%s] modelIndex=[%d] resizable=[%b] minWidth=[%s] maxWidth=[%d] preferredWidth=[%d]\n",
+                              tc.getIdentifier(),
+                              tc.getHeaderValue(),
+                              tc.getModelIndex(),
+                              tc.getResizable(),
+                              tc.getMinWidth(),
+                              tc.getMaxWidth(),
+                              tc.getPreferredWidth()
+                              ));
+
+            final String propertyName = c.getBindWith();
                 
-                //
-                // set Header
-                //
-               
+            if( null==propertyName ) {
+                    logger.warning( String.format("column [%s] has not set bindWith property. It will be ignored in binding!", tc.getIdentifier()));
+                    continue;
+
+            }
                 
-                final Object headerValue = c.getHeaderValue();
-               
-                if( null==headerValue ) {
-                	c.setHeaderValue(propertyName);
-                }
-                cb.setColumnName( c.getHeaderValue().toString());
+            //
+            // Property Binding
+            //
+            Property bp = BeanProperty.create(propertyName);
+
+            ColumnBinding cb = binding.addColumnBinding( bp) ;
+
+            //
+            // set Header
+            //
+
+
+            final Object headerValue = c.getHeaderValue();
+
+            if( null==headerValue ) {
+                    c.setHeaderValue(propertyName);
+            }
+            cb.setColumnName( c.getHeaderValue().toString());
                                
-                //
-                // set Property type
-                //
-                final String typeName = c.getType();
-                
-                if( null!=typeName ) {
-                	
-                    Class<?> typeClass = null;
-                    try {
-                            typeClass = Class.forName(typeName);
+            //
+            // set Property type
+            //
+            final String typeName = c.getType();
 
-                            cb.setColumnClass(typeClass);
-                    } catch (ClassNotFoundException e) {
-                        logger.warning( String.format("column type [%s] is not valid java type. It will be ignored in binding!", typeName));
-                    }
-                                 	
+            if( null!=typeName ) {
+
+                Class<?> typeClass = null;
+                try {
+                        typeClass = Class.forName(typeName);
+
+                        cb.setColumnClass(typeClass);
+                } catch (ClassNotFoundException e) {
+                    logger.warning( String.format("column type [%s] is not valid java type. It will be ignored in binding!", typeName));
                 }
+
+            }
               
 
-                //
-                // set Editable
-                //
-                cb.setEditable( c.isEditable() ) ;
+            //
+            // set Editable
+            //
+            cb.setEditable( c.isEditable() ) ;
+
                 
-                
-            }
+        }
 
             
-            if( null!=group ) {
-            	group.addBinding(binding);
-            }
-            else {
-            	binding.bind();
-            }
+        if( null!=group ) {
+            group.addBinding(binding);
+        }
+        else {
+            binding.bind();
+        }
 
-            return binding;
+        return binding;
             
     }
 
@@ -366,82 +372,84 @@ public class BindingUtils  {
      * @param beanList
      */
     @SuppressWarnings("unchecked")
-	public static JTableBinding initTableBindingFromBeanInfo( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass, boolean isAllPropertiesBound ) {
-    		if( null==table )		throw new IllegalArgumentException( "table argument is null!");
-    		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
-    		if( null==beanClass )	throw new IllegalArgumentException( "beanClass argument is null!");
-            
-    		PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
-        
-            JTableBinding binding = SwingBindings.createJTableBinding( startegy, beanList, table);
-            
-            if( null==pp ) {
-                logger.warning("getPropertyDescriptors has returned null!");
-                return null;
-            }
-            
-            Arrays.sort( pp, new Comparator<PropertyDescriptor>() {
+    public static JTableBinding initTableBindingFromBeanInfo( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass, boolean isAllPropertiesBound ) {
+        if( null==table )		throw new IllegalArgumentException( "table argument is null!");
+        if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
+        if( null==beanClass )	throw new IllegalArgumentException( "beanClass argument is null!");
 
-                public int compare(PropertyDescriptor p1, PropertyDescriptor p2) {
-    
-                    final int i1 = getColumnIndex(p1);
-                    final int i2 = getColumnIndex(p2);
-                    
-                    return ( i1-i2 );                   
-                }
-            });
+        if( isDesignTime() ) return null;
+            
+        PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
+
+        JTableBinding binding = SwingBindings.createJTableBinding( startegy, beanList, table);
+            
+        if( null==pp ) {
+            logger.warning("getPropertyDescriptors has returned null!");
+            return null;
+        }
+            
+        Arrays.sort( pp, new Comparator<PropertyDescriptor>() {
+
+            public int compare(PropertyDescriptor p1, PropertyDescriptor p2) {
+
+                final int i1 = getColumnIndex(p1);
+                final int i2 = getColumnIndex(p2);
+
+                return ( i1-i2 );
+            }
+        });
             
             
-            for( PropertyDescriptor p : pp ) {
-                
-                Boolean isBinded = (Boolean) p.getValue(TABLE_COLUMN_IS_BOUND);
-                if( null==isBinded && isAllPropertiesBound==false) {
-                	continue;
-                }
-                if( (null!=isBinded && Boolean.FALSE.equals(isBinded)) ) {
-                    continue; // skip property
-                }
-                	
-                final String name = p.getName();
-                
-                if( "class".equals(name)) {
+        for( PropertyDescriptor p : pp ) {
+
+            Boolean isBinded = (Boolean) p.getValue(TABLE_COLUMN_IS_BOUND);
+            if( null==isBinded && isAllPropertiesBound==false) {
                     continue;
-                }
-                
-                Property bp = BeanProperty.create(name);
-
-                ColumnBinding cb = binding.addColumnBinding( bp) ;
-                
-                final String displayName = p.getDisplayName();
-                
-                cb.setColumnName( (null==displayName) ? name : displayName);
-                
-                final Class<?> type = p.getPropertyType();
-                
-                if( type.isPrimitive()) {
-                    cb.setColumnClass( MethodUtils.toNonPrimitiveClass(type) );
-                    
-                } 
-                else {    
-                    cb.setColumnClass(type);
-                }
-                
-
-                Boolean isEditable = (Boolean) p.getValue(TABLE_COLUMN_EDITABLE);
-                
-                cb.setEditable( (null!=isEditable && Boolean.TRUE.equals(isEditable)) ) ;
-                
-                
+            }
+            if( (null!=isBinded && Boolean.FALSE.equals(isBinded)) ) {
+                continue; // skip property
             }
 
-            if( null!=group ) {
-            	group.addBinding(binding);
+            final String name = p.getName();
+
+            if( "class".equals(name)) {
+                continue;
+            }
+
+            Property bp = BeanProperty.create(name);
+
+            ColumnBinding cb = binding.addColumnBinding( bp) ;
+
+            final String displayName = p.getDisplayName();
+
+            cb.setColumnName( (null==displayName) ? name : displayName);
+
+            final Class<?> type = p.getPropertyType();
+
+            if( type.isPrimitive()) {
+                cb.setColumnClass( MethodUtils.toNonPrimitiveClass(type) );
+
             }
             else {
-            	binding.bind();
+                cb.setColumnClass(type);
             }
+                
 
-            return binding;
+            Boolean isEditable = (Boolean) p.getValue(TABLE_COLUMN_EDITABLE);
+
+            cb.setEditable( (null!=isEditable && Boolean.TRUE.equals(isEditable)) ) ;
+
+
+        }
+
+        if( null!=group ) {
+            group.addBinding(binding);
+        }
+        else {
+            binding.bind();
+        }
+
+        return binding;
             
     }
     
@@ -456,7 +464,8 @@ public class BindingUtils  {
 	public static JComboBoxBinding initComboBinding( BindingGroup group, UpdateStrategy strategy, JComboBox combo, List<?> beanList ) {
 		if( null==combo )		throw new IllegalArgumentException( "combo argument is null!");
 		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
-        
+
+                if( isDesignTime() ) return null;
     
 		JComboBoxBinding binding = SwingBindings.createJComboBoxBinding(strategy, beanList, combo);
         
@@ -484,6 +493,7 @@ public class BindingUtils  {
 		if( null==list )		throw new IllegalArgumentException( "list argument is null!");
 		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
         
+                if( isDesignTime() ) return null;
     
 		JListBinding binding = SwingBindings.createJListBinding(strategy, beanList, list);
         

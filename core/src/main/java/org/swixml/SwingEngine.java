@@ -159,6 +159,9 @@ public class SwingEngine<T extends Container> {
     System.out.println("SwixML 2.5");
   }
 
+  public static boolean isDesignTime( ) {
+      return Boolean.getBoolean("org.swixml.designTime");
+  }
   //
   //  Member Variables
   //

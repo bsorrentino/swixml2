@@ -5,6 +5,7 @@ import javax.swing.JPasswordField;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
+import static org.swixml.SwingEngine.isDesignTime;
 
 @SuppressWarnings("serial")
 public class JPasswordFieldEx extends JPasswordField implements BindableBasicWidget {
@@ -29,7 +30,7 @@ public class JPasswordFieldEx extends JPasswordField implements BindableBasicWid
 
         final String bindWith = getBindWith();
 
-        if( null!=bindWith && bindWith.length()>0 && bindWith.trim().length()>0){
+        if( !isDesignTime() && null!=bindWith && !bindWith.isEmpty() ){
 
             AutoBinding binding = BindingUtils.parseBind( this, "text", bindWith );
 

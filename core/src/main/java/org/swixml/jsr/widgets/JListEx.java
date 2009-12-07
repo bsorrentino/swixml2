@@ -12,6 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
+import static org.swixml.SwingEngine.isDesignTime;
 
 @SuppressWarnings("serial")
 public class JListEx extends JList implements BindableListWidget {
@@ -75,7 +76,7 @@ public class JListEx extends JList implements BindableListWidget {
 
     @Override
     public void addNotify() {
-        if( getBindList()!=null && !BindingUtils.isBound(this)  ) {
+        if( !isDesignTime() && getBindList()!=null && !BindingUtils.isBound(this)  ) {
 
             Binding b = BindingUtils.initListBinding( null, UpdateStrategy.READ_WRITE, this, getBindList() );
             BindingUtils.setBound(this, true);

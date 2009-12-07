@@ -9,6 +9,7 @@ import javax.swing.JSlider;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
+import static org.swixml.SwingEngine.isDesignTime;
 
 /**
  *
@@ -37,7 +38,7 @@ public class JSliderEx extends JSlider implements BindableBasicWidget {
 
         final String bindWith = getBindWith();
 
-        if( null!=bindWith && bindWith.length()>0 && bindWith.trim().length()>0){
+        if( !isDesignTime() && null!=bindWith && !bindWith.isEmpty() ){
 
             AutoBinding binding = BindingUtils.parseBind( this, "value", bindWith );
 
