@@ -9,7 +9,6 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.logging.Level;
@@ -270,6 +269,7 @@ public class SwixmlTestApplication extends SwingApplication {
 	}
 
 	public static void main( String args[] ) {
+                System.setProperty("org.swixml.designTime", "true");
 		SwingApplication.launch(SwixmlTestApplication.class, args);
 	}
 }

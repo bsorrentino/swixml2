@@ -14,6 +14,96 @@
   				<target>1.5</target>
   			</configuration>
   		</plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                  <archive>
+                    <manifest>
+                      <addClasspath>true</addClasspath>
+                      <mainClass>swixml.tool.SwixmlTestApplication</mainClass>
+                    </manifest>
+                  </archive>
+                </configuration>
+              </plugin>
+                   <plugin>
+                  <artifactId>maven-assembly-plugin</artifactId>
+                  <configuration>
+                  <descriptors>
+                    <descriptor>src/main/assembly/assembly.xml</descriptor>
+                  </descriptors>
+                </configuration>
+             </plugin>
+            <plugin>
+            <groupId>org.codehaus.mojo.webstart</groupId>
+            <artifactId>webstart-maven-plugin</artifactId>
+            <version>1.0-alpha-2</version>
+
+            <executions>
+            <execution>
+            <goals>
+            <goal>jnlp</goal>
+            </goals>
+            <phase>install</phase>
+            <configuration>
+
+                <dependencies>
+                        <includes />
+                        <excludes />
+                </dependencies>
+                <!--
+                <resourcesDirectory>${project.basedir}/src/jnlp/resources</resourcesDirectory>
+                -->
+                <resourcesDirectory>src/main/native</resourcesDirectory>
+                <jnlp>
+                    <!-- we play with the resource path and template relative path to test MOJO-391	-->
+                    <inputTemplateResourcePath>${project.basedir}/src/main</inputTemplateResourcePath>
+                    <inputTemplate>jnlp/template.vm</inputTemplate>
+                    <outputFile>swixml-tool.jnlp</outputFile>
+                    <mainClass>swixml.tool.SwixmlTestApplication</mainClass>
+                </jnlp>
+
+                <!--
+                =====================
+                SIGNING
+
+                defining this will automatically sign the jar and its dependencies
+                =====================
+                -->
+                <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+
+                <sign>
+                    <alias>swixml2-examples</alias>
+                    <validity>180</validity>
+
+                    <dnameCn>Swixml2</dnameCn>
+                    <dnameOu>None</dnameOu>
+                    <dnameO>ExampleOrg</dnameO>
+                    <dnameL>Avellino</dnameL>
+                    <dnameSt>Italy</dnameSt>
+                    <dnameC>IT</dnameC>
+
+                    <verify>true</verify>
+                    <keystore>${project.basedir}/bsc.keystore</keystore>
+                    <keypass>googlebsc</keypass>
+                    <storepass>googlebsc</storepass>
+
+                    <keystoreConfig>
+                        <delete>false</delete>
+                        <gen>false</gen>
+                    </keystoreConfig>
+                </sign>
+
+                <verbose>false</verbose>
+
+            </configuration>
+
+            </execution>
+
+            </executions>
+
+            </plugin>
+
   	</plugins>
   </build>
   <dependencies>
@@ -23,4 +113,5 @@
   		<version>2.5-SNAPSHOT</version>
   	</dependency>
   </dependencies>
+
 </project>

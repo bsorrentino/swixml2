@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.5+" codebase="http://swixml2.googlecode.com/svn/trunk/jnlp/" >
+
+  <information>
+    <title>SWIXML2 TOOL</title>
+	<vendor>BSC</vendor>    
+	
+	<shortcut>
+        <desktop/>
+    </shortcut>
+	<offline-allowed/> 
+	
+  </information>
+
+  <security>
+     <all-permissions/>
+  </security>
+
+  <resources>
+    <j2se version="1.6+" java-vm-args="-esa -Xnoclassgc" initial-heap-size="128m"  max-heap-size="256m" />
+     $dependencies
+  </resources>
+
+<resources>
+
+</resources>
+  
+  
+  <application-desc main-class="$mainClass"/>
+
+</jnlp>
