@@ -15,6 +15,7 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
+import static org.swixml.SwingEngine.isDesignTime;
 
 @SuppressWarnings("serial")
 public class JComboBoxEx extends JComboBox implements BindableListWidget, BindableBasicWidget {
@@ -66,7 +67,7 @@ public class JComboBoxEx extends JComboBox implements BindableListWidget, Bindab
 	@Override
 	public void addNotify() {
 	
-            if( getBindList()!=null && !BindingUtils.isBound(this) ) {
+            if( !isDesignTime() && getBindList()!=null && !BindingUtils.isBound(this) ) {
 
                 BindingGroup context = new BindingGroup();
 
