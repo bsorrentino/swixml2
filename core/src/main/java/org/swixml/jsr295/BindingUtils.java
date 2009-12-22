@@ -33,6 +33,8 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.Property;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.beansbinding.Validator;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -93,20 +95,27 @@ public class BindingUtils  {
 		
 	}
 
-    public static void setBound( JComponent comp, boolean value ) {
-    	if( comp==null) throw new IllegalArgumentException( "comp argument is null!");
-    	
-    	final String name = comp.getClass().getName().concat(".bound");
-    	comp.putClientProperty( name , value);
-    }
-    
     public static boolean isBound( JComponent comp ) {
     	if( comp==null) throw new IllegalArgumentException( "comp argument is null!");
 
     	final String name = comp.getClass().getName().concat(".bound");
-    	
-    	return Boolean.TRUE.equals( comp.getClientProperty(name) );
+
+    	return (Boolean.TRUE.equals( comp.getClientProperty(name) ) );
     }
+
+    public static boolean boundCheckAndSet( JComponent comp ) {
+    	if( comp==null) throw new IllegalArgumentException( "comp argument is null!");
+
+    	final String name = comp.getClass().getName().concat(".bound");
+    	
+    	if( Boolean.TRUE.equals( comp.getClientProperty(name) ) ) {
+            return true;
+        }
+
+    	comp.putClientProperty( name , Boolean.TRUE);
+        return false;
+    }
+    
     /**
      * 
      * @param value
@@ -182,12 +191,14 @@ public class BindingUtils  {
      * @param owner
      * @param bind
      */
-    public static AutoBinding parseBind( JComponent owner, String property, String bindProperty ) {
+    public static AutoBinding parseBind( JComponent owner, String property, String bindProperty, Converter<?, ?> converter ) {
         if( isDesignTime() ) return null;
+        if( boundCheckAndSet(owner)) return null;
+
 
         Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
-        return addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property );
+        return addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property, converter, null );
         
     }
     
@@ -198,12 +209,13 @@ public class BindingUtils  {
      * @param owner
      * @param bind
      */
-    public static AutoBinding parseBindR( JComponent owner, String property, String bindProperty ) {
+    public static AutoBinding parseBindR( JComponent owner, String property, String bindProperty, Converter<?, ?> converter ) {
         if( isDesignTime() ) return null;
-        
+        if( boundCheckAndSet(owner)) return null;
+       
         Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
-        return addAutoBinding( null, UpdateStrategy.READ, client, bindProperty, owner, property );
+        return addAutoBinding( null, UpdateStrategy.READ, client, bindProperty, owner, property, converter, null );
         
     }
     
@@ -217,12 +229,18 @@ public class BindingUtils  {
      * @param targetProperty
      */
     @SuppressWarnings("unchecked")
-    public static AutoBinding addAutoBinding( BindingGroup bindingGroup, UpdateStrategy strategy, Object source, String beanProperty, Object target, String targetProperty  ) {
+    public static AutoBinding addAutoBinding( BindingGroup bindingGroup,
+                                                UpdateStrategy strategy,
+                                                Object source,
+                                                String beanProperty,
+                                                Object target,
+                                                String targetProperty,
+                                                Converter<?, ?> converter,
+                                                Validator<?> validator ) {
+        
         if( null==source )			throw new IllegalArgumentException( "bean argument is null!");
         if( null==target )			throw new IllegalArgumentException( "target argument is null!");
         if( null==targetProperty )	throw new IllegalArgumentException( "targetProperty argument is null!");
-
-        if( isDesignTime() ) return null;
 
         final Property tp = ( targetProperty.startsWith("$") )
               ? ELProperty.create(targetProperty)
@@ -235,6 +253,13 @@ public class BindingUtils  {
               target,
               tp);
 
+        if(converter!=null) {
+            binding.setConverter(converter);
+        }
+        if(validator!=null) {
+            binding.setValidator(validator);
+        }
+        
         if( null!=bindingGroup ) {
                 bindingGroup.addBinding(binding);
         } else {
@@ -261,11 +286,12 @@ public class BindingUtils  {
      */
     @SuppressWarnings("unchecked")
     public static JTableBinding initTableBindingFromTableColumns( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList ) {
-        if( null==table )		throw new IllegalArgumentException( "table argument is null!");
+        if( null==table )	throw new IllegalArgumentException( "table argument is null!");
         if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
 
 
         if( isDesignTime() ) return null;
+        if( boundCheckAndSet(table)) return null;
 
         final TableColumnModel columnModel = table.getColumnModel();
 
@@ -373,11 +399,12 @@ public class BindingUtils  {
      */
     @SuppressWarnings("unchecked")
     public static JTableBinding initTableBindingFromBeanInfo( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass, boolean isAllPropertiesBound ) {
-        if( null==table )		throw new IllegalArgumentException( "table argument is null!");
+        if( null==table )	throw new IllegalArgumentException( "table argument is null!");
         if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
         if( null==beanClass )	throw new IllegalArgumentException( "beanClass argument is null!");
 
         if( isDesignTime() ) return null;
+        if( boundCheckAndSet(table)) return null;
             
         PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
 
@@ -461,15 +488,24 @@ public class BindingUtils  {
      * @param beanList
      */
 	@SuppressWarnings("unchecked")
-	public static JComboBoxBinding initComboBinding( BindingGroup group, UpdateStrategy strategy, JComboBox combo, List<?> beanList ) {
-		if( null==combo )		throw new IllegalArgumentException( "combo argument is null!");
+	public static JComboBoxBinding initComboBinding(    BindingGroup group,
+                                                            UpdateStrategy strategy,
+                                                            JComboBox combo,
+                                                            List<?> beanList,
+                                                            Converter<?,?> converter )
+        {
+		if( null==combo )	throw new IllegalArgumentException( "combo argument is null!");
 		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
 
                 if( isDesignTime() ) return null;
+                if( boundCheckAndSet(combo)) return null;
     
 		JComboBoxBinding binding = SwingBindings.createJComboBoxBinding(strategy, beanList, combo);
         
-
+                if( converter!=null ) {
+                    binding.setConverter(converter);
+                }
+                
                 if( null!=group ) {
                         group.addBinding(binding);
                 }
@@ -489,14 +525,23 @@ public class BindingUtils  {
 	 * @param beanList
 	 */
 	@SuppressWarnings("unchecked")
-	public static JListBinding initListBinding( BindingGroup group, UpdateStrategy strategy, JList list, List<?> beanList ) {
-		if( null==list )		throw new IllegalArgumentException( "list argument is null!");
+	public static JListBinding initListBinding( BindingGroup group, 
+                                                    UpdateStrategy strategy,
+                                                    JList list,
+                                                    List<?> beanList,
+                                                    Converter<?,?> converter )
+        {
+		if( null==list )	throw new IllegalArgumentException( "list argument is null!");
 		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
         
                 if( isDesignTime() ) return null;
+                if( boundCheckAndSet(list)) return null;
     
 		JListBinding binding = SwingBindings.createJListBinding(strategy, beanList, list);
         
+                if( converter!=null ) {
+                    binding.setConverter(converter);
+                }
 
                 if( null!=group ) {
                         group.addBinding(binding);

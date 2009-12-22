@@ -38,13 +38,9 @@ public class JSliderEx extends JSlider implements BindableBasicWidget {
 
         final String bindWith = getBindWith();
 
-        if( !isDesignTime() && null!=bindWith && !bindWith.isEmpty() ){
+        if( null!=bindWith && !bindWith.isEmpty() ){
 
-            AutoBinding binding = BindingUtils.parseBind( this, "value", bindWith );
-
-            if( getConverter()!=null ) {
-                binding.setConverter( getConverter() );
-            }
+            BindingUtils.parseBind( this, "value", bindWith, getConverter() );
 
         }
 

@@ -76,14 +76,9 @@ public class JListEx extends JList implements BindableListWidget {
 
     @Override
     public void addNotify() {
-        if( !isDesignTime() && getBindList()!=null && !BindingUtils.isBound(this)  ) {
+        if( getBindList()!=null ) {
 
-            Binding b = BindingUtils.initListBinding( null, UpdateStrategy.READ_WRITE, this, getBindList() );
-            BindingUtils.setBound(this, true);
-
-            if( getConverter()!=null ) {
-                b.setConverter( getConverter() );
-            }
+            BindingUtils.initListBinding( null, UpdateStrategy.READ_WRITE, this, getBindList(), getConverter() );
 
         }
 

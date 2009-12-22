@@ -6,7 +6,6 @@
 package org.swixml.jsr.widgets;
 
 import javax.swing.JRadioButton;
-import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
 import static org.swixml.SwingEngine.isDesignTime;
@@ -37,13 +36,9 @@ public class JRadioButtonEx extends JRadioButton implements BindableBasicWidget{
 
         final String bindWith = getBindWith();
 
-        if( !isDesignTime() && null!=bindWith && !bindWith.isEmpty() ){
+        if( null!=bindWith && !bindWith.isEmpty() ){
 
-            AutoBinding binding = BindingUtils.parseBind( this, "selected", bindWith );
-
-            if( getConverter()!=null ) {
-                binding.setConverter( getConverter() );
-            }
+            BindingUtils.parseBind( this, "selected", bindWith, getConverter() );
 
         }
 
