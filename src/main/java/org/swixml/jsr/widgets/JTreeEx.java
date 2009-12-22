@@ -144,7 +144,7 @@ public class JTreeEx extends JTree {
     @Override
     public void addNotify() {
     	
-    	if( !BindingUtils.isBound(this)) {
+    	if( !BindingUtils.boundCheckAndSet(this)) {
 	        if( null!=openIcon || null!=leafIcon || null!=closedIcon) {
 	            DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
 	            
@@ -153,8 +153,6 @@ public class JTreeEx extends JTree {
 	            if(null!=closedIcon) renderer.setClosedIcon(closedIcon);
 	        
 	            setCellRenderer(renderer);
-	            
-	            BindingUtils.setBound(this, true);
 	        }
     	}
         super.addNotify();

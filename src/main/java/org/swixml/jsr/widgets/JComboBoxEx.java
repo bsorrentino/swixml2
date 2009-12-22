@@ -67,17 +67,11 @@ public class JComboBoxEx extends JComboBox implements BindableListWidget, Bindab
 	@Override
 	public void addNotify() {
 	
-            if( !isDesignTime() && getBindList()!=null && !BindingUtils.isBound(this) ) {
+            if( getBindList()!=null && !BindingUtils.isBound(this) ) {
 
                 BindingGroup context = new BindingGroup();
 
-                JComboBoxBinding binding = BindingUtils.initComboBinding( context, UpdateStrategy.READ_WRITE, this, getBindList() );
-
-                BindingUtils.setBound(this, true);
-
-                if( getConverter()!=null ) {
-                    binding.setConverter( getConverter() );
-                }
+                BindingUtils.initComboBinding( context, UpdateStrategy.READ_WRITE, this, getBindList(), getConverter() );
 
                 if( getBindWith()!=null ) {
                     

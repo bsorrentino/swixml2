@@ -191,17 +191,16 @@ public class JTableEx extends JTable implements BindableListWidget {
 	@Override
     public void addNotify() {
 
-        if( !isDesignTime() && beanList!=null && !BindingUtils.isBound(this) ) {
+        if( beanList!=null ) {
         	  	
-        	if( beanClass!=null ) {
-        		BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, getBindList(), getBindClass(), isAllPropertiesBound());
-        	}
-        	else {
-        	    super.setAutoCreateColumnsFromModel(false);
+            if( beanClass!=null ) {
+                 BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, getBindList(), getBindClass(), isAllPropertiesBound());
+            }
+            else {
+                super.setAutoCreateColumnsFromModel(false);
 
-        		BindingUtils.initTableBindingFromTableColumns( null, UpdateStrategy.READ_WRITE, this, getBindList() );        		
-        	}
-            BindingUtils.setBound(this, true);
+                BindingUtils.initTableBindingFromTableColumns( null, UpdateStrategy.READ_WRITE, this, getBindList() );
+            }
         }
        
         
