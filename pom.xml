@@ -176,6 +176,7 @@
     <snapshotRepository>
         <id>google-project</id>
         <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
+        <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
 </distributionManagement>
 

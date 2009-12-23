@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.swixml.org/2007/Swixml" elementFormDefault="qualified">
-  <xs:element name="table">
-    <xs:complexType mixed="true">
+  <xs:element name="table" >
+    <xs:complexType mixed="true" >
       <xs:sequence minOccurs="0" maxOccurs="unbounded">
         <xs:any />
       </xs:sequence>

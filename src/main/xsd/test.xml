@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF8"?>
+
+<!--
+    Document   : test.xml
+    Created on : 18 dicembre 2009, 0.49
+    Author     : softphone
+    Description:
+        Purpose of the document follows.
+-->
+
+<panel  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://www.swixml.org/2007/Swixml'
+   xsi:schemaLocation='http://www.swixml.org/2007/Swixml file:/Users/softphone/WORKSPACES/COMMONS/SWIXML/swixml2/src/main/xsd/swixml2.xsd'
+
+   id="panel1"
+   
+   >
+
+   <button id="" action="" text="">
+       <gridbagconstraints  />
+   </button>
+
+   <button ></button>
+
+</panel>
