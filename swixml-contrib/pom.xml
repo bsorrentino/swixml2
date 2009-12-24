@@ -30,7 +30,7 @@
     <dependency>
         <groupId>org.swixml</groupId>
         <artifactId>swixml</artifactId>
-        <version>2.5-SNAPSHOT</version>
+        <version>2.5.20091222</version>
     </dependency>
   </dependencies>
 
