@@ -19,12 +19,27 @@ import org.swixml.jsr296.SwingApplication;
 public class AppTest extends SwingApplication {
 
     public class MainFrame extends JFrame {
-        JMenuButton btnMenu;
+        JSimpleMenuButton btnMenu;
         JAnimatedButton btnAnimated2;
 
         @Action
         public void button2() {
             System.out.printf( "button2 selected[%b]\n", btnAnimated2.isSelected() );
+        }
+
+        @Action
+        public void action() {
+            btnMenu.showPopup();
+        }
+
+        @Action
+        public void action1() {
+            System.out.printf( "action1 \n" );
+        }
+
+        @Action
+        public void action2() {
+            System.out.printf( "action2 \n" );
         }
         
     }
@@ -33,28 +48,10 @@ public class AppTest extends SwingApplication {
 
     @Override
     protected void startup() {
-        SwingTagLibrary.getInstance().registerTag("menubutton", JMenuButton.class);
+        SwingTagLibrary.getInstance().registerTag("menubutton", JSimpleMenuButton.class);
         SwingTagLibrary.getInstance().registerTag("animatedbutton", JAnimatedButton.class);
         try {
             super.render(dlg, "swixml/Dialog1.xml");
-
-            dlg.btnMenu.addActions(
-                        new AbstractAction("open"){
-
-                        public void actionPerformed(ActionEvent e) {
-                            System.out.println( getValue(NAME) );
-                        }
-
-                         },
-                        new AbstractAction("close"){
-
-                        public void actionPerformed(ActionEvent e) {
-                            System.out.println( getValue(NAME) );
-                        }
-
-                         }
-                    );
-
 
             show( dlg );
 
