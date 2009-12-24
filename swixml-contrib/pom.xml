@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.swixml</groupId>
   <artifactId>swixml-contrib</artifactId>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>swixml-contrib</name>
   <url>http://maven.apache.org</url>
@@ -15,8 +15,8 @@
 </properties>
 
   <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/tags/swixml-contrib-1.0</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/tags/swixml-contrib-1.0</url>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swixml-contrib</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/trunk/swixml-contrib</url>
   </scm>
 
   <dependencies>
