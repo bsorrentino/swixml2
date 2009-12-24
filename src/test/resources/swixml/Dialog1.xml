@@ -5,7 +5,12 @@
 <vbox>
 
 
-<menubutton id="btnMenu" text="test" ></menubutton>
+<menubutton id="btnMenu" text="test" action="action">
+    <popupMenu>
+      <menuitem text="menu1" action="action1"/>
+      <menuitem text="menu2" action="action2"/>
+    </popupMenu>
+</menubutton>
 
 <!-- READ ICONS FROM RESOURCE FILE -->
 <animatedbutton id="btnAnimated" name="btnAnimated" iconCount="2" ></animatedbutton>

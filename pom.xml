@@ -7,6 +7,19 @@
   <packaging>jar</packaging>
   <name>swixml-contrib</name>
   <url>http://maven.apache.org</url>
+
+<properties>
+	<!-- SCM properties  -->
+	<addTimestamp>true</addTimestamp>
+	<!--tag>${pom.artifactId}-${pom.version}</tag-->
+	<tagBase>https://swixml2.googlecode.com/svn/tags/</tagBase>
+</properties>
+
+  <scm>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swixml-contrib</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/trunk/swixml-contrib</url>
+  </scm>
+
   <dependencies>
     <dependency>
         <groupId>junit</groupId>
@@ -31,5 +44,28 @@
   			</configuration>
   		</plugin>
   	</plugins>
-  </build>
+
+<extensions>
+      <extension>
+        <groupId>org.jvnet.wagon-svn</groupId>
+        <artifactId>wagon-svn</artifactId>
+        <version>1.8</version>
+      </extension>
+</extensions>
+
+</build>
+
+
+<distributionManagement>
+    <repository>
+        <id>google-project</id>
+        <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
+    </repository>
+    <snapshotRepository>
+        <id>google-project</id>
+        <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
+        <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+</distributionManagement>
+
 </project>
