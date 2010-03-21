@@ -127,25 +127,27 @@ import org.swixml.MacApp;
  */
 
 @ProxyActions({"cut", "copy", "paste", "delete"})
-
 public abstract class Application extends AbstractBean {
-	private static final String DEFAULT_LOOK_AND_FEEL = "default";
-	private static final String CROSSPLATFORM_LOOK_AND_FEEL = "crossplatform";
-	private static final String SYSTEM_LOOK_AND_FEEL = "system";
-	private static final String APPLICATION_LOOK_AND_FEEL = "Application.lookAndFeel";
+    private static final String DEFAULT_LOOK_AND_FEEL = "default";
+    private static final String CROSSPLATFORM_LOOK_AND_FEEL = "crossplatform";
+    private static final String SYSTEM_LOOK_AND_FEEL = "system";
+    private static final String APPLICATION_LOOK_AND_FEEL = "Application.lookAndFeel";
 
-	
-	private static final String COM_APPLE_MRJ_APPLICATION_GROWBOX_INTRUDES = "com.apple.mrj.application.growbox.intrudes";
-	private static final String APPLE_AWT_SHOW_GROW_BOX = "apple.awt.showGrowBox";
-	private static final String APPLE_LAF_USE_SCREEN_MENU_BAR = "apple.laf.useScreenMenuBar";
-	private static final String COM_APPLE_MACOS_USE_SCREEN_MENU_BAR = "com.apple.macos.useScreenMenuBar";
 
-	/**
-	 * Mac OSX identifier in System.getProperty(os.name)
-	 */
-	public static final String MAC_OSX_OS_NAME = "mac os x";
+    private static final String COM_APPLE_MRJ_APPLICATION_GROWBOX_INTRUDES = "com.apple.mrj.application.growbox.intrudes";
+    private static final String APPLE_AWT_SHOW_GROW_BOX = "apple.awt.showGrowBox";
+    private static final String APPLE_LAF_USE_SCREEN_MENU_BAR = "apple.laf.useScreenMenuBar";
+    private static final String COM_APPLE_MACOS_USE_SCREEN_MENU_BAR = "com.apple.macos.useScreenMenuBar";
 
-	private static final Logger logger = Logger.getLogger(Application.class.getName());
+    /**
+     * Mac OSX identifier in System.getProperty(os.name)
+     */
+    public static final String MAC_OSX_OS_NAME = "mac os x";
+
+    public static final String AUTO_INJECTFIELD = Application.class.getName().concat(".injectFields");
+
+
+    private static final Logger logger = Logger.getLogger(Application.class.getName());
     private static Application application = null;
     private final List<ExitListener> exitListeners;
     private final ApplicationContext context;
@@ -355,7 +357,7 @@ public abstract class Application extends AbstractBean {
 
             }
 
-            appResourceMap.injectFields(application);
+            if( Boolean.getBoolean(AUTO_INJECTFIELD)) appResourceMap.injectFields(application);
 
         }
 
