@@ -21,6 +21,7 @@ import org.swixml.SwingEngine;
  */
 public abstract class SwingApplication extends SingleFrameApplication {
 
+        
 /*
 	private PropertyChangeListener taskChangeListener = new PropertyChangeListener() {
 	
@@ -51,7 +52,7 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-		getContext().getResourceMap().injectFields(container);
+                if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
 
 		return engine.render(resource);
 	}
@@ -61,7 +62,7 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-		getContext().getResourceMap().injectFields(container);
+                if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
 
 		return engine.render(reader);
 	}
@@ -71,7 +72,7 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-		getContext().getResourceMap().injectFields(container);
+                if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
 
 		return engine.render(xmlFile);
 	}
@@ -81,7 +82,7 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-		getContext().getResourceMap().injectFields(container);
+                if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
 
 		return engine.render(url);
 	}
