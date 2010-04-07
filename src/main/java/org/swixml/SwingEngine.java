@@ -333,7 +333,9 @@ public class SwingEngine<T extends Container> {
     // reset components collection
     components = null;
     // initialize all client fields with UI components by their id
-    mapMembers(result);
+    
+    // Issue 44
+    //mapMembers(result);
     
     //if (Frame.class.isAssignableFrom(client.getClass())) {
     //  SwingEngine.setAppFrame((Frame) client);
@@ -737,6 +739,77 @@ public class SwingEngine<T extends Container> {
     SwingEngine.traverse(c, list);
     return list.iterator();
   }
+
+  protected void mapMember( Object widget, String fieldName) {
+	  if( client==null) throw new IllegalStateException("client obj is null!");
+
+	  final Class<?> cls = client.getClass();
+  
+	  mapMember( widget, fieldName, cls );
+  }  
+  
+  /**
+   * @param widget
+   * @param field
+   * @param obj
+   * @param cls
+   */
+  protected void mapMember( Object widget, String fieldName, Class <?> cls) {
+	// TODO Issue 44
+	
+	if( widget==null) throw new IllegalArgumentException("parameter widget is null!");
+	if( fieldName==null) throw new IllegalArgumentException("parameter fieldName is null!");
+	if( cls==null) throw new IllegalArgumentException("parameter cls is null!");
+	if( client==null) throw new IllegalStateException("client obj is null!");
+
+	boolean fullaccess = true;
+	
+	Field field = null;
+	
+	try{
+		try {
+			field = cls.getDeclaredField(fieldName);
+		} catch (AccessControlException e) {
+			fullaccess = false; // applet or otherwise restricted environment
+			field = cls.getField(fieldName);
+		}
+	} catch (NoSuchFieldException e) {
+		logger.warning( String.format("field [%s] in class [%s] doesn't exist! Ignored", cls.getName(), fieldName));	
+		return;
+	}
+
+	// field and object type need to be compatible and field must not be declared Transient
+	if (field.getType().isAssignableFrom(widget.getClass()) && !Modifier.isTransient(field.getModifiers())) {
+		try {
+		
+			boolean accessible = field.isAccessible();
+			field.setAccessible(true);
+			field.set(client, widget);
+			field.setAccessible(accessible);
+	
+		} catch (AccessControlException e) {
+			try {
+				fullaccess = false;
+				field.set(client, widget);
+			} catch (IllegalAccessException e1) {
+				logger.severe( "illegal access exception on set field!");
+			}
+		} catch (IllegalArgumentException e) {
+		  // intentionally empty
+		} catch (IllegalAccessException e) {
+		  // intentionally empty
+		}
+	}
+
+	// Since getDeclaredFields() only works on the class itself, not the super class,
+	// we need to make this recursive down to the object.class
+	if (fullaccess) {
+		// only if we have access to the declared fields do we need to visit the whole tree.
+		mapMember(widget, fieldName, cls.getSuperclass());
+	}
+}
+	  
+  
 
   /**
    * Introspects the given object's class and initializes its non-transient fields with objects that have been instanced

@@ -1,3 +1,10 @@
+
+2.5.SNAPSHOT 
+=============
+
+- Issue 44
+- add org.jdesktop.application.Application.injectFields to enable/disable auto inject fileds
+
 * * * * * * 2.5  * * * * *
 NEW
 ---

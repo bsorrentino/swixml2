@@ -537,6 +537,7 @@ public class Parser {
       //
       if (id != null) {
         engine.getIdMap().put(id, obj);
+        engine.mapMember(obj, id);
       }
     }
 
