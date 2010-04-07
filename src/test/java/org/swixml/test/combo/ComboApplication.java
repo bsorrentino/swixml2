@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -117,6 +118,11 @@ public class ComboApplication extends SwingApplication {
                 //combo.getEditor().setItem("test");
 
 
+            }
+
+            @Action
+            public void combo2_selection( ActionEvent e ) {
+                System.out.println( "combo2_selection " + e);
             }
 
             public void submit() {

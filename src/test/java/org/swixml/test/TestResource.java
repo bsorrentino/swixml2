@@ -23,11 +23,13 @@ public class TestResource {
 	
 	@Test
 	public void loadResource() throws Exception {
+		System.setProperty( Application.AUTO_INJECTFIELD, "true" );
 		
 		Application.launch(SimpleApplication.class, new String[0]);
 		
 		SimpleApplication app = Application.getInstance(SimpleApplication.class);
 	
+		
 		assertNotNull( app );
 
 		ApplicationContext ctx = app.getContext();
