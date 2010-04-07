@@ -11,7 +11,7 @@
 
     <vbox constraints="BorderLayout.NORTH" >
         <combobox id="combo" editable="true" bindList="${data}"  />
-        <combobox id="combo2" editable="true" bindList="${data2}" bindWith="item" />
+        <combobox id="combo2" editable="true" bindList="${data2}" bindWith="item" action="combo2_selection" />
     </vbox>
 
     <panel constraints="BorderLayout.CENTER"></panel>
