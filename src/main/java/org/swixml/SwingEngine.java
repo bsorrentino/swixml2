@@ -756,10 +756,10 @@ public class SwingEngine<T extends Container> {
    */
   protected void mapMember( Object widget, String fieldName, Class <?> cls) {
 	// TODO Issue 44
+	if( cls==null) return;
 	
 	if( widget==null) throw new IllegalArgumentException("parameter widget is null!");
 	if( fieldName==null) throw new IllegalArgumentException("parameter fieldName is null!");
-	if( cls==null) throw new IllegalArgumentException("parameter cls is null!");
 	if( client==null) throw new IllegalStateException("client obj is null!");
 
 	boolean fullaccess = true;
@@ -774,7 +774,14 @@ public class SwingEngine<T extends Container> {
 			field = cls.getField(fieldName);
 		}
 	} catch (NoSuchFieldException e) {
-		logger.warning( String.format("field [%s] in class [%s] doesn't exist! Ignored", fieldName, cls.getName()));	
+		logger.fine( String.format("field [%s] in class [%s] doesn't exist! Ignored", fieldName, cls.getName()));	
+
+		// Since getDeclaredFields() only works on the class itself, not the super class,
+		// we need to make this recursive down to the object.class
+		if (fullaccess) {
+			// only if we have access to the declared fields do we need to visit the whole tree.
+			mapMember(widget, fieldName, cls.getSuperclass());
+		}
 		return;
 	}
 
@@ -786,11 +793,16 @@ public class SwingEngine<T extends Container> {
 			field.setAccessible(true);
 			field.set(client, widget);
 			field.setAccessible(accessible);
+
+			logger.info( String.format("field [%s] mapped in class [%s]", fieldName, cls.getName()));	
 	
 		} catch (AccessControlException e) {
 			try {
 				fullaccess = false;
 				field.set(client, widget);
+
+				logger.info( String.format("field [%s] mapped in class [%s]", fieldName, cls.getName()));	
+			
 			} catch (IllegalAccessException e1) {
 				logger.severe( "illegal access exception on set field!");
 			}
@@ -801,12 +813,6 @@ public class SwingEngine<T extends Container> {
 		}
 	}
 
-	// Since getDeclaredFields() only works on the class itself, not the super class,
-	// we need to make this recursive down to the object.class
-	if (fullaccess) {
-		// only if we have access to the declared fields do we need to visit the whole tree.
-		mapMember(widget, fieldName, cls.getSuperclass());
-	}
 }
 	  
   
