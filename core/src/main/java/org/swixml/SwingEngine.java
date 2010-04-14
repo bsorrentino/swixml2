@@ -774,7 +774,7 @@ public class SwingEngine<T extends Container> {
 			field = cls.getField(fieldName);
 		}
 	} catch (NoSuchFieldException e) {
-		logger.warning( String.format("field [%s] in class [%s] doesn't exist! Ignored", cls.getName(), fieldName));	
+		logger.warning( String.format("field [%s] in class [%s] doesn't exist! Ignored", fieldName, cls.getName()));	
 		return;
 	}
 
