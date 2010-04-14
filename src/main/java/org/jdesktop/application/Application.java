@@ -145,6 +145,7 @@ public abstract class Application extends AbstractBean {
     public static final String MAC_OSX_OS_NAME = "mac os x";
 
     public static final String AUTO_INJECTFIELD = Application.class.getName().concat(".injectFields");
+    public static final String IGNORE_RESOURCES_PREFIX = Application.class.getName().concat(".ignore.resources.prefix");
 
 
     private static final Logger logger = Logger.getLogger(Application.class.getName());
