@@ -4,6 +4,10 @@
 
 - Issue 44
 - add org.jdesktop.application.Application.injectFields to enable/disable auto inject fileds
+- Issue 46
+- Issue 47
+- Issue 48 - If missing attribute 'name' it will be set to value of  attribute 'id' (if present)
+- JavaDoc refinements 
 
 * * * * * * 2.5  * * * * *
 NEW
