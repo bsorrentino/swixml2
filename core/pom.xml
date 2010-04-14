@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.swixml</groupId>
   <artifactId>swixml</artifactId>
-  <version>2.5.20100414</version>
+  <version>2.5-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>SWIXML FRAMEWORK 2.5</name>
   <url>http://code.google.com/p/swixml2/</url>
@@ -17,8 +17,8 @@
 </properties>	
 
   <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/tags/swixml-2.5.20100414</developerConnection>  
-    <url>https://swixml2.googlecode.com/svn/tags/swixml-2.5.20100414</url>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
+    <url>https://swixml2.googlecode.com/svn/trunk/core</url>
   </scm>
 
   <dependencies>
