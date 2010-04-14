@@ -323,6 +323,7 @@ public class Parser {
     this.jdoc = jdoc;
     this.lbl_map.clear();
     this.mac_map.clear();
+    
     Object result = getSwing(processCustomAttributes(jdoc.getRootElement()), container);
 
     linkLabels();
@@ -421,7 +422,7 @@ public class Parser {
     Factory factory = engine.getTaglib().getFactory(element.getName());
     
     //  look for <id> attribute value
-    String id = element.getAttribute(Parser.ATTR_ID) != null ? element.getAttribute(Parser.ATTR_ID).getValue().trim() : null;
+    final String id = element.getAttribute(Parser.ATTR_ID) != null ? element.getAttribute(Parser.ATTR_ID).getValue().trim() : null;
     //  either there is no id or the id is not user so far
     boolean unique = !engine.getIdMap().containsKey(id);
     boolean constructed = false;
@@ -532,13 +533,14 @@ public class Parser {
 
       obj = initParameter != null ? factory.newInstance(initParameter) : factory.newInstance( attributes );
       constructed = true;
-      //
-      //  put newly created object in the map if it has an <id> attribute (uniqueness is given att this point)
-      //
-      if (id != null) {
-        engine.getIdMap().put(id, obj);
-        engine.mapMember(obj, id);
-      }
+    }
+    
+    //
+    //  put newly created object in the map if it has an <id> attribute (uniqueness is given att this point)
+    //
+    if (id != null) {
+      engine.getIdMap().put(id, obj);
+      engine.mapMember(obj, id);
     }
 
     //
@@ -833,11 +835,19 @@ public class Parser {
     List list = new ArrayList();  // remember not applied attributes
     Action action = null; // used to insert an action into the macmap
 
+    Attribute attr_id = null;
+    Attribute attr_name = null;
+    
     while (it != null && it.hasNext()) { // loop through all available attributes
       Attribute attr = (Attribute) it.next();
 
-      if (Parser.ATTR_ID.equals(attr.getName()))
-        continue;
+      if (Parser.ATTR_ID.equals(attr.getName())) {
+    	  attr_id = attr;
+    	  continue;
+      }
+      if ("name".equals(attr.getName())) {
+    	  attr_name = attr;
+      }
       if (Parser.ATTR_REFID.equals(attr.getName()))
         continue;
       if (Parser.ATTR_USE.equals(attr.getName())) {
@@ -1012,6 +1022,10 @@ public class Parser {
         }
       }
     } // end_while
+    
+    if( attr_id!=null && attr_name==null ) {
+    	list.add( new Attribute("name", attr_id.getValue()));
+    }
     return list;
   }
 
