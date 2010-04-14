@@ -14,6 +14,7 @@ import java.io.Reader;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.swixml.SwingEngine;
+import static org.swixml.LogUtil.logger;
 
 /**
  *
@@ -46,7 +47,20 @@ public abstract class SwingApplication extends SingleFrameApplication {
     protected void progressMessage( final String message ) {
         
     }
-*/        
+*/   
+    public final <T extends Container> T render( T container ) throws Exception {
+    	final SwingEngine<T> engine = new SwingEngine<T>( container );
+		engine.setClassLoader( getClass().getClassLoader() );
+
+        if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
+
+        String resource = container.getClass().getName().replace('.', '/').concat(".xml");
+        
+        logger.info( String.format("render resource [%s]", resource));
+        
+		return engine.render(resource);
+	}
+	
     public final <T extends Container> T render( T container, String resource) throws Exception {
     	if( null==resource ) throw new IllegalArgumentException( "resource is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
