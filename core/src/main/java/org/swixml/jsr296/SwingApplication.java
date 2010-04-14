@@ -5,16 +5,14 @@
 
 package org.swixml.jsr296;
 
+import static org.swixml.LogUtil.logger;
+
 import java.awt.Container;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.Reader;
 
 import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.Task;
 import org.swixml.SwingEngine;
-import static org.swixml.LogUtil.logger;
 
 /**
  *
@@ -48,6 +46,19 @@ public abstract class SwingApplication extends SingleFrameApplication {
         
     }
 */   
+	/**
+	 * render using a resource 
+	 * 
+	 * <pre>
+	 * 
+	 * the resource is located using the following convention
+	 * 
+	 * container class a.b.c.Name ==> a/b/c/Name.xml
+	 * 
+	 * </pre>
+	 * 
+	 * @param container target container
+	 */
     public final <T extends Container> T render( T container ) throws Exception {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
@@ -61,6 +72,13 @@ public abstract class SwingApplication extends SingleFrameApplication {
 		return engine.render(resource);
 	}
 	
+    /**
+     * 
+     * @param container
+     * @param resource
+     * @return
+     * @throws Exception
+     */
     public final <T extends Container> T render( T container, String resource) throws Exception {
     	if( null==resource ) throw new IllegalArgumentException( "resource is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
@@ -71,6 +89,13 @@ public abstract class SwingApplication extends SingleFrameApplication {
 		return engine.render(resource);
 	}
 
+    /**
+     * 
+     * @param container
+     * @param reader
+     * @return
+     * @throws Exception
+     */
     public final <T extends Container> T render( T container, Reader reader) throws Exception {
     	if( null==reader ) throw new IllegalArgumentException( "reader is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
@@ -81,6 +106,13 @@ public abstract class SwingApplication extends SingleFrameApplication {
 		return engine.render(reader);
 	}
 
+    /**
+     * 
+     * @param container
+     * @param xmlFile
+     * @return
+     * @throws Exception
+     */
     public final <T extends Container> T render( T container, File xmlFile) throws Exception {
     	if( null==xmlFile ) throw new IllegalArgumentException( "xmlFile is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
@@ -91,6 +123,13 @@ public abstract class SwingApplication extends SingleFrameApplication {
 		return engine.render(xmlFile);
 	}
 
+    /**
+     * 
+     * @param container
+     * @param url
+     * @return
+     * @throws Exception
+     */
     public final <T extends Container> T render( T container, java.net.URL url) throws Exception {
     	if( null==url ) throw new IllegalArgumentException( "url is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
