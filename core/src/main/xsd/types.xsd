@@ -105,6 +105,34 @@ CONTAINER
 
 <!--
 =================================
+BindableBasicWidget
+=================================
+-->
+<xs:complexType name="bindableBasicWidget" mixed="true" abstract="true" >
+<xs:complexContent>
+    <xs:extension  base="t:component" >
+        <xs:attribute name="converter" type="xs:string"></xs:attribute>
+        <xs:attribute name="bindWith" type="xs:string"></xs:attribute>
+    </xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<!--
+=================================
+BindableListWidget
+=================================
+-->
+<xs:complexType name="bindableListWidget" mixed="true" abstract="true" >
+<xs:complexContent>
+    <xs:extension  base="t:component" >
+        <xs:attribute name="converter" type="xs:string"></xs:attribute>
+        <xs:attribute name="bindList" type="xs:string"></xs:attribute>
+    </xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<!--
+=================================
 PANEL
 =================================
 -->
@@ -122,12 +150,38 @@ BUTTON
 <xs:complexType name="button" mixed="true" >
 <xs:complexContent>
     <xs:extension  base="t:component" >
+        <xs:attribute name="text" type="xs:string"></xs:attribute>
         <xs:attribute name="action" type="xs:string"></xs:attribute>
     </xs:extension>
-
 </xs:complexContent>
 </xs:complexType>
 
+<!--
+=================================
+LABEL
+=================================
+-->
+<xs:complexType name="label" mixed="true" >
+<xs:complexContent>
+    <xs:extension  base="t:bindableBasicWidget" >
+        <xs:attribute name="text" type="xs:string"></xs:attribute>
+    </xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<!--
+=================================
+TEXTFIELD
+=================================
+-->
+<xs:complexType name="textField" mixed="true" >
+<xs:complexContent>
+    <xs:extension  base="t:bindableBasicWidget" >
+        <xs:attribute name="text" type="xs:string"></xs:attribute>
+        <xs:attribute name="action" type="xs:string"></xs:attribute>
+    </xs:extension>
+</xs:complexContent>
+</xs:complexType>
 
 
 </xs:schema>

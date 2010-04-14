@@ -14,4 +14,10 @@ elementFormDefault="unqualified" attributeFormDefault="unqualified">
 <xs:element  name="button" type="t:button" >
 </xs:element>
 
+<xs:element  name="textField" type="t:textField" >
+</xs:element>
+
+<xs:element  name="label" type="t:label" >
+</xs:element>
+
 </xs:schema>
