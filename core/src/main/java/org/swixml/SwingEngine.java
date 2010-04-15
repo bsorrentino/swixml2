@@ -87,6 +87,8 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
+import org.swixml.localization.LocalizerDefaultImpl;
+import org.swixml.localization.LocalizerJSR296Impl;
 
 import static org.swixml.LogUtil.logger;
 
@@ -185,7 +187,7 @@ public class SwingEngine<T extends Container> {
   /**
    * access to taglib to let overwriting class add and remove tags.
    */
-  private Localizer localizer = new Localizer();
+  private Localizer localizer = null;
   //
   //  Private Constants
   //
@@ -202,8 +204,16 @@ public class SwingEngine<T extends Container> {
    * Default ctor for a SwingEngine.
    */
   protected SwingEngine() {
+    if( Boolean.getBoolean( Application.USE_COMMON_LOCALIZER ) ) {
+    	localizer = new LocalizerJSR296Impl();
+    }
+    else {
+    	localizer = new LocalizerDefaultImpl(); 
+    }
     this.setLocale(SwingEngine.default_locale);
-    this.getLocalizer().setResourceBundle(SwingEngine.default_resource_bundle_name);
+    localizer.setResourceBundle(SwingEngine.default_resource_bundle_name);
+    
+
 
   }
 

@@ -146,6 +146,7 @@ public abstract class Application extends AbstractBean {
 
     public static final String AUTO_INJECTFIELD = Application.class.getName().concat(".injectFields");
     public static final String IGNORE_RESOURCES_PREFIX = Application.class.getName().concat(".ignore.resources.prefix");
+    public static final String USE_COMMON_LOCALIZER = Application.class.getName().concat(".use.common.localizer");
 
 
     private static final Logger logger = Logger.getLogger(Application.class.getName());
