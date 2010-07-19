@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.swixml</groupId>
+  <artifactId>swixml-parent</artifactId>
+  <version>2.5-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>SWIXML2 PARENT PROJECT</name>
+  
+  <modules>
+  	<module>core</module>
+  	<module>examples</module>
+  </modules>
+  
+<dependencies>
+	<dependency>
+	  <groupId>junit</groupId>
+	  <artifactId>junit</artifactId>
+	  <version>4.1</version>
+	  <scope>test</scope>
+	</dependency>
+</dependencies>
+
+<build>
+
+<plugins>
+
+<plugin>
+   <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+        <source>1.5</source>
+        <target>1.5</target>
+    </configuration>
+</plugin>
+
+<plugin>
+	<artifactId>maven-release-plugin</artifactId>
+	<configuration>
+		<goals>clean deploy</goals>
+	</configuration>
+</plugin>
+
+</plugins>
+
+<extensions>
+      <extension>
+        <groupId>org.jvnet.wagon-svn</groupId>
+        <artifactId>wagon-svn</artifactId>
+        <version>1.8</version>
+      </extension>
+</extensions>
+
+</build>
+
+<repositories>
+    <repository>
+      <id>google-swixml2</id>
+      <url>http://swixml2.googlecode.com/svn/mavenrepo</url>
+    </repository>
+</repositories>  
+
+
+<distributionManagement>
+    <repository>
+        <id>google-project</id>
+        <url>svn:https://swixml2.googlecode.com/svn/mavenrepo</url>
+    </repository>
+    <snapshotRepository>
+        <id>google-project</id>
+        <url>svn:https://swixml2.googlecode.com/svn/mavenrepo</url>
+        <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+</distributionManagement>
+
+</project>
