@@ -8,6 +8,11 @@
   <url>http://code.google.com/p/swixml2/</url>
   <description>GUI generating engine for Java applications</description>
 
+<parent>
+  <groupId>org.swixml</groupId>
+  <artifactId>swixml-parent</artifactId>
+  <version>2.5-SNAPSHOT</version>
+</parent>
 
 <properties>
 	<!-- SCM properties  -->
@@ -76,13 +81,6 @@
 </dependency>
 
 <dependency>
-  <groupId>junit</groupId>
-  <artifactId>junit</artifactId>
-  <version>4.1</version>
-  <scope>test</scope>
-</dependency>
-
-<dependency>
   <groupId>javax.jnlp</groupId>
   <artifactId>jnlp</artifactId>
   <version>1.6</version>
@@ -101,27 +99,13 @@
 <plugins>
 
 <plugin>
-   <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <configuration>
-        <source>1.5</source>
-        <target>1.5</target>
-    </configuration>
-</plugin>
-
-<plugin>
    <artifactId>maven-assembly-plugin</artifactId>
    <configuration>
+       <finalName>swixml-2.5</finalName>
      <descriptors>
        <descriptor>src/main/assembly/assembly.xml</descriptor>
      </descriptors>
    </configuration>
-</plugin>
-<plugin>
-	<artifactId>maven-release-plugin</artifactId>
-	<configuration>
-		<goals>clean deploy</goals>
-	</configuration>
 </plugin>
 
 <!--     
@@ -157,28 +141,9 @@
 -->
 </plugins>
 
-<extensions>
-      <extension>
-        <groupId>org.jvnet.wagon-svn</groupId>
-        <artifactId>wagon-svn</artifactId>
-        <version>1.8</version>
-      </extension>
-</extensions>
-
 </build>
 
 
-<distributionManagement>
-    <repository>
-        <id>google-project</id>
-        <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
-    </repository>
-    <snapshotRepository>
-        <id>google-project</id>
-        <url>svn:https://swixml2.googlecode.com/svn/trunk/mavenrepo</url>
-        <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
-</distributionManagement>
 
 
 </project>
