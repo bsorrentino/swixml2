@@ -264,12 +264,12 @@ public class SwixmlTestApplication extends SwingApplication {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+                System.setProperty("org.swixml.designTime", "true");
+
 
 	}
 
 	public static void main( String args[] ) {
-                System.setProperty("org.swixml.designTime", "true");
 		SwingApplication.launch(SwixmlTestApplication.class, args);
 	}
 }

@@ -3,106 +3,108 @@
   <groupId>org.swixml</groupId>
   <artifactId>swixml-tool</artifactId>
   <name>swixml tool</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>2.5-SNAPSHOT</version>
   <description>swixml tool</description>
+  
+<parent>
+  <groupId>org.swixml</groupId>
+  <artifactId>swixml-parent</artifactId>
+  <version>2.5-SNAPSHOT</version>
+</parent>
+  
   <build>
   	<plugins>
-  		<plugin>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<configuration>
-  				<source>1.5</source>
-  				<target>1.5</target>
-  			</configuration>
-  		</plugin>
-             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                  <archive>
-                    <manifest>
-                      <addClasspath>true</addClasspath>
-                      <mainClass>swixml.tool.SwixmlTestApplication</mainClass>
-                    </manifest>
-                  </archive>
-                </configuration>
-              </plugin>
-                   <plugin>
-                  <artifactId>maven-assembly-plugin</artifactId>
-                  <configuration>
-                  <descriptors>
-                    <descriptor>src/main/assembly/assembly.xml</descriptor>
-                  </descriptors>
-                </configuration>
-             </plugin>
-            <plugin>
-            <groupId>org.codehaus.mojo.webstart</groupId>
-            <artifactId>webstart-maven-plugin</artifactId>
-            <version>1.0-alpha-2</version>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-jar-plugin</artifactId>
+		<configuration>
+			<archive>
+				<manifest>
+					<addClasspath>true</addClasspath>
+					<mainClass>swixml.tool.SwixmlTestApplication</mainClass>
+				</manifest>
+			</archive>
+		</configuration>
+	</plugin>
 
-            <executions>
-            <execution>
-            <goals>
-            <goal>jnlp</goal>
-            </goals>
-            <phase>install</phase>
-            <configuration>
+	<plugin>
+		<artifactId>maven-assembly-plugin</artifactId>
+		<configuration>
+			<descriptors>
+				<descriptor>src/main/assembly/assembly.xml</descriptor>
+			</descriptors>
+		</configuration>
+	</plugin>
+	<plugin>
+		<groupId>org.codehaus.mojo.webstart</groupId>
+		<artifactId>webstart-maven-plugin</artifactId>
+		<version>1.0-alpha-2</version>
 
-                <dependencies>
-                        <includes />
-                        <excludes />
-                </dependencies>
-                <!--
-                <resourcesDirectory>${project.basedir}/src/jnlp/resources</resourcesDirectory>
-                -->
-                <resourcesDirectory>src/main/native</resourcesDirectory>
-                <jnlp>
-                    <!-- we play with the resource path and template relative path to test MOJO-391	-->
-                    <inputTemplateResourcePath>${project.basedir}/src/main</inputTemplateResourcePath>
-                    <inputTemplate>jnlp/template.vm</inputTemplate>
-                    <outputFile>swixml-tool.jnlp</outputFile>
-                    <mainClass>swixml.tool.SwixmlTestApplication</mainClass>
-                </jnlp>
+		<executions>
+			<execution>
+				<goals>
+					<goal>jnlp</goal>
+				</goals>
+				<phase>install</phase>
+				<configuration>
 
-                <!--
-                =====================
-                SIGNING
+					<dependencies>
+						<includes />
+						<excludes />
+					</dependencies>
+					<resourcesDirectory>${project.basedir}/src/jnlp</resourcesDirectory>
+					<!-- 
+					<resourcesDirectory>src/main/native</resourcesDirectory>
+					-->
+					<workDirectory>../jnlp</workDirectory>
+					<jnlp>
+						<!--
+							we play with the resource path and template relative path to test
+							MOJO-391
+						-->
+						<inputTemplateResourcePath>${project.basedir}/src/main</inputTemplateResourcePath>
+						<inputTemplate>jnlp/template.vm</inputTemplate>
+						<outputFile>swixml-tool.jnlp</outputFile>
+						<mainClass>swixml.tool.SwixmlTestApplication</mainClass>
+					</jnlp>
 
-                defining this will automatically sign the jar and its dependencies
-                =====================
-                -->
-                <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+					<!--
+						===================== SIGNING defining this will automatically
+						sign the jar and its dependencies =====================
+					-->
+					<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
 
-                <sign>
-                    <alias>swixml2-examples</alias>
-                    <validity>180</validity>
+					<sign>
+						<alias>swixml2-examples</alias>
+						<validity>180</validity>
 
-                    <dnameCn>Swixml2</dnameCn>
-                    <dnameOu>None</dnameOu>
-                    <dnameO>ExampleOrg</dnameO>
-                    <dnameL>Avellino</dnameL>
-                    <dnameSt>Italy</dnameSt>
-                    <dnameC>IT</dnameC>
+						<dnameCn>Swixml2</dnameCn>
+						<dnameOu>None</dnameOu>
+						<dnameO>ExampleOrg</dnameO>
+						<dnameL>Avellino</dnameL>
+						<dnameSt>Italy</dnameSt>
+						<dnameC>IT</dnameC>
 
-                    <verify>true</verify>
-                    <keystore>${project.basedir}/bsc.keystore</keystore>
-                    <keypass>googlebsc</keypass>
-                    <storepass>googlebsc</storepass>
+						<verify>true</verify>
+						<keystore>${project.basedir}/bsc.keystore</keystore>
+						<keypass>googlebsc</keypass>
+						<storepass>googlebsc</storepass>
 
-                    <keystoreConfig>
-                        <delete>false</delete>
-                        <gen>false</gen>
-                    </keystoreConfig>
-                </sign>
+						<keystoreConfig>
+							<delete>false</delete>
+							<gen>false</gen>
+						</keystoreConfig>
+					</sign>
 
-                <verbose>false</verbose>
+					<verbose>false</verbose>
 
-            </configuration>
+				</configuration>
 
-            </execution>
+			</execution>
 
-            </executions>
+		</executions>
 
-            </plugin>
+	</plugin>
 
   	</plugins>
   </build>
