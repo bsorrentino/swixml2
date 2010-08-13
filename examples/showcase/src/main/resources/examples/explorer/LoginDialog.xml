@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<dialog Size="500,500" resizable="false" title="Login Dialog"  defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
+
+<vbox>
+
+    <panel  layout="GridLayout(2,2,1,10)" border="CompoundBorder(EmptyBorder(10,1,10,10), TitledBorder(Security information))">
+        <label text="Login" />
+        <textfield bindWith="login" columns="15"/>
+
+        <label text="Password" />
+        <passwordField bindWith="password"  columns="15" />
+    </panel>
+
+   	<box.vstrut height="10"/>
+
+    <hbox>
+    	<box.glue/>
+    	<button text="Submit" action="submit"/>
+    	<box.hstrut width="5"/>
+    	<button text="Close" action="close"/>
+    </hbox>
+    
+</vbox>
+
+</dialog>

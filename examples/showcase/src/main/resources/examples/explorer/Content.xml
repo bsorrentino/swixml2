@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<panel  layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="XML Source" layout="BorderLayout">
+<scrollpane>
+<textarea id="xmlSource" bindWith="xmlSource" font="Courier-PLAIN-13"></textarea>
+</scrollpane>
+</panel>
+
+<panel name="Java Source" layout="BorderLayout" >
+<scrollpane>
+<textarea id="javaSource" bindWith="javaSource" font="Courier-PLAIN-13"></textarea>
+</scrollpane>
+</panel>
+
+</tabbedpane>
+
+</panel>

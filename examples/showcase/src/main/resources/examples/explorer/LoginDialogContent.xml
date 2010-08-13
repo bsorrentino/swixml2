@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<panel  layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="XML Source" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/LoginDialog.xml"></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="Application" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/LoginExample.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="Dialog" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/LoginDialog.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+</tabbedpane>
+
+</panel>

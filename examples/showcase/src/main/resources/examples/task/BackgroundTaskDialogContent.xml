@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<panel  layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="XML Source" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/BackgroundTaskDialog.xml"></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="Java Source (Application)" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/BackgroundTaskExample.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="Java Source (Dialog)" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/explorer/BackgroundTaskDialog.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="NetworkTimeRetriever" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/task/NetworkTimeRetrieverTask.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+<panel name="ListFilesTask" layout="BorderLayout">
+<scrollpane>
+<filetextarea source="examples/task/ListFilesTask.java" ></filetextarea>
+</scrollpane>
+</panel>
+
+</tabbedpane>
+
+</panel>
