@@ -1,12 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.swixml</groupId>
   <artifactId>swixml-examples</artifactId>
-  <packaging>jar</packaging>
-  <version>1.0</version>
+  <packaging>pom</packaging>
+  <version>2.5-SNAPSHOT</version>
   <name>SWIXML EXAMPLES 2.5</name>
-  <url>http://maven.apache.org</url>
+  <url>http://code.google.com/p/swixml2/</url>
 
 <parent>
   <groupId>org.swixml</groupId>
@@ -22,6 +22,7 @@
       <version>2.5-SNAPSHOT</version>
     </dependency>
 
+<!-- 
     <dependency>
         <groupId>it.softphone.win32</groupId>
         <artifactId>winappbar</artifactId>
@@ -36,7 +37,7 @@
         <type>dll</type>
         <scope>runtime</scope>
     </dependency>
-<!--
+
     <dependency>
       <groupId>org.jvnet</groupId>
       <artifactId>substance</artifactId>
@@ -113,6 +114,13 @@
 </plugin>
 -->
 
+<!-- 
+=========================
+WEBSTART PLUGIN
+
+goal ==> webstart:jnlp
+=========================
+ -->
 <plugin>
 <groupId>org.codehaus.mojo.webstart</groupId>
 <artifactId>webstart-maven-plugin</artifactId>
@@ -123,17 +131,19 @@
 <goals>
 <goal>jnlp</goal>
 </goals>
+<!-- 
 <phase>install</phase>
+ -->
 <configuration>
 
 	<dependencies>
-		<includes />
-		<excludes />
+		<includes/>
+		<excludes/>
 	</dependencies>
+	<resourcesDirectory>${project.basedir}/src/jnlp</resourcesDirectory>
 	<!-- 
-	<resourcesDirectory>${project.basedir}/src/jnlp/resources</resourcesDirectory>
-	-->
 	<resourcesDirectory>src/main/native</resourcesDirectory>
+	-->
 	<workDirectory>../jnlp</workDirectory>
 	<jnlp>
 		<!-- we play with the resource path and template relative path to test MOJO-391	-->
@@ -188,4 +198,8 @@ defining this will automatically sign the jar and its dependencies
 
 </build>
 
+  <modules>
+    <module>wizard</module>
+    <module>showcase</module>
+  </modules>
 </project>
