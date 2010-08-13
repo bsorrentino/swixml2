@@ -56,11 +56,6 @@
         <version>1.4</version>
    </dependency>
 -->
-      <dependency>
-        <groupId>org.netbeans.api</groupId>
-        <artifactId>wizard</artifactId>
-        <version>0.998.1</version>
-      </dependency>
 
 </dependencies>
 <scm>
