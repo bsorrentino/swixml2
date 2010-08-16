@@ -40,11 +40,12 @@ public class GenerateBeanPage extends WizardPage implements DDLWizardConstants{
                     progress.setBusy("Generating Beans!");
                     BeanGeneratorUtils.generateBean(generateBeanList, getPackageName(), outputDir);
 
-                    progress.setBusy("Generating BeanInfo!");
-                    BeanGeneratorUtils.generateBeanInfo(generateBeanList, getPackageName(), outputDir);
+                    //progress.setBusy("Generating BeanInfo!");
+                    //BeanGeneratorUtils.generateBeanInfo(generateBeanList, getPackageName(), outputDir);
 
                     progress.finished(WizardPanelNavResult.PROCEED);
                 } catch (Exception e) {
+                	e.printStackTrace();
                     progress.failed(String.format("Error on Bean creation\n%s", e.getMessage()), true /*canNavigateBack*/);
                 }
 
@@ -57,7 +58,11 @@ public class GenerateBeanPage extends WizardPage implements DDLWizardConstants{
 	
 	public GenerateBeanPage() {
 		super("generate", "Generate Bean&BeanInfo");
+
 		
+		setGenerateBean(false);
+
+
 		try {
 			
 			Map<String,PropertyDescriptor> map = BindingUtils.getPropertyMap(GenerateBean.class);
@@ -110,7 +115,7 @@ public class GenerateBeanPage extends WizardPage implements DDLWizardConstants{
 		try {
 			connection = DDLWizardApplication.getConnection(wizardData);
 
-			Database result = platform.readModelFromDatabase( connection, null);
+			Database result = platform.readModelFromDatabase( connection, "dbName");
 			
 			return result; 
 		}
@@ -137,12 +142,11 @@ public class GenerateBeanPage extends WizardPage implements DDLWizardConstants{
 	protected void renderingPage() {
             super.renderingPage();
 
-            setGenerateBean(true);
-
             Database db = null;
             try {
                 db = (Boolean.TRUE.equals(getWizardData(CREATEDB))) ? getCreatedDatabase(getWizardDataMap()) : createFormLiveDatabase(getWizardDataMap());
 
+                getGenerateBeanList().clear();
                 for (Table table : db.getTables()) {
 
                     getGenerateBeanList().add(new GenerateBean(table));
@@ -150,6 +154,7 @@ public class GenerateBeanPage extends WizardPage implements DDLWizardConstants{
 
 
             } catch (Exception e) {
+            	e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fatal Error on render component! \n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 Application.getInstance().exit();
             }

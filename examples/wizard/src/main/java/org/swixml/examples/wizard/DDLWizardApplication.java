@@ -137,12 +137,13 @@ public class DDLWizardApplication extends SwingApplication implements DDLWizardC
     protected void startup() {
 
         try {
-            render(page1, "SetJDBCInfoPage.xml");
-            render( page2, "SetDBSchema.xml");
-            render( page3, "GenerateBean.xml");
+            render(page1);
+            render( page2);
+            render( page3);
 
         } catch (Exception ex) {
 
+        	ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Fatal Error on render component!", "Error", JOptionPane.ERROR_MESSAGE);
             exit();
 
@@ -159,7 +160,7 @@ else {
 
 }
 
-
+	
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -169,6 +170,8 @@ else {
         int y = (dim.height-h)/2;
 
       /* Object result = */WizardDisplayer.showWizard(wizard, new Rectangle(x,y,w,h));
+      
+      exit();
 
    }
 

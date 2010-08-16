@@ -1,18 +1,24 @@
 package org.swixml.examples.wizard;
 
+import java.awt.Dimension;
 import java.io.File;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.ddlutils.model.Column;
-import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.Table;
 import org.bsc.bean.BeanManagerUtils;
+import org.jdesktop.application.Application;
+import org.swixml.jsr296.SwingApplication;
 
 import biz.source_code.miniTemplator.MiniTemplator;
 
@@ -100,20 +106,7 @@ public class BeanGeneratorUtils {
 	 
 	public static void generateBean( List<GenerateBean> beanList, String packageName, File outputDir ) throws Exception {
 		if( null==beanList ) throw new IllegalArgumentException( "beanList parameter is null!");
-		if( null==outputDir ) throw new IllegalArgumentException( "outputDir parameter is null!");
-		
-		final String sep = System.getProperty("file.separator");
-
-		if( !DDLWizardApplication.isEmpty(packageName)) {
-			String newPath = new StringBuilder()
-				.append( outputDir.getAbsolutePath() )
-				.append( sep )
-				.append( packageName.replace(".", sep) )
-				.toString();
-			outputDir = new File( newPath );
-		}
-
-		outputDir.mkdirs();
+		//if( null==outputDir ) throw new IllegalArgumentException( "outputDir parameter is null!");
 		
 		for( GenerateBean bean : beanList ) {
 			
@@ -139,9 +132,38 @@ public class BeanGeneratorUtils {
 			}
 
 			
-			File beanFile = new File( outputDir, String.format("%s.java", bean.getBeanName() ) );
+			if( outputDir!=null ) {
+				final String sep = System.getProperty("file.separator");
 
-			t.generateOutput(beanFile);
+				if( !DDLWizardApplication.isEmpty(packageName)) {
+					String newPath = new StringBuilder()
+						.append( outputDir.getAbsolutePath() )
+						.append( sep )
+						.append( packageName.replace(".", sep) )
+						.toString();
+					outputDir = new File( newPath );
+				}
+
+				outputDir.mkdirs();
+				
+				File beanFile = new File( outputDir, String.format("%s.java", bean.getBeanName() ) );
+
+				t.generateOutput(beanFile);
+			
+			}
+			else {
+				StringWriter sw = new StringWriter();
+				
+				t.generateOutput(sw);
+				
+				JTextArea message = new JTextArea();
+				message.setText(sw.toString());
+				message.setRows(30);
+				message.setColumns(80);
+				message.setEditable(false);
+				
+				JOptionPane.showMessageDialog( Application.getInstance(SwingApplication.class).getMainFrame(), new JScrollPane(message));
+			}
 		}
 	}
 	
@@ -149,6 +171,7 @@ public class BeanGeneratorUtils {
 		if( null==beanList ) throw new IllegalArgumentException( "beanList parameter is null!");
 		if( null==outputDir ) throw new IllegalArgumentException( "outputDir parameter is null!");
 
+	
 		final String sep = System.getProperty("file.separator");
 		
 		if( !DDLWizardApplication.isEmpty(packageName)) {
