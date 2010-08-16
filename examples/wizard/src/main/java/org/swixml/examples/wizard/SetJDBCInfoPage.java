@@ -101,8 +101,7 @@ public class SetJDBCInfoPage extends WizardPage implements DDLWizardConstants{
                                                     "jdbc:sqlserver://SQL_SERVER:1433;databaseName=DB_NAME;integratedSecurity=false;" ));
 		supportedDrivers.add( new JDBCInfo( "Derby DB [Embed]", 
                                                      org.apache.derby.jdbc.EmbeddedDriver.class,
-													"jdbc:derby:/Users/softphone/WORKSPACES/SOFTPHONE/TMP/test-gwt-security/test-gwt-security/MyDB;create=false" ));
-                                                     //"jdbc:derby:DB_PATH/DB_NAME;create=false" ));
+                                                     "jdbc:derby:DB_PATH/DB_NAME;create=false" ));
     	setCreateDB(false);
     	setFromDB(true);
 		
