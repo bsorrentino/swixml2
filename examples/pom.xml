@@ -64,17 +64,6 @@
 </scm>
   
 <build>
-	<resources>
-		<resource>
-			<directory>src/main/java</directory>
-			<includes>
-				<include>**/*.java</include>
-			</includes>
-		</resource>
-		<resource>
-			<directory>src/main/resources</directory>
-		</resource>
-	</resources>
 
 <plugins>
     
@@ -109,85 +98,6 @@
 </plugin>
 -->
 
-<!-- 
-=========================
-WEBSTART PLUGIN
-
-goal ==> webstart:jnlp
-=========================
- -->
-<plugin>
-<groupId>org.codehaus.mojo.webstart</groupId>
-<artifactId>webstart-maven-plugin</artifactId>
-<version>1.0-alpha-2</version>
-
-<executions>
-<execution>
-<goals>
-<goal>jnlp</goal>
-</goals>
-<!-- 
-<phase>install</phase>
- -->
-<configuration>
-
-	<dependencies>
-		<includes/>
-		<excludes/>
-	</dependencies>
-	<resourcesDirectory>${project.basedir}/src/jnlp</resourcesDirectory>
-	<!-- 
-	<resourcesDirectory>src/main/native</resourcesDirectory>
-	-->
-	<workDirectory>../jnlp</workDirectory>
-	<jnlp>
-		<!-- we play with the resource path and template relative path to test MOJO-391	-->
-		<inputTemplateResourcePath>${project.basedir}/src/main</inputTemplateResourcePath>
-		<inputTemplate>jnlp/template.vm</inputTemplate>
-		<outputFile>swixml2.jnlp</outputFile>	
-		<mainClass>examples.explorer.Swixml2Explorer</mainClass>		
-	</jnlp>
-
-<!-- 
-=====================
-SIGNING
-
-defining this will automatically sign the jar and its dependencies 
-=====================
--->
-	<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
-	
-	<sign>
-		<alias>swixml2-examples</alias>
-		<validity>180</validity>
-	
-		<dnameCn>Swixml2</dnameCn>
-		<dnameOu>None</dnameOu>
-		<dnameO>ExampleOrg</dnameO>
-		<dnameL>Avellino</dnameL>
-		<dnameSt>Italy</dnameSt>
-		<dnameC>IT</dnameC>
-	
-		<verify>true</verify>
-        <keystore>${project.basedir}/bsc.keystore</keystore>
-        <keypass>googlebsc</keypass>
-        <storepass>googlebsc</storepass>
-
-		<keystoreConfig>
-			<delete>false</delete>
-			<gen>false</gen>
-		</keystoreConfig>
-	</sign>
-
-	<verbose>false</verbose>
-
-</configuration>
-
-</execution>
-
-</executions>
-
-</plugin>
 
 </plugins>
 
