@@ -53,7 +53,8 @@ public class DDLWizardApplication extends SwingApplication implements DDLWizardC
         }
 
         public boolean cancel(Map wizardData) {
-            exit();
+            getInstance(SwingApplication.class).getMainFrame().dispose();
+        	//exit();
             return true;
         }
 
@@ -171,7 +172,8 @@ else {
 
       /* Object result = */WizardDisplayer.showWizard(wizard, new Rectangle(x,y,w,h));
       
-      exit();
+      getInstance(SwingApplication.class).getMainFrame().dispose(); 
+  	//exit();
 
    }
 
