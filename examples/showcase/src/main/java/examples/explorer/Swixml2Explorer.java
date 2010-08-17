@@ -28,6 +28,7 @@ import legacy.Layout;
 
 import org.jdesktop.application.Action;
 import org.swixml.SwingTagLibrary;
+import org.swixml.examples.wizard.DDLWizardApplication;
 import org.swixml.jsr296.SwingApplication;
 
 import examples.spinner.SpinnerSampleApplication;
@@ -222,6 +223,13 @@ public class Swixml2Explorer extends SwingApplication  {
 				{
 					PanelInfo p = new PanelInfo("Spinner Example", SpinnerSampleApplication.class);
 					p.setXmlPanel("examples/spinner/SpinnerDialogContent.xml");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				
+				{
+					PanelInfo p = new PanelInfo("Wizard Integration Example", DDLWizardApplication.class);
+					p.setXmlPanel("examples/wizard/WizardExample.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
