@@ -751,7 +751,10 @@ public class SwingEngine<T extends Container> {
   }
 
   protected void mapMember( Object widget, String fieldName) {
-	  if( client==null) throw new IllegalStateException("client obj is null!");
+	  if( client==null) {
+              if(isDesignTime()) return;
+              throw new IllegalStateException("client obj is null!");
+          }
 
 	  final Class<?> cls = client.getClass();
   
