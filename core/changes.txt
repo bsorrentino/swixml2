@@ -1,7 +1,12 @@
 
 2.5.SNAPSHOT 
-=============
+============
 
+Issue 49 - unify the localization model to JSR296 model 
+
+
+2.5.20100414
+============
 - Issue 44
 - add org.jdesktop.application.Application.injectFields to enable/disable auto inject fileds
 - Issue 46

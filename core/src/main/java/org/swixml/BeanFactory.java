@@ -5,6 +5,8 @@
 
 package org.swixml;
 
+import java.awt.LayoutManager;
+import org.jdom.Element;
 import static org.swixml.LogUtil.logger;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +20,9 @@ import java.util.logging.Level;
 
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.jdom.Attribute;
+import org.swixml.processor.ButtonGroupTagProcessor;
+import org.swixml.processor.ConstraintsTagProcessor;
+import org.swixml.processor.TagProcessor;
 
 /**
  *
@@ -27,10 +32,16 @@ public class BeanFactory implements Factory {
 
     final Map<String,Method> nameMap;
     final Class<?> template;
+    private final TagProcessor processor;
     
     public BeanFactory( Class<?> beanClass ) {
+       this( beanClass, null );
+    }
+    
+    public BeanFactory( Class<?> beanClass, TagProcessor processor ) {
 		if( null==beanClass) throw new IllegalArgumentException( "beanClass is null!");
         this.template = beanClass;
+        this.processor = processor;
         
         Method[] mm = beanClass.getMethods();
         
@@ -113,5 +124,34 @@ public class BeanFactory implements Factory {
         
                 
     }
+
+
+    /**
+     * 
+     * @param p
+     * @param parent
+     * @param child
+     * @return
+     * @throws Exception
+     */
+    public boolean process(Parser p, Object parent, Element child, LayoutManager layoutMgr) throws Exception {
+        boolean result = false;
+        
+        if(null != processor)
+            result = processor.process(p, parent, child, layoutMgr);
+
+        if (!result) {
+            result = ButtonGroupTagProcessor.instance.process(p, parent, child, layoutMgr);
+
+            if (!result) {
+                result = ConstraintsTagProcessor.instance.process(p, parent, child, layoutMgr);
+            }
+        }
+
+        return result;
+    }
+
+
+
 
 }

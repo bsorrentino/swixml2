@@ -90,6 +90,8 @@ import org.swixml.jsr.widgets.JTextAreaEx;
 import org.swixml.jsr.widgets.JTextFieldEx;
 import org.swixml.jsr.widgets.JTreeEx;
 import org.swixml.jsr295.BindingUtils;
+import org.swixml.processor.NopTagProcessor;
+import org.swixml.processor.TableColumnTagProcessor;
 
 /**
  * The SwingTagLibrary contains Factories for all Swing Objects that can be instatiated by
@@ -122,9 +124,13 @@ public final class SwingTagLibrary extends TagLibrary {
    * derived classes to change the registration behaviour.
    */
   protected void registerTags() {
+
+
+    registerTag( "ButtonGroup", ButtonGroup.class, NopTagProcessor.instance );
+    registerTag( "Separator", JSeparator.class, NopTagProcessor.instance );
+
     registerTag( "Applet", JApplet.class );
     registerTag( "Button", JButton.class );
-    registerTag( "ButtonGroup", ButtonGroup.class );
     registerTag( "CheckBoxMenuItem", JCheckBoxMenuItem.class );
     registerTag( "Component", JComponent.class );
     registerTag( "DesktopPane", JDesktopPane.class );
@@ -144,7 +150,6 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "RadioButtonMenuItem", JRadioButtonMenuItem.class );
     registerTag( "OptionPane", JOptionPane.class );
     registerTag( "ScrollPane", XScrollPane.class );
-    registerTag( "Separator", JSeparator.class );
     registerTag( "SplitPane", XSplitPane.class );
     registerTag( "TabbedPane", XTabbedPane.class );
     registerTag( "TableHeader", JTableHeader.class );
@@ -165,7 +170,7 @@ public final class SwingTagLibrary extends TagLibrary {
     //registerTag( "TextArea", JTextArea.class );
     registerTag( "TextArea", JTextAreaEx.class );
     //registerTag( "Table", JTable.class );
-    registerTag( "Table", JTableEx.class );
+    registerTag( "Table", JTableEx.class, new TableColumnTagProcessor() );
     //registerTag( "Label", JLabel.class );
     registerTag( "Label", JLabelEx.class );
     //registerTag( "Tree", JTree.class );

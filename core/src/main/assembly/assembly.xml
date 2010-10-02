@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="windows-1252"?>
 
 <assembly>
-  <id>distribution</id>
+  <id>distribution-20100719</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
   <formats>
     <format>zip</format>
   </formats>

@@ -72,9 +72,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
 import javax.swing.Action;
-import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -83,11 +81,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.RootPaneContainer;
 import javax.swing.UIManager;
-import javax.swing.table.TableColumn;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -98,7 +94,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.swixml.converters.LocaleConverter;
 import org.swixml.converters.PrimitiveConverter;
-import org.swixml.jsr.widgets.JTableEx;
 import org.swixml.jsr295.BindingUtils;
 
 /**
@@ -116,14 +111,16 @@ import org.swixml.jsr295.BindingUtils;
 @SuppressWarnings({"unchecked"})
 public class Parser {
 
-  private static final String TAG_GRIDBAGCONSTRAINTS = "gridbagconstraints";
+  public static final String TAG_GRIDBAGCONSTRAINTS = "gridbagconstraints";
 
 //
   //  Custom TAGs
   //
-  private static final String TAG_CONSTRAINTS = "constraints";
+  public static final String TAG_CONSTRAINTS = "constraints";
 
-  private static final String TAG_BUTTONGROUP = "buttongroup";
+  public static final String TAG_BUTTONGROUP = "buttongroup";
+  
+  public static final String TAG_TABLECOLUMN = "tablecolumn";
 
   //
   //  Custom Attributes
@@ -253,7 +250,7 @@ public class Parser {
   /**
    * the calling engine
    */
-  private SwingEngine<?> engine;
+  public final  SwingEngine<?> engine;
 
   /**
    * ConverterLib, to access COnverters, converting String in all kinds of things
@@ -612,102 +609,22 @@ public class Parser {
     
     List remainingAttrs = applyAttributes(obj, factory, attributes);
     
-    //
+    ////////////////////////////////////////////////////
     //  process child tags
     //
+    ////////////////////////////////////////////////////
 
     LayoutManager layoutMgr = getLayoutManager(obj);
 
-
     Iterator it = element.getChildren().iterator();
+    
     while (it != null && it.hasNext()) {
       
       Element child = (Element) it.next();
-     
-      //
-      //  Prepare for possible add tablecolumn to table
-      //
-      if( "tablecolumn".equalsIgnoreCase(child.getName())) {
-    	  
-    	  if( !(obj instanceof JTable) ) {
-    		  logger.warning( String.format( "%s tag is valid only inside Table Tag. Ignored!", "tablecolumn")); 
-    		  continue;
-    	  }
-    	  final JTableEx table = (JTableEx) obj;
-    	  
-    	  final javax.swing.table.TableColumn tc = (TableColumn) getSwing( child, null);
 
-          tc.setModelIndex( table.getColumnModel().getColumnCount() );
-          
-    	  table.getColumnModel().addColumn(tc);
-    	  
-    	  logger.info( String.format("column [%s] header=[%s] modelIndex=[%d] resizable=[%b] minWidth=[%s] maxWidth=[%d] preferredWidth=[%d]\n", 
-      			  tc.getIdentifier(),
-      			  tc.getHeaderValue(),
-      			  tc.getModelIndex(),
-      			  tc.getResizable(),
-      			  tc.getMinWidth(),
-      			  tc.getMaxWidth(),
-      			  tc.getPreferredWidth()
-      			  ));
-    	  
-    	  continue;
-      }
-      //
-      //  Prepare for possible grouping through BottonGroup Tag
-      //
-      if (TAG_BUTTONGROUP.equalsIgnoreCase(child.getName())) {
+      factory.process( this, obj, child, layoutMgr ) ;
 
-        int k = JMenu.class.isAssignableFrom(obj.getClass()) ? ((JMenu) obj).getItemCount() : ((Container) obj).getComponentCount();
-        getSwing(child, obj);
-        int n = JMenu.class.isAssignableFrom(obj.getClass()) ? ((JMenu) obj).getItemCount() : ((Container) obj).getComponentCount();
-        //
-        //  add the recently add container entries into the btngroup
-        //
-        ButtonGroup btnGroup = new ButtonGroup();
-        // incase the button group was given an id attr. it should also be put into the idmap.
-        if (null != child.getAttribute(Parser.ATTR_ID)) {
-          engine.getIdMap().put(child.getAttribute(Parser.ATTR_ID).getValue(), btnGroup);
-        }
-        while (k < n) {
-          putIntoBtnGrp(JMenu.class.isAssignableFrom(obj.getClass()) ? ((JMenu) obj).getItem(k++) : ((Container) obj).getComponent(k++), btnGroup);
-        }
-        continue;
-      }
 
-      //
-      //  A CONSTRAINTS attribute is removed from the childtag but used to add the child into the currrent obj
-      //
-      Attribute constrnAttr = child.getAttribute(ATTR_CONSTRAINTS);
-      Object constrains = null;
-      if (constrnAttr != null && layoutMgr != null) {
-        child.removeAttribute(ATTR_CONSTRAINTS); // therefore it won't be used in getSwing(child)
-        LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance().getLayoutConverter(layoutMgr.getClass());
-        if (layoutConverter != null)
-          constrains = layoutConverter.convertConstraintsAttribute(constrnAttr);
-      }
-
-      //
-      //  A CONSTRAINTS element is used to add the child into the currrent obj
-      //
-      Element constrnElement = child.getChild(TAG_CONSTRAINTS);
-      if (constrnElement != null && layoutMgr != null) {
-        LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance().getLayoutConverter(layoutMgr.getClass());
-        if (layoutConverter != null)
-          constrains = layoutConverter.convertConstraintsElement(constrnElement);
-      }
-
-      //
-      //  A constraints or GridBagConstraints grand-childtag is not added at all ..
-      //  .. but used to add the child into this container
-      //
-      Element grandchild = child.getChild(TAG_GRIDBAGCONSTRAINTS);
-      if (grandchild != null) {
-        addChild((Container) obj, (Component) getSwing(child, null), getSwing(grandchild, null));
-      } else if (!child.getName().equals(TAG_CONSTRAINTS) &&
-              !child.getName().equals(TAG_GRIDBAGCONSTRAINTS)) {
-        addChild((Container) obj, (Component) getSwing(child, null), constrains);
-      }
     }
 
     //
@@ -732,6 +649,7 @@ public class Parser {
     return (constructed ? obj : null);
   }
 
+ 
   /**
    * 
    * @param method
@@ -1071,7 +989,7 @@ public class Parser {
    * @param constrains <code>Object</code> contraints
    * @return <code>Component</code> - the passed in component
    */
-  private static Component addChild(Container parent, Component component, Object constrains) {
+  public Component addChild(Container parent, Component component, Object constrains) {
     if (component == null) return null;
 
     //
@@ -1208,22 +1126,6 @@ public class Parser {
     return elem;
   }
 
-  /**
-   * Recursively adds AbstractButtons into the given
-   *
-   * @param obj <code>Object</code> should be an AbstractButton or JComponent containing AbstractButtons
-   * @param grp <code>ButtonGroup</code>
-   */
-  private static void putIntoBtnGrp(Object obj, ButtonGroup grp) {
-    if (AbstractButton.class.isAssignableFrom(obj.getClass())) {
-      grp.add((AbstractButton) obj);
-    } else if (JComponent.class.isAssignableFrom(obj.getClass())) {
-      JComponent jp = (JComponent) obj;
-      for (int i = 0; i < jp.getComponentCount(); i++) {
-        putIntoBtnGrp(jp.getComponent(i), grp);
-      }
-    } // otherwise just do nothing ...
-  }
 
 
   /**

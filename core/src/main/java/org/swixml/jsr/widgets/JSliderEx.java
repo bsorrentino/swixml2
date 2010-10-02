@@ -5,19 +5,43 @@
 
 package org.swixml.jsr.widgets;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.Action;
 import javax.swing.JSlider;
-import org.jdesktop.beansbinding.AutoBinding;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
-import static org.swixml.SwingEngine.isDesignTime;
 
 /**
  *
  * @author softphone
  */
 public class JSliderEx extends JSlider implements BindableBasicWidget {
+    
+	private Action action;
+	
+	private ChangeListener listener = new ChangeListener() {
 
-    public String getBindWith() {
+		public void stateChanged(ChangeEvent e) {
+
+			if( action!=null )
+				action.actionPerformed( new ActionEvent(  e, 0, "changed") );
+		}
+		
+	};
+
+    public final Action getAction() {
+		return action;
+	}
+
+	public final void setAction(Action action) {
+		this.action = action;
+	}
+
+	public String getBindWith() {
         return (String) getClientProperty(BINDWITH_PROPERTY);
     }
 
@@ -44,8 +68,14 @@ public class JSliderEx extends JSlider implements BindableBasicWidget {
 
         }
 
+        super.addChangeListener( listener );
         super.addNotify();
     }
 
-
+    @Override
+    public void removeNotify() {    	
+    	super.removeNotify();
+    	
+        super.removeChangeListener( listener );
+    }
 }

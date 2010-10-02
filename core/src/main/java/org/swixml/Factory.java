@@ -53,11 +53,13 @@
 
 package org.swixml;
 
+import java.awt.LayoutManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import org.jdom.Attribute;
+import org.jdom.Element;
 
 /**
  * An interface to represent a generic factory
@@ -66,59 +68,68 @@ import org.jdom.Attribute;
  * @version $Revision: 1.1 $
  */
 public interface Factory {
-  /** Specifies the prefix string for all setter methods */
-  static final String SETTER_ID = "set";
-  static final String ADDER_ID = "add";
-  
-  /**
-   * Create a new component instance
-   *
-   * @return instance <code>Object</code> a new instance of a template class
-   * @throws Exception
-   */
-  Object newInstance( List<Attribute> attributes ) throws Exception;
+    /** Specifies the prefix string for all setter methods */
+    static final String SETTER_ID = "set";
+    static final String ADDER_ID = "add";
+
+    /**
+     * Create a new component instance
+     *
+     * @return instance <code>Object</code> a new instance of a template class
+     * @throws Exception
+     */
+    Object newInstance(List<Attribute> attributes) throws Exception;
+
+    /**
+     * Creates a new Object which class is {@link #getTemplate()} and the constructor
+     * parameter are <code>parameter</code>.
+     *
+     * @param parameter <code>Object[]</code> the parameter array to be passed into the constructor
+     * @return <code>Object</object> - the created object, an instance of the template class
+     * @throws InstantiationException if the creation of the object failed
+     * @throws IllegalAccessException if the constructor is either private or protected.
+     * @throws InvocationTargetException if the constructor invoked throws an exception
+     */
+    Object newInstance(Object... parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException;
+
+    /**
+     * @return class - <code>Class</code> the backing class template
+     */
+    Class<?> getTemplate();
+
+    /**
+     * Get all setter property methods - useful for debug
+     * @return <code>Collection</code> - containing all available setter methods
+     */
+    Collection<Method> getSetters();
+
+    /**
+     *
+     * @param bean
+     * @param name
+     * @return
+     */
+    Class<?> getPropertyType(Object bean, String name);
+
+    /**
+     *
+     * @param bean
+     * @param name
+     * @param value
+     * @return
+     * @exception
+     */
+    void setProperty(Object bean, String name, Object value) throws Exception;
 
 
-  /**
-   * Creates a new Object which class is {@link #getTemplate()} and the constructor
-   * parameter are <code>parameter</code>.
-   *
-   * @param parameter <code>Object[]</code> the parameter array to be passed into the constructor
-   * @return <code>Object</object> - the created object, an instance of the template class
-   * @throws InstantiationException if the creation of the object failed
-   * @throws IllegalAccessException if the constructor is either private or protected.
-   * @throws InvocationTargetException if the constructor invoked throws an exception
-   */
-  Object newInstance(Object... parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException;
-
-  /**
-   * @return class - <code>Class</code> the backing class template
-   */
-  Class<?> getTemplate();
-
-  /**
-   * Get all setter property methods - useful for debug
-   * @return <code>Collection</code> - containing all available setter methods
-   */
-  Collection<Method> getSetters();
-
-  /**
-   * 
-   * @param bean
-   * @param name
-   * @return
-   */
-  Class<?> getPropertyType( Object bean, String name );
-
-  /**
-   * 
-   * @param bean
-   * @param name
-   * @param value
-   * @return 
-   * @exception 
-   */
-  void setProperty( Object bean, String name, Object value ) throws Exception;
-  
+    /**
+     * 
+     * @param p
+     * @param parent
+     * @param child
+     * @return
+     * @throws Exception
+     */
+    boolean process( Parser p, Object parent, Element child, LayoutManager layoutMgr ) throws Exception;
 
 }

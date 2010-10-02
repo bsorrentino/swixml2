@@ -55,6 +55,7 @@ package org.swixml;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.swixml.processor.TagProcessor;
 
 /**
  * A skeletal impementation of a TagLibrary<br>
@@ -81,6 +82,17 @@ public abstract class TagLibrary {
    * Registers all factories for the TagLibrary.
    */
   abstract protected void registerTags();
+
+  /**
+   * 
+   * @param name
+   * @param template
+   * @param processor
+   */
+  public void registerTag( String name, Class<?> template, TagProcessor processor ) {
+    //registerTag( name, new DefaultFactory( template ) );
+    registerTag( name, new BeanFactory( template, processor ) );
+  }
 
   /**
    * Registers a class for the given tag name
