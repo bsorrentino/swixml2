@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<frame name="mainframe" size="640,480" title="S W I X M L" plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel" defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
+<dialog  name="mainframe"
+        size="640,480"
+        title="S W I X M L"
+        _plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
+        defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
+            
   <menubar name="menubar">
     <menu name="filemenu" text="File">
       <menuitem name="mi_new" text="New" icon="icons/new.gif" mnemonic="VK_N" accelerator="control N" Action="newAction"/>
@@ -14,8 +19,10 @@
   </menubar>
 
 
-  <panel layout="borderlayout" background="666666" constraints="BorderLayout.CENTER">
-    <splitpane oneTouchExpandable="true" dividerLocation="200">
+  <panel layout="borderLayout" background="666666" >
+
+
+    <splitpane oneTouchExpandable="true" dividerLocation="200" constraints="BorderLayout.CENTER" >
 
       <splitpane oneTouchExpandable="true" dividerLocation="140" orientation="HORIZONTAL">
         <scrollPane background="blue" >
@@ -38,11 +45,13 @@
       </panel>
 
     </splitpane>
-  </panel>
+
 
   <panel constraints="BorderLayout.SOUTH">
     <label text="Status:"/>
     <textfield text="OK"/>
   </panel>
-</frame>
+
+</panel>
+</dialog>
 

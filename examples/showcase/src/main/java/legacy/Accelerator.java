@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.swixml.SwingEngine;
@@ -18,7 +18,7 @@ import org.swixml.SwingEngine;
  *
  * @since swixml (#101)
  */
-public class Accelerator extends JFrame {
+public class Accelerator extends JDialog {
   private static final String DESCRIPTOR = "xml/accelerator.xml";
   SwingEngine swix = new SwingEngine( this );
 

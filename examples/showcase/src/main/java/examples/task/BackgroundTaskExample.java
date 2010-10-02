@@ -12,7 +12,7 @@ public class BackgroundTaskExample extends SwingApplication {
     protected void startup() {
 
 		try {
-			JDialog dialog = super.render(new BackgroundTaskDialog(), "examples/explorer/BackgroundTaskDialog.xml");
+			JDialog dialog = super.render(new BackgroundTaskDialog());
 
 			super.show(dialog);
 			
