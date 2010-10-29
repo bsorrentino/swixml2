@@ -528,7 +528,7 @@ public class Parser {
         }
       }
 
-      obj = initParameter != null ? factory.newInstance(initParameter) : factory.newInstance( attributes );
+      obj = initParameter != null ? factory.newInstance(initParameter) : factory.create( engine.getClient(), element );
       constructed = true;
     }
     

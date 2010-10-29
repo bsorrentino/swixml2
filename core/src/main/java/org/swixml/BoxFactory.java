@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 
 import org.jdom.Attribute;
+import org.jdom.Element;
 
 
 /**
@@ -190,49 +191,52 @@ public class BoxFactory extends BeanFactory {
         
     }
     
-    protected Component createGlue(List<Attribute> attributes) {
+    protected Component createGlue( Element element) {
         return Box.createGlue();
     }
 
-    protected Component createHGlue(List<Attribute> attributes) {
+    protected Component createHGlue(Element element) {
         return Box.createHorizontalGlue();
     }
 
-    protected Component createVGlue(List<Attribute> attributes) {
+    protected Component createVGlue(Element element) {
         return Box.createVerticalGlue();
     }
 
-    protected Component createHStrut(List<Attribute> attributes) throws Exception {
+    protected Component createHStrut(Element element) throws Exception {
         
-        Integer width = getIntAttribute("width", attributes);
+        @SuppressWarnings("unchecked")
+		Integer width = getIntAttribute("width", element.getAttributes());
         
         return Box.createHorizontalStrut(width);
     }
 
-    protected Component createVStrut(List<Attribute> attributes) throws Exception {
+    protected Component createVStrut(Element element) throws Exception {
         
-        Integer heigth = getIntAttribute("height", attributes);
+        @SuppressWarnings("unchecked")
+		Integer heigth = getIntAttribute("height", element.getAttributes());
         
         return Box.createVerticalStrut(heigth);
     }
 
-    protected Component createRigidArea(List<Attribute> attributes) throws Exception {
+    protected Component createRigidArea(Element element) throws Exception {
         
-        Dimension d = getDimensionAttribute("size", attributes);
+        @SuppressWarnings("unchecked")
+		Dimension d = getDimensionAttribute("size", element.getAttributes());
         
         return Box.createRigidArea(d);
     }
 
     @Override
-    public Object newInstance(List<Attribute> attributes) throws Exception {
+    public Object create( Object owner, Element element) throws Exception {
         Component c = null;
         switch( type ) {
-            case GLUE: c = createGlue(attributes); break;
-            case HGLUE: c = createHGlue(attributes); break;
-            case VGLUE: c = createVGlue(attributes); break;
-            case HSTRUT: c = createHStrut(attributes); break;
-            case VSTRUT: c = createVStrut(attributes); break;
-            case RIGIDAREA: c = createRigidArea(attributes); break;
+            case GLUE: c = createGlue(element); break;
+            case HGLUE: c = createHGlue(element); break;
+            case VGLUE: c = createVGlue(element); break;
+            case HSTRUT: c = createHStrut(element); break;
+            case VSTRUT: c = createVStrut(element); break;
+            case RIGIDAREA: c = createRigidArea(element); break;
         }
         
         return c;

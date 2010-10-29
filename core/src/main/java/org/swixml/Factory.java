@@ -78,7 +78,7 @@ public interface Factory {
      * @return instance <code>Object</code> a new instance of a template class
      * @throws Exception
      */
-    Object newInstance(List<Attribute> attributes) throws Exception;
+    Object create(Object owner, Element element) throws Exception;
 
     /**
      * Creates a new Object which class is {@link #getTemplate()} and the constructor

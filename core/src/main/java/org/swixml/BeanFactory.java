@@ -5,21 +5,28 @@
 
 package org.swixml;
 
-import java.awt.LayoutManager;
-import org.jdom.Element;
 import static org.swixml.LogUtil.logger;
 
+import java.awt.Container;
+import java.awt.LayoutManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import javax.swing.Action;
+import javax.swing.RootPaneContainer;
+
 import org.apache.commons.beanutils.ConstructorUtils;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.PropertyResolutionException;
 import org.jdom.Attribute;
+import org.jdom.Element;
+import org.swixml.jsr295.BindingUtils;
 import org.swixml.processor.ButtonGroupTagProcessor;
 import org.swixml.processor.ConstraintsTagProcessor;
 import org.swixml.processor.TagProcessor;
@@ -65,7 +72,7 @@ public class BeanFactory implements Factory {
         return template;
     }
 
-    public Object newInstance( List<Attribute> attributes ) throws Exception {
+    public Object create( Object owner, Element element ) throws Exception {
         return template.newInstance();
     }
 
@@ -73,11 +80,14 @@ public class BeanFactory implements Factory {
      * 
      */
     public Object newInstance(Object... parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        Class<?> types[] = new Class<?>[ parameter.length ];
+
+    	/*
+    	Class<?> types[] = new Class<?>[ parameter.length ];
         int i=0;
         for( Object p : parameter ) {
             types[i++] = p.getClass();
         }
+        */
         try {
             // get runtime class of the parameter
             //return template.getConstructor(types).newInstance(parameter);
@@ -152,6 +162,29 @@ public class BeanFactory implements Factory {
     }
 
 
+    public  final Object getAttributeValue( Object owner,  Attribute attr ) {
+    	final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
+
+    	if( !isVariable ) return attr.getValue();
+
+    	Object result = null;
+    	try {
+
+            ELProperty<Object,Object> p = ELProperty.create(attr.getValue());
+
+            if( !p.isReadable( owner ) ) {
+                logger.warning( "property " + attr.getValue() + " is not readable!");
+                return result;
+            }
+
+            result = p.getValue( owner );
+        
+        } catch( PropertyResolutionException ex ) {
+              logger.log( Level.WARNING, "variable " + attr.getValue() +  " doesn't exist!", ex);  
+        }
+
+        return result;
+    }
 
 
 }

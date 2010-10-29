@@ -52,6 +52,9 @@
 */
 package org.swixml;
 
+import java.util.ServiceLoader;
+import static org.swixml.LogUtil.logger;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -200,6 +203,16 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag("HBox", BoxFactory.HGapBox.class);
 	
     registerTag("tableColumn", BindingUtils.Column.class );
+    
+    ServiceLoader<TagLibraryService> loader = ServiceLoader.load(TagLibraryService.class);
+    if( loader== null ) return;
+    
+    for( TagLibraryService tls : loader ) {
+    	logger.info( "processing TagLibrary service provider " + tls);
+    	
+    	tls.registerTags(this);
+    	
+    }
   }
 }
 
