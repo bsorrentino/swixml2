@@ -20,6 +20,11 @@
 		<artifactId>swixml-examples-wizard</artifactId>
 		<version>2.5-SNAPSHOT</version>
 	</dependency> 
+	<dependency>
+		<groupId>org.swixml</groupId>
+		<artifactId>swixml-contrib</artifactId>
+		<version>2.5-SNAPSHOT</version>
+	</dependency> 
   </dependencies>
 
 <build>

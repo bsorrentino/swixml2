@@ -6,10 +6,10 @@ import java.awt.Font;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import javax.swing.JTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 @SuppressWarnings("serial")
-public class FileTextArea extends JTextArea {
+public class FileTextArea extends RSyntaxTextArea {
 
 	
 	private String source;
@@ -30,8 +30,14 @@ public class FileTextArea extends JTextArea {
 	@Override
 	public void addNotify() {
 		if( source != null ) {
-			super.setText( loadResource(source) );
+			java.io.InputStream is = FileTextArea.class.getClassLoader().getResourceAsStream(source);
+			try {
+				read( new java.io.InputStreamReader(is), null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		super.setEditable(false);
 		super.addNotify();
 	}
 	
@@ -39,6 +45,7 @@ public class FileTextArea extends JTextArea {
 		if( res==null ) return null;
 		
 		java.io.InputStream is = FileTextArea.class.getClassLoader().getResourceAsStream(res);
+		
 		if( is==null ) {
 			logger.warning( String.format("resource [%s] not found!", res));
 		}

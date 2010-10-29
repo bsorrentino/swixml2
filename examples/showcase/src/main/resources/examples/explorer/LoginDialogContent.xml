@@ -5,21 +5,27 @@
 <tabbedpane constraints="BorderLayout.CENTER">
 
 <panel name="XML Source" layout="BorderLayout">
-<scrollpane>
-<filetextarea source="examples/explorer/LoginDialog.xml"></filetextarea>
-</scrollpane>
+
+<RTextScrollPane>
+	<fileTextArea syntaxEditingStyle="text/xml" source="examples/explorer/LoginDialog.xml"  editable="false"/>
+</RTextScrollPane>
+
 </panel>
 
 <panel name="Application" layout="BorderLayout">
-<scrollpane>
-<filetextarea source="examples/explorer/LoginExample.java" ></filetextarea>
-</scrollpane>
+
+<RTextScrollPane>
+	<fileTextArea syntaxEditingStyle="text/java" source="examples/explorer/LoginExample.java"  editable="false"/>
+</RTextScrollPane>
+
 </panel>
 
 <panel name="Dialog" layout="BorderLayout">
-<scrollpane>
-<filetextarea source="examples/explorer/LoginDialog.java" ></filetextarea>
-</scrollpane>
+
+<RTextScrollPane>
+	<fileTextArea syntaxEditingStyle="text/java" source="examples/explorer/LoginDialog.java"  editable="false"/>
+</RTextScrollPane>
+
 </panel>
 
 </tabbedpane>

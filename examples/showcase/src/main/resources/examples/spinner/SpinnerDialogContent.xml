@@ -5,15 +5,15 @@
 <tabbedpane constraints="BorderLayout.CENTER">
 
 <panel name="XML Source" layout="BorderLayout">
-<scrollpane>
-<filetextarea source="examples/spinner/SpinnerDialog.xml"></filetextarea>
-</scrollpane>
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/xml" source="examples/spinner/SpinnerDialog.xml" ></filetextarea>
+</RTextScrollPane>
 </panel>
 
 <panel name="Application" layout="BorderLayout">
-<scrollpane>
-<filetextarea source="examples/spinner/SpinnerSampleApplication.java" ></filetextarea>
-</scrollpane>
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/java" source="examples/spinner/SpinnerSampleApplication.java" ></filetextarea>
+</RTextScrollPane>
 </panel>
 
 
