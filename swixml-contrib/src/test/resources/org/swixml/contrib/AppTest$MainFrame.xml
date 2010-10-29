@@ -23,6 +23,11 @@
     icon0="/images/RecAni1.png"
     icon1="/images/RecAni1_gray.png" ></animatedbutton>
 
+
+<RTextScrollPane>
+	<RSyntaxTextArea syntaxEditingStyle="text/java" bindWith="sourceFile" editable="false"/>
+</RTextScrollPane>
+
 </vbox>
 
 </frame>

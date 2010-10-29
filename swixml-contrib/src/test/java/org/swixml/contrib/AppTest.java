@@ -1,15 +1,15 @@
 package org.swixml.contrib;
 
-import java.awt.event.ActionEvent;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
+
 import javax.swing.JFrame;
+
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.junit.Test;
-import org.swixml.SwingTagLibrary;
 import org.swixml.jsr296.SwingApplication;
 
 
@@ -21,8 +21,20 @@ public class AppTest extends SwingApplication {
     public class MainFrame extends JFrame {
         JSimpleMenuButton btnMenu;
         JAnimatedButton btnAnimated2;
+        
+        public String getSourceFile() {
+        	
+        	return new StringBuffer()
+        		.append( "package test;")
+        			.append('\n')
+        			.append('\n')
+        		.append( "class Test {")
+        			.append('\n')
+        		.append( "}")
+        		.toString();
+        }
 
-        @Action
+		@Action
         public void button2() {
             System.out.printf( "button2 selected[%b]\n", btnAnimated2.isSelected() );
         }
@@ -48,10 +60,9 @@ public class AppTest extends SwingApplication {
 
     @Override
     protected void startup() {
-        SwingTagLibrary.getInstance().registerTag("menubutton", JSimpleMenuButton.class);
-        SwingTagLibrary.getInstance().registerTag("animatedbutton", JAnimatedButton.class);
+    	
         try {
-            super.render(dlg, "swixml/Dialog1.xml");
+            super.render(dlg);
 
             show( dlg );
 
