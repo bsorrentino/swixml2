@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.5+" codebase="http://swixml2.googlecode.com/svn/trunk/jnlp/" >
+<jnlp spec="1.5+" codebase="http://swixml2.googlecode.com/svn/jnlp/" >
 
   <information>
     <title>SWIXML2 EXPLORER</title>

@@ -13,6 +13,7 @@
   <name>SWIXML WIZARD EXAMPLE</name>
   <url>http://code.google.com/p/swixml2/</url>
   <dependencies>
+  <!-- 
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>sqljdbc4-unsigned</artifactId>
@@ -25,6 +26,7 @@
             <version>9.2.0.1</version>
             <scope>compile</scope>
         </dependency>
+ -->
         <dependency>
             <groupId>org.apache.ddlutils</groupId>
             <artifactId>ddlutils</artifactId>

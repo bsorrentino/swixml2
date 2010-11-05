@@ -94,10 +94,10 @@ public class SetJDBCInfoPage extends WizardPage implements DDLWizardConstants{
 		supportedDrivers.add( new JDBCInfo( "MySql Driver", com.mysql.jdbc.Driver.class,  "jdbc:mysql://mysql_server:3306/db_name" ));
 		//supportedDrivers.add( new JDBCInfo( "MySql Driver", com.mysql.jdbc.Driver.class,  "jdbc:mysql://192.168.2.101:3306/aacc" ));
 		supportedDrivers.add( new JDBCInfo( "Oracle Driver", 
-                                                    oracle.jdbc.driver.OracleDriver.class,
+                                                    Void.class /*oracle.jdbc.driver.OracleDriver.class*/,
                                                     "jdbc:oracle:thin:@//oracle_server:1521/oracle_db_name" ));
 		supportedDrivers.add( new JDBCInfo( "MSSQL Driver", 
-                                                    com.microsoft.sqlserver.jdbc.SQLServerDriver.class,
+                                                    Void.class /*com.microsoft.sqlserver.jdbc.SQLServerDriver.class*/,
                                                     "jdbc:sqlserver://SQL_SERVER:1433;databaseName=DB_NAME;integratedSecurity=false;" ));
 		supportedDrivers.add( new JDBCInfo( "Derby DB [Embed]", 
                                                      org.apache.derby.jdbc.EmbeddedDriver.class,
