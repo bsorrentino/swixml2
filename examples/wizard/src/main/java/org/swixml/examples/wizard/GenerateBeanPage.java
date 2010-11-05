@@ -10,11 +10,11 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.observablecollections.ObservableCollections;
@@ -38,7 +38,7 @@ public class GenerateBeanPage extends WizardPage implements DDLWizardConstants{
 
                 try {
                     progress.setBusy("Generating Beans!");
-                    BeanGeneratorUtils.generateBean(generateBeanList, getPackageName(), outputDir);
+                    //BeanGeneratorUtils.generateBean(generateBeanList, getPackageName(), outputDir);
 
                     //progress.setBusy("Generating BeanInfo!");
                     //BeanGeneratorUtils.generateBeanInfo(generateBeanList, getPackageName(), outputDir);
