@@ -204,7 +204,8 @@ public class SwingEngine<T extends Container> {
    * Default ctor for a SwingEngine.
    */
   protected SwingEngine() {
-    if( Boolean.getBoolean( Application.USE_COMMON_LOCALIZER ) ) {
+    //if( Boolean.getBoolean( Application.USE_COMMON_LOCALIZER ) ) {
+    if( Application.getBooleanProperty(Application.USE_COMMON_LOCALIZER) ) {
     	localizer = new LocalizerJSR296Impl();
     }
     else {
