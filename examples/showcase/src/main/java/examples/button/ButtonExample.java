@@ -38,7 +38,7 @@ public class ButtonExample extends SwingApplication {
 		
 		System.setProperty( IGNORE_RESOURCES_PREFIX, "true");
 		System.setProperty( AUTO_INJECTFIELD, "true");
-		
+
 		SwingApplication.launch(ButtonExample.class, args);
 	}
 
