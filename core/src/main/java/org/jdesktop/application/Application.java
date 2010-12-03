@@ -247,18 +247,17 @@ public abstract class Application extends AbstractBean {
     public static synchronized <T extends Application> void launch(final Class<T> applicationClass, final String[] args) {
 	Runnable doCreateAndShowGUI = new Runnable() {
 	    public void run() {
-		try {
-		    application = create(applicationClass);		    
-            application.initialize(args);
-		    application.startup();
-		    		// raise an error on loading of Substance Look&Feel
+                try {
+                    application = create(applicationClass);
+                    application.initialize(args);
+                    application.startup();
+                    // raise an error on loading of Substance Look&Feel
                     //application.waitForReady();
-		}
-		catch (Exception e) {
+                } catch (Exception e) {
                     String msg = String.format("Application %s failed to launch", applicationClass);
-		    logger.log(Level.SEVERE, msg, e);
-                    throw(new Error(msg, e));
-		}
+                    logger.log(Level.SEVERE, msg, e);
+                    throw (new Error(msg, e));
+                }
 	    }
 	};
 	SwingUtilities.invokeLater(doCreateAndShowGUI);
@@ -764,5 +763,30 @@ public abstract class Application extends AbstractBean {
 
     public void hide(View view) {
         view.getRootPane().getParent().setVisible(false);
+    }
+
+    /**
+     * Returns true if and only if the system property named by the argument exists and is equal to the string "true".
+     * (Beginning with version 1.0.2 of the JavaTM platform, the test of this string is case insensitive.)
+     * A system property is accessible through getProperty, a method defined by the System class.
+     * If there is no property with the specified name, or if the specified name is empty or null, or a SecurityException is raised then false is returned.
+     *
+     * @param name  the system property name.     *
+     * @return the boolean value of the system property.
+     */
+    public static final boolean getBooleanProperty( String name ) {
+        boolean result = false;
+
+        if( name!=null ) {
+
+            try {
+
+                result = Boolean.getBoolean(name);
+                
+            } catch (SecurityException ignoreException) {
+                // Unsigned apps can't set this property.
+            }
+        }
+        return result;
     }
 }
