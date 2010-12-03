@@ -383,16 +383,16 @@ public class ResourceManager extends AbstractBean {
     private String classBundleBaseName(Class<?> cls) {
     	String className = cls.getName();
     	
-    	StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
     	
-		int i = className.lastIndexOf('.');
+	int i = className.lastIndexOf('.');
     	if (i > 0) {
     		sb.append(className.substring(0, i));
     		sb.append('.');
     	}
 
-    	if( !Boolean.getBoolean(Application.IGNORE_RESOURCES_PREFIX) )
-    		 sb.append("resources.");
+    	//if( !Boolean.getBoolean(Application.IGNORE_RESOURCES_PREFIX) ) sb.append("resources.");
+        if( !Application.getBooleanProperty(Application.IGNORE_RESOURCES_PREFIX) ) sb.append("resources.");
 		
     	sb.append(cls.getSimpleName());
     	
