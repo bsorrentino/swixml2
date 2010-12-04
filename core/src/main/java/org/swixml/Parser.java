@@ -705,7 +705,7 @@ public class Parser {
       return ( isVariable && !isBound ) ;
 
   }
-  
+
   /**
    * Creates an object and sets properties based on the XML tag's attributes
    *
@@ -827,9 +827,12 @@ public class Parser {
       ////////////////////////
 
 
-    Class<?> paraType = factory.getPropertyType(obj, attr.getName());
+    Class<?>[] paraTypes = factory.getPropertyType(obj, attr.getName());
 
-    if( null!=paraType ) {
+    if( null!=paraTypes ) {
+
+        Class<?> paraType = paraTypes[0];
+        
         //  A setter method has successfully been identified.
         Converter converter = cvtlib.getConverter(paraType);
 
@@ -839,22 +842,22 @@ public class Parser {
               if( null==para ) para = getMethodParamValue(paraType, converter, attr);
 
               if( para instanceof Action ) {
-                  action = (Action) para;              
+                  action = (Action) para;
               }
 
-              factory.setProperty(obj, attr.getName(), para); // ATTR SET
+              factory.setProperty(obj, attr, para, paraType); // ATTR SET
 
             } catch (NoSuchFieldException e) {
                 // useful for extra attributes
                 logger.warning( "property " + attr.getName() + " doesn't exist!");
                 list.add(attr);
             } catch (InvocationTargetException e) {
-                
-            	Throwable cause = e.getCause();
-            	if( cause!=null ) {
-            		logger.warning( "exception during invocation of " + attr.getName() + ": " + cause.getMessage());
-            	}
-            	//
+
+                Throwable cause = e.getCause();
+                if( cause!=null ) {
+                        logger.warning( "exception during invocation of " + attr.getName() + ": " + cause.getMessage());
+                }
+                //
                 // The JFrame class is slightly incompatible with Frame.
                 // Like all other JFC/Swing top-level containers, a JFrame contains a JRootPane as its only child.
                 // The content pane provided by the root pane should, as a rule, contain all the non-menu components
@@ -864,18 +867,18 @@ public class Parser {
                   Container rootpane = ((RootPaneContainer) obj).getContentPane();
                   Factory f = engine.getTaglib().getFactory(rootpane.getClass());
                   try {
-                    f.setProperty(rootpane, attr.getName(), para); // ATTR SET
-                  } catch (Exception ex) {  
+                    f.setProperty(rootpane, attr, para, paraType); // ATTR SET
+                  } catch (Exception ex) {
                       list.add(attr);
                   }
                 } else {
                   list.add(attr);
                 }
-            } 
+            }
             catch (Exception e) {
                 throw new Exception(e + ":" + attr.getName() + ":" + para, e);
             }
-            
+
             continue;
         }
 
@@ -888,7 +891,7 @@ public class Parser {
             if (Parser.LOCALIZED_ATTRIBUTES.contains(attr.getName().toLowerCase()) && attr.getAttributeType() == Attribute.CDATA_TYPE) {
               s = engine.getLocalizer().getString(s);
             }
-            factory.setProperty(obj, attr.getName(), s); // ATTR SET
+            factory.setProperty(obj, attr, s, paraType ); // ATTR SET
           } catch (Exception e) {
             list.add(attr);
           }
@@ -900,7 +903,7 @@ public class Parser {
         //
         if (paraType.isPrimitive()) {
           try {
-            factory.setProperty(obj, attr.getName(), PrimitiveConverter.conv(paraType, attr, engine.getLocalizer())); // ATTR SET
+            factory.setProperty(obj, attr, PrimitiveConverter.conv(paraType, attr, engine.getLocalizer()), paraType); // ATTR SET
           } catch (Exception e) {
             list.add(attr);
           }
@@ -911,7 +914,7 @@ public class Parser {
         // try again later
         //
         list.add(attr);
-
+        
     } else {
         //
         //  Search for a public field in the obj.class that matches the attribute name

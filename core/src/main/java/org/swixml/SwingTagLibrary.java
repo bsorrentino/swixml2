@@ -78,8 +78,10 @@ import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.table.JTableHeader;
+import org.swixml.factory.BoxFactory;
 
-import org.swixml.BoxFactory.Type;
+import org.swixml.factory.BoxFactory.Type;
+import org.swixml.factory.SplitPaneFactory;
 import org.swixml.jsr.widgets.JCheckBoxEx;
 import org.swixml.jsr.widgets.JComboBoxEx;
 import org.swixml.jsr.widgets.JLabelEx;
@@ -153,7 +155,7 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag( "RadioButtonMenuItem", JRadioButtonMenuItem.class );
     registerTag( "OptionPane", JOptionPane.class );
     registerTag( "ScrollPane", XScrollPane.class );
-    registerTag( "SplitPane", XSplitPane.class );
+    registerTag( "SplitPane", new SplitPaneFactory() );
     registerTag( "TabbedPane", XTabbedPane.class );
     registerTag( "TableHeader", JTableHeader.class );
     registerTag( "TextPane", JTextPane.class );

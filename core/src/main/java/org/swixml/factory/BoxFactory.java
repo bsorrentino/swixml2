@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.swixml;
+package org.swixml.factory;
 
 import static org.swixml.LogUtil.logger;
 
@@ -17,6 +17,9 @@ import javax.swing.JComponent;
 
 import org.jdom.Attribute;
 import org.jdom.Element;
+import org.swixml.BeanFactory;
+import org.swixml.Converter;
+import org.swixml.ConverterLibrary;
 
 
 /**

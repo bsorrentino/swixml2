@@ -109,7 +109,7 @@ public interface Factory {
      * @param name
      * @return
      */
-    Class<?> getPropertyType(Object bean, String name);
+    Class<?>[] getPropertyType(Object bean, String name);
 
     /**
      *
@@ -119,7 +119,7 @@ public interface Factory {
      * @return
      * @exception
      */
-    void setProperty(Object bean, String name, Object value) throws Exception;
+    void setProperty(Object bean, Attribute attr, Object value, Class<?> type) throws Exception;
 
 
     /**
