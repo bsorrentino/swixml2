@@ -79,6 +79,23 @@
             </properties>
         </action>
         
+        <action>
+            <actionName>CUSTOM-release</actionName>
+            <displayName>release</displayName>
+            <goals>
+                <goal>release:prepare</goal>
+            </goals>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <dryRun>false
+-DignoreSnapshots=true
+-Dtag=swixml-core-2.5-20101204
+-DreleaseVersion=2.5-20101204
+-DpreparationGoals='clean deploy'
+-DdevelopmentVersion=2.5-SNAPSHOT
+-Dresume=false</dryRun>
+            </properties>
+        </action>
         
         
     </actions>
