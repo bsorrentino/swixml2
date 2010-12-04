@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.swixml</groupId>
-  <artifactId>swixml2-quickstart</artifactId>
+  <artifactId>swixml-quickstart</artifactId>
   <packaging>jar</packaging>
   <version>2.5-SNAPSHOT</version>
   <name>SWIXML QUICKSTART 2.5</name>
   <url>http://code.google.com/p/swixml2/</url>
-  <description>Project to define a maven swixml2-quickstart archetype</description>
+  <description>Project to define a maven swixml-quickstart archetype</description>
   
 <parent>
   <groupId>org.swixml</groupId>
