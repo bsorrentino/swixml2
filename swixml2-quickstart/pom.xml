@@ -15,6 +15,11 @@
   <version>2.5-SNAPSHOT</version>
 </parent>
 
+ <scm>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swixml2-quickstart</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/trunk//swixml2-quickstart</url>
+  </scm>
+
 <dependencies>
 
     <dependency>
