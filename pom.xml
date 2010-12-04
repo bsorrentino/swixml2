@@ -10,10 +10,12 @@
   
   <modules>
   	<module>core</module>
-  	<module>examples</module>
   	<module>swixml-contrib</module>
     <module>swixml2-quickstart</module>
     <module>swingx</module>
+	<!--
+  	<module>examples</module>
+  	-->
   </modules>
   
 <dependencies>
