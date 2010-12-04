@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<frame	preferredSize="500,600"
+<frame	size="500,600"
 		resizable="true" 
 		alwaysOnTop="false"
 		title="SWIXM2 Explorer (Release 2.5-SNAPSHOT)" 
@@ -11,7 +11,7 @@
 </toolbar>
 
 
-<splitpane constraints="BorderLayout.CENTER">
+<splitpane dividerLocation="300" resizeWeight=".2" constraints="BorderLayout.CENTER" >
 <scrollpane minimumSize="150,800">
 <tree id="mainTree" model="${applications}" action="selectNode" dblClickAction="activeNode" toolTipText="double clik to run demo" />
 </scrollpane>

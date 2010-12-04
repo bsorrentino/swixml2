@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
@@ -35,6 +34,7 @@ import examples.spinner.SpinnerSampleApplication;
 import examples.table.TableExample;
 import examples.task.BackgroundTaskExample;
 import examples.util.GenericTreeModel;
+import org.swixml.XFrame;
 
 
 public class Swixml2Explorer extends SwingApplication  {
@@ -111,7 +111,7 @@ public class Swixml2Explorer extends SwingApplication  {
 	}
 	
 	@SuppressWarnings("serial")
-	public class MyFrame extends JFrame {
+	public class MyFrame extends XFrame {
 		
 		Set<PanelInfo> panels = new HashSet<PanelInfo>(100);
 		private Class<?> selectedApplicationClass = null;
