@@ -99,13 +99,22 @@
 <plugins>
 
 <plugin>
-   <artifactId>maven-assembly-plugin</artifactId>
-   <configuration>
-       <finalName>swixml-2.5</finalName>
-     <descriptors>
-       <descriptor>src/main/assembly/assembly.xml</descriptor>
-     </descriptors>
-   </configuration>
+	<artifactId>maven-assembly-plugin</artifactId>
+	<executions>
+		<execution>
+			<id>distribution</id>
+			<goals>
+				<goal>assembly</goal>
+			</goals>
+			<phase>deploy</phase>
+		</execution>
+	</executions>
+	<configuration>
+		<finalName>swixml-2.5</finalName>
+		<descriptors>
+			<descriptor>src/main/assembly/assembly.xml</descriptor>
+		</descriptors>
+	</configuration>
 </plugin>
 
 <!--     
