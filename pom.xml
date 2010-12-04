@@ -22,6 +22,18 @@
 	  <scope>test</scope>
 	</dependency>
 </dependencies>
+<properties>
+	<!-- SCM properties  -->
+	<addTimestamp>true</addTimestamp>
+	<!--tag>${pom.artifactId}-${pom.version}</tag-->
+	<tagBase>https://swixml2.googlecode.com/svn/tags/</tagBase>
+</properties>
+
+
+ <scm>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/trunk</url>
+  </scm>
 
 <build>
 
