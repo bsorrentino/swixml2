@@ -13,6 +13,11 @@
   <name>SWIXML SWINGX</name>
   <url>http://code.google.com/p/swixml2/</url>
 
+ <scm>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swingx</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/trunk/swingx</url>
+  </scm>
+
   <dependencies>
 
     <dependency>
