@@ -4,6 +4,25 @@
 <panel layout="BorderLayout">
 
 <tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="table-tree" layout="BorderLayout">
+	<splitpane constraints="BorderLayout.CENTER">
+	<scrollpane>
+	<tree model="${myTree}" action="selectNode"/>
+	</scrollpane>
+	
+	<scrollpane>
+	<table id="testTable" action="selectRow" dblClickAction="activateRow" cellSelectionEnabled="true" rowSelectionAllowed="true" selectionBackground="red" bindList="${myData}" >
+		<tableColumn bindWith="name" type="java.lang.String" headerValue="NAME" minWidth="100" resizable="true"  editable="true" />
+		<tableColumn bindWith="age" type="java.lang.Integer" headerValue="AGE" maxWidth="50" resizable="true"  editable="true" />
+	</table>
+	
+	</scrollpane>
+	
+	</splitpane>
+</panel>
+
+
 <panel name="commons" layout="FlowLayout(FlowLayout.LEFT)">
 <vbox gap="20">
 
@@ -40,18 +59,6 @@
 </vbox>
 </panel>
 
-<panel name="table-tree" layout="BorderLayout">
-<splitpane constraints="BorderLayout.CENTER">
-<scrollpane>
-<tree model="${myTree}" action="selectNode"/>
-</scrollpane>
-
-<scrollpane>
-<table id="testTable" action="selectRow" cellSelectionEnabled="true" bindList="${myData}" bindClass="${myDataClass}" />
-</scrollpane>
-
-</splitpane>
-</panel>
 
 </tabbedpane>        
 
