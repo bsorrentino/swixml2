@@ -64,7 +64,7 @@ goal ==> webstart:jnlp
 <configuration>
 
 
-	<workDirectory>../../jnlp</workDirectory>
+	<workDirectory>../../../jnlp</workDirectory>
   
 	<jnlp>
 		<outputFile>swixml2.jnlp</outputFile>	
