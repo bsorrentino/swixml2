@@ -99,11 +99,12 @@ public class JTableEx extends JTable implements BindableListWidget {
         		if (e.getClickCount() == 2){
         			Action a = getDblClickAction();
         			
-        			if( a==null ) return;
+        			if( a!=null && a.isEnabled() ) {
         			
-        			ActionEvent ev = new ActionEvent(e, 0, null );
+        				ActionEvent ev = new ActionEvent(e, 0, null );
         			
-        			a.actionPerformed(ev);
+        				a.actionPerformed(ev);
+        			}
         			
                 }
              }
