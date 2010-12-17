@@ -212,12 +212,15 @@ public class SchemaGenerator {
     } catch (URISyntaxException e) {
       e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
-    File file;
+    File file = null;;
     try {
-      if (args != null && args[0]!=null && 0 < args[0].length()) {
+      if (args != null && args.length > 0) {
         file = new File(args[0]);
-        SchemaGenerator.print(new URI("http://www.swixml.org/2007/Swixml"), file);
       }
+      else {
+          file = new File( "swixml2-schema.xsd");
+      }
+        SchemaGenerator.print(new URI("http://www.swixml.org/2007/Swixml"), file);
     } catch (Exception e) {
       e.printStackTrace();
     }
