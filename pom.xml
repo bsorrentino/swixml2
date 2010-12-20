@@ -16,6 +16,7 @@
 	<!--
   	<module>examples</module>
   	-->
+    <module>schema-generator</module>
   </modules>
   
 <dependencies>
