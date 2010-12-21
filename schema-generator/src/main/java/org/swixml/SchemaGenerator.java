@@ -50,6 +50,7 @@
 */
 package org.swixml;
 
+import java.beans.Introspector;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -65,7 +66,6 @@ import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Swixml XML Schema Generator
@@ -165,10 +165,17 @@ public class SchemaGenerator {
       Element e = new Element("attribute", XSNS);
       Method m = (Method) obj;
       String s = m.getName();
-      if (s.startsWith(Factory.SETTER_ID))
-        s = s.substring(Factory.SETTER_ID.length()).toLowerCase();
-      if (s.startsWith(Factory.ADDER_ID))
-        s = s.substring(Factory.ADDER_ID.length()).toLowerCase();
+      if (s.startsWith(Factory.SETTER_ID)) {
+
+
+          //s = s.substring(Factory.SETTER_ID.length()).toLowerCase();
+          s = Introspector.decapitalize(s.substring(Factory.SETTER_ID.length()));
+
+      }
+      else if (s.startsWith(Factory.ADDER_ID))  {
+          //s = s.substring(Factory.ADDER_ID.length())/*.toLowerCase()*/;
+          s = Introspector.decapitalize(s.substring(Factory.ADDER_ID.length()));
+      }
       boolean b = boolean.class.equals(m.getParameterTypes()[0]);
       if (!set.contains(s)) {
         e.setAttribute("name", s);
