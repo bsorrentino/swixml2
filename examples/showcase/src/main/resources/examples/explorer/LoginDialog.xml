@@ -16,9 +16,9 @@
 
     <hbox>
     	<box.glue/>
-    	<button text="Submit" action="submit"/>
+    	<button id="defaultButton" text="Submit" action="enterAction"/>
     	<box.hstrut width="5"/>
-    	<button text="Close" action="close"/>
+    	<button text="Close" action="escapeAction"/>
     </hbox>
     
 </vbox>

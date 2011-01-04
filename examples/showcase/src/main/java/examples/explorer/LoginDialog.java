@@ -1,14 +1,14 @@
 package examples.explorer;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
+import org.swixml.jsr.widgets.JDialogEx;
 import org.swixml.jsr296.SwingApplication;
 
 
 @SuppressWarnings("serial")
-public class LoginDialog extends JDialog  {
+public class LoginDialog extends JDialogEx  {
 	
 	private static final String DATA_VALID = "dataValid";
 	/** bound property - MUST BE DEFINED getter & setter */
@@ -57,7 +57,7 @@ public class LoginDialog extends JDialog  {
 	 * 
 	 * this method is bound with close button
 	 */
-	@Action
+	@Action(name="escapeAction")
 	public void close() {
 		// Exit from application
 		//Application.getInstance().exit();
@@ -73,7 +73,7 @@ public class LoginDialog extends JDialog  {
 	 * 
 	 * action will be enabled when property isDataValid returns true
 	 */
-	@Action(enabledProperty=DATA_VALID)
+	@Action(name="enterAction",enabledProperty=DATA_VALID)
 	public void submit() {
 		JOptionPane.showMessageDialog( SwingApplication.getInstance(SwingApplication.class).getMainFrame(), 
 										String.format("submit login=[%s] password=[%s]\n", getLogin(), getPassword()));
