@@ -50,6 +50,8 @@
 */
 package org.swixml;
 
+import javax.swing.Box;
+import org.swixml.annotation.SchemaAware;
 import java.beans.Introspector;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -66,6 +68,8 @@ import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import org.swixml.factory.BoxFactory;
+import static org.swixml.factory.BoxFactory.Type.*;
 
 /**
  * Swixml XML Schema Generator
@@ -161,66 +165,131 @@ public class SchemaGenerator {
     sequence.setAttribute("minOccurs", "0");
     sequence.setAttribute("maxOccurs", "unbounded");
     elem.setContent(sequence);
-    for (Object obj : factory.getSetters()) {
-      Element e = new Element("attribute", XSNS);
-      Method m = (Method) obj;
-      String s = m.getName();
-      if (s.startsWith(Factory.SETTER_ID)) {
 
+    addFactoryAttributes( factory, set, elem);
 
-          //s = s.substring(Factory.SETTER_ID.length()).toLowerCase();
-          s = Introspector.decapitalize(s.substring(Factory.SETTER_ID.length()));
+    return elem;
+  }
 
-      }
-      else if (s.startsWith(Factory.ADDER_ID))  {
-          //s = s.substring(Factory.ADDER_ID.length())/*.toLowerCase()*/;
-          s = Introspector.decapitalize(s.substring(Factory.ADDER_ID.length()));
-      }
-      boolean b = boolean.class.equals(m.getParameterTypes()[0]);
+  private static Element addAttribute( Set<String> set, Element elem, String s, Class<?> type  ) {
+      Element e = null;
+
       if (!set.contains(s)) {
+        boolean b = boolean.class.equals(type);
+
+        e = new Element("attribute", XSNS);
         e.setAttribute("name", s);
         e.setAttribute("type", b ? XSNS.getPrefix() + ":boolean" : XSNS.getPrefix() + ":string");
         elem.addContent(e);
         set.add(s);
       }
-    }
-    //
-    // add custom swixml atributes
-    //
-    for (Field field : Parser.class.getFields()) {
-      if (field.getName().startsWith("ATTR_") && !field.getName().endsWith("PREFIX") && Modifier.isFinal(field.getModifiers())) {
-        Element e = new Element("attribute", XSNS);
-        try {
-          String s = field.get(Parser.class).toString().toLowerCase();
-          if (!set.contains(s)) {
-            e.setAttribute("name", s);
-            e.setAttribute("type", XSNS.getPrefix() + ":string");
-            elem.addContent(e);
-            set.add(s);
-          }
-        } catch (IllegalAccessException e1) {
-          e1.printStackTrace();
-        }
-      }
-    }
-    return elem;
+
+      return e;
   }
 
+  private static void addFactoryAttributes( Factory factory, Set<String> set, Element elem  ) {
+      for (Method m : factory.getSetters()) {
+          String s = m.getName();
+          if (s.startsWith(Factory.SETTER_ID)) {
+
+
+              //s = s.substring(Factory.SETTER_ID.length()).toLowerCase();
+              s = Introspector.decapitalize(s.substring(Factory.SETTER_ID.length()));
+
+          } else if (s.startsWith(Factory.ADDER_ID)) {
+              //s = s.substring(Factory.ADDER_ID.length())/*.toLowerCase()*/;
+              s = Introspector.decapitalize(s.substring(Factory.ADDER_ID.length()));
+          }
+
+          if( factory instanceof BoxFactory ) {
+
+              BoxFactory bf = (BoxFactory) factory;
+
+              BoxFactory.Type type = bf.getType();
+
+              switch( type ) {
+                  case HSTRUT:
+                      addAttribute( set, elem, "width", Integer.class);
+                      break;
+                  case VSTRUT:
+                      addAttribute( set, elem, "height", Integer.class);
+                      break;
+                  case RIGIDAREA:
+                      addAttribute( set, elem, "size", String.class);
+                      break;
+                  case VGLUE:
+                  case HGLUE:
+                  case GLUE:
+                      break;
+              }
+          }
+ /*
+          else if( Box.class.isAssignableFrom(factory.getTemplate()) ) {
+              // Do Nothing
+
+          }
+  */
+          else {
+            addAttribute(set, elem, s, m.getParameterTypes()[0]);
+            addCustomAttributes(set, elem);
+          }
+      }
+
+  }
+
+  private static void addCustomAttributes( Set<String> set, Element elem ) {
+      //
+      // add custom swixml atributes
+      //
+      for (Field field : Parser.class.getFields()) {
+          if (field.getName().startsWith("ATTR_") && !field.getName().endsWith("PREFIX") && Modifier.isFinal(field.getModifiers())) {
+              try {
+                  SchemaAware schema = field.getAnnotation(SchemaAware.class);
+
+                  if( schema!=null  ) {
+                      Deprecated deprecated = field.getAnnotation(Deprecated.class);
+                      String s = field.get(Parser.class).toString().toLowerCase();
+
+                      Element e = addAttribute(set, elem, s, String.class);
+                      if( e!=null && deprecated!=null ) {
+                          addDocumentation( e, "deprecated");
+                      }
+                  }
+              } catch (IllegalAccessException e1) {
+                  e1.printStackTrace();
+              }
+          }
+      }
+
+  }
+
+  private static void addDocumentation( final Element e, final String description ) {
+      Element ann = new Element("annotation",XSNS) {{
+          Element doc = new Element("documentation",XSNS);
+          doc.setText(description);
+          addContent( doc );
+      }};
+      e.addContent(ann);
+      
+  }
   /**
    * Writes teh schema into the given file. defaults to userhome/swixml.xsd
    *
    * @param args <code>String[]<code> file name.
    */
   public static void main(String[] args) throws Exception{
+      try {
+          File file = null;
 
-      File file = null;
-
-      if (args != null && args.length > 0) {
-          file = new File(args[0]);
-          SchemaGenerator.print(new URI("http://www.swixml.org/2007/Swixml"), file);
-      } else {
-          LogUtil.logger.warning("output file parameter missing. No file will be generated");
-          SchemaGenerator.print();
+          if (args != null && args.length > 0) {
+              file = new File(args[0]);
+              SchemaGenerator.print(new URI("http://www.swixml.org/2007/Swixml"), file);
+          } else {
+              LogUtil.logger.warning("output file parameter missing. No file will be generated");
+              SchemaGenerator.print();
+          }
+      }catch( Exception e ) {
+         e.printStackTrace();
       }
   }
 }
