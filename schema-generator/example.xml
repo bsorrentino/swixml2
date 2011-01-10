@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<dialog xmlns="http://www.swixml.org/2007/Swixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.swixml.org/2007/Swixml swixml2-schema-2.5-SNAPSHOT.xsd "
+    size="100,100"
+    resizable="true"
+    alwaysOnTop="true"
+    title="Client Attribute Sample"
+    defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+    
+    
+
+</dialog>
