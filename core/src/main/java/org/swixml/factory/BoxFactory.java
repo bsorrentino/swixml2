@@ -142,12 +142,16 @@ public class BoxFactory extends BeanFactory {
         GLUE, HGLUE, VGLUE, HSTRUT, VSTRUT, RIGIDAREA
     }
     
-    Type type;
+    final Type type;
     
     public BoxFactory( Type type ) {
         super(Component.class);
         this.type = type;
     
+    }
+
+    public Type getType() {
+        return type;
     }
 
     protected Integer getIntAttribute( String name, List<Attribute> attributes ) throws Exception {
@@ -209,7 +213,7 @@ public class BoxFactory extends BeanFactory {
     protected Component createHStrut(Element element) throws Exception {
         
         @SuppressWarnings("unchecked")
-		Integer width = getIntAttribute("width", element.getAttributes());
+        Integer width = getIntAttribute("width", element.getAttributes());
         
         return Box.createHorizontalStrut(width);
     }
@@ -217,7 +221,7 @@ public class BoxFactory extends BeanFactory {
     protected Component createVStrut(Element element) throws Exception {
         
         @SuppressWarnings("unchecked")
-		Integer heigth = getIntAttribute("height", element.getAttributes());
+        Integer heigth = getIntAttribute("height", element.getAttributes());
         
         return Box.createVerticalStrut(heigth);
     }
@@ -225,7 +229,7 @@ public class BoxFactory extends BeanFactory {
     protected Component createRigidArea(Element element) throws Exception {
         
         @SuppressWarnings("unchecked")
-		Dimension d = getDimensionAttribute("size", element.getAttributes());
+        Dimension d = getDimensionAttribute("size", element.getAttributes());
         
         return Box.createRigidArea(d);
     }

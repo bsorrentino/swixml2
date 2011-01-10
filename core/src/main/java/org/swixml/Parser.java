@@ -92,6 +92,7 @@ import org.jdesktop.beansbinding.PropertyResolutionException;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.swixml.annotation.SchemaAware;
 import org.swixml.converters.LocaleConverter;
 import org.swixml.converters.PrimitiveConverter;
 import org.swixml.jsr295.BindingUtils;
@@ -129,31 +130,37 @@ public class Parser {
 /**
    * Additional attribute to collect layout constrain information
    */
+  @SchemaAware
   public static final String ATTR_CONSTRAINTS = TAG_CONSTRAINTS;
 
   /**
    * Additional attribute to collect information about the PLAF implementation
    */
+  @SchemaAware
   public static final String ATTR_PLAF = "plaf";
 
   /**
    * Additional attribute to collect layout constrain information
    */
+  @SchemaAware
   public static final String ATTR_BUNDLE = "bundle";
 
   /**
    * Additional attribute to collect layout constrain information
    */
+  @SchemaAware
   public static final String ATTR_LOCALE = "locale";
 
   /**
    * Allows to provides swixml tags with an unique id
    */
+  @SchemaAware
   public static final String ATTR_ID = "id";
 
   /**
    * Allows to provides swixml tags with a reference to another tag
    */
+  @SchemaAware
   public static final String ATTR_REFID = "refid";
 
   /**
@@ -162,21 +169,27 @@ public class Parser {
    * @see #ATTR_REFID
    * @deprecated use refid instead
    */
+  @SchemaAware
+  @Deprecated
   public static final String ATTR_USE = "use";
 
   /**
    * Allows to provides swixml tags with an unique id
    */
+  @SchemaAware
   public static final String ATTR_INCLUDE = "include";
 
   /**
    * Allows to provides swixml tags with a dynamic update class
    */
+  @SchemaAware
+  @Deprecated
   public static final String ATTR_INITCLASS = "initclass";
 
   /**
    * Allows to provides swixml tags with a dynamic update class
    */
+  
   public static final String ATTR_ACTION = "action";
 
   /**
