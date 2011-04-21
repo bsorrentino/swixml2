@@ -2,7 +2,10 @@
 2.5.SNAPSHOT 
 ============
 
-Issue 49 - unify the localization model to JSR296 model 
+Issue 65 - uniform bind model
+Issue 49 - unify the localization model to JSR296 model
+
+
 
 
 2.5.20100414

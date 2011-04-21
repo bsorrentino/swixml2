@@ -63,8 +63,13 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.swixml.LogUtil;
 
 /**
  * The <code>PrimitiveConverter</code> class defines a converter that creates primitive objects (wrapper),
@@ -174,4 +179,58 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
   public static void addConstantProvider(final Class<?> clazz) {
     dictionaries.put( clazz.getSimpleName(), clazz );
   }
+
+  private static Pattern p = Pattern.compile( "(?:(\\w+)[.])?(\\w+)");
+
+  /**
+   * retrieve a constant field from class
+   *
+   * @param clazz   Constant Provider
+   * @param value   Constant name
+   * @param def     default value
+   * @return
+   */
+  public static <T> T getConstantValue( Class<?> clazz, String value, T def ) {
+      if( clazz == null ) throw new IllegalArgumentException( "class is null!");
+      if( value == null ) throw new IllegalArgumentException( "value is null!");
+
+      Matcher m = p.matcher(value.trim());
+
+      if( !m.matches() ) {
+          LogUtil.logger.warning(  String.format( "value [%s] is not valid constant expression. Default is returned!", value ));
+          return def;
+      }
+
+      String cn =  m.group(1);
+
+      if( cn!=null && !clazz.getSimpleName().equalsIgnoreCase(cn) ) {
+          LogUtil.logger.warning(  String.format( "class defined in constant expression [%s] doesn't match with given class [%s]. Ignored!", cn, clazz.getSimpleName() ));
+
+      }
+
+      String cv = m.group(2);
+      try {
+          Field f = clazz.getField(cv);
+
+          Object vv = f.get(null);
+
+          if( vv==null ) {
+              LogUtil.logger.warning(String.format("constant field [%s] in class [%s] is null. Default is returned!", cv, clazz.getSimpleName()));
+              return def;
+          }
+
+          return (T) vv;
+
+      } catch (NoSuchFieldException ex) {
+          LogUtil.logger.warning(String.format("constant field [%s] not found in class [%s] Default is returned!", cv, clazz.getSimpleName()));
+          return def;
+      } catch (Exception ex) {
+          LogUtil.logger.log(Level.WARNING, String.format("exception reading contant field [%s] in class [%s]. Default is returned!", cv, clazz.getSimpleName()), ex);
+          return def;
+      }
+
+  }
+
+
+
 }

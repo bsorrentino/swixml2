@@ -53,12 +53,12 @@ package org.swixml.layoutconverters;
 
 import java.awt.BorderLayout;
 import java.awt.LayoutManager;
-import java.lang.reflect.Field;
 import java.util.StringTokenizer;
 
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.swixml.LayoutConverter;
+import org.swixml.converters.PrimitiveConverter;
 import org.swixml.converters.Util;
 
 /**
@@ -152,6 +152,8 @@ public class BorderLayoutConverter implements LayoutConverter {
    */
   public Object convertConstraintsAttribute( final Attribute attr ) {
     String value = attr.getValue();
+
+    /*
     Field[] fields = BorderLayout.class.getFields();
     for (int i = 0; i < fields.length; i++) {
       if (value.endsWith( fields[i].getName() )) {
@@ -163,7 +165,9 @@ public class BorderLayoutConverter implements LayoutConverter {
       }
     }
     return null;
-  }
+    */
+    return PrimitiveConverter.getConstantValue(BorderLayout.class, value, null);
+   }
 
   /**
    * Returns always <code>null</code>.

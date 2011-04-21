@@ -53,6 +53,7 @@
 
 package org.swixml.converters;
 
+import java.util.HashMap;
 import static org.swixml.LogUtil.logger;
 
 import java.lang.reflect.Method;
@@ -63,11 +64,14 @@ import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
 import org.swixml.ConverterLibrary;
 import org.swixml.Localizer;
+
+import static org.swixml.converters.PrimitiveConverter.getConstantValue;
 
 /**
  * The <code>BorderConverter</code> class defines a converter that creates Border objects based on a provided String.
@@ -99,12 +103,15 @@ public class BorderConverter implements Converter {
    */
   public static final Class TEMPLATE = Border.class;
 
+  
   /**
    * all methods the BorderFactory provides
    */
   private static final Method[] METHODS = BorderFactory.class.getMethods();
 
-  private Pattern p = Pattern.compile( "CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
+  private Pattern compoundBorderPattern = Pattern.compile( "CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
+
+  private Pattern borderPattern = Pattern.compile( "(\\w*)[(](.+)*[)]");
 
   /**
    * Returns a <code>javax.swing Border</code>
@@ -117,7 +124,7 @@ public class BorderConverter implements Converter {
 
       String input = attr.getValue();
       
-      Matcher m = p.matcher(input);
+      Matcher m = compoundBorderPattern.matcher(input);
       
       if( m.matches() ) {
 
@@ -132,21 +139,138 @@ public class BorderConverter implements Converter {
   }
 
   /**
-   * 
-   * 
+   *
+   *
    */
   protected Border convert(final Class type, final String borderString, Localizer localizer) {
 
     Border border = null;
-    
-    StringTokenizer st = new StringTokenizer(borderString, "(,)"); // border type + parameters
-    
-    int n = st.countTokens() - 1; // number of parameter to create a border
-    
-    String borderType = st.nextToken().trim();
-    
+
+    Matcher m = borderPattern.matcher(borderString);
+
+    if( !m.matches()) return border;
+
+    int groupCount = m.groupCount();
+
+    String borderType = m.group(1);
+
+    final String [] params = (groupCount>1) ? m.group(2).split(",") : new String[0] ;
+
+    if( "TitledBorder".equalsIgnoreCase(borderType)) {
+        return convertTitledBorder( params );
+    }
+
     Method method = null;
+
+    ConverterLibrary cvtlib = ConverterLibrary.getInstance();
+
+    int pLen = params.length;
     
+    //
+    // Special case for single parameter construction, give priority to String Type
+    //
+    if (pLen == 0) {
+      try {
+        
+          method = BorderFactory.class.getMethod("create" + borderType);
+
+      } catch (NoSuchMethodException e) {
+        // intent. empty
+      }
+
+      if (method == null) pLen = 1 ; // try with empty string
+
+    }
+
+    if (pLen == 1) {
+      try {
+        method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
+      } catch (NoSuchMethodException e) {
+        //  no need to do anything here.
+      }
+    }
+    for (int i = 0; method == null && i < METHODS.length; i++) {
+      if (METHODS[i].getParameterTypes().length == pLen && METHODS[i].getName().endsWith(borderType)) {
+        method = METHODS[i];
+
+        for (int j = 0; j < method.getParameterTypes().length; j++) {
+          if (String.class.equals(method.getParameterTypes()[j])) {
+            continue;
+          }
+          if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
+            method = null;
+            break;
+          }
+        }
+      }
+    }
+    try {
+      Object[] args = new Object[pLen];
+      for (int i = 0; i < pLen; i++) { // fill argument array
+        Converter converter = cvtlib.getConverter(method.getParameterTypes()[i]);
+        Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", params[i].trim(), Attribute.CDATA_TYPE);
+        if (converter != null) {
+          args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
+        } else {
+          args[i] = attrib.getValue();
+        }
+      }
+      border = (Border) method.invoke(null, args);
+    } catch (Exception e) {
+        logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
+    }
+    return border;
+  }
+
+   /**
+   * A <code>Converters</code> conversTo method informs about the Class type the converter
+   * is returning when its <code>convert</code> method is called
+   *
+   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
+   */
+  public Class convertsTo() {
+    return TEMPLATE;
+  }
+
+
+  private TitledBorder convertTitledBorder( String[] params ) {
+
+      if( params==null || params.length==0 ) return new TitledBorder((Border)null);
+
+      switch (params.length) {
+          case 1:
+              return new TitledBorder(params[0]);
+          case 2:{
+              int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
+              return new TitledBorder((Border) null, params[0], titleJustification, TitledBorder.DEFAULT_POSITION);
+              }
+          default: {
+              int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
+              int textPosition = getConstantValue(TitledBorder.class, params[2], TitledBorder.DEFAULT_POSITION);
+              return new TitledBorder((Border) null, params[0], titleJustification, textPosition);
+          }
+
+     }
+    }
+
+
+ /**
+   *
+   *
+   */
+  @Deprecated
+  protected Border _convert_old(final Class type, final String borderString, Localizer localizer) {
+
+    Border border = null;
+
+    StringTokenizer st = new StringTokenizer(borderString, "(,)"); // border type + parameters
+
+    int n = st.countTokens() - 1; // number of parameter to create a border
+
+    String borderType = st.nextToken().trim();
+
+    Method method = null;
+
     ConverterLibrary cvtlib = ConverterLibrary.getInstance();
     //
     // Special case for single parameter construction, give priority to String Type
@@ -203,13 +327,5 @@ public class BorderConverter implements Converter {
     return border;
   }
 
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   *
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class convertsTo() {
-    return TEMPLATE;
-  }
+
 }

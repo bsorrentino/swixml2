@@ -23,16 +23,17 @@ import javax.swing.table.TableModel;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Converter;
+import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
-import static org.swixml.SwingEngine.isDesignTime;
 
 /**
  *
  * @author sorrentino
  */
 @SuppressWarnings("serial")
-public class JTableEx extends JTable implements BindableListWidget {
+public class JTableEx extends JTable implements BindableListWidget, BindableBasicWidget {
 
     private Action action;
     private Action dblClickAction = null;
@@ -40,6 +41,8 @@ public class JTableEx extends JTable implements BindableListWidget {
     private Class<?> beanClass;
     private List<?> beanList;
     private boolean allPropertiesBound = true;
+
+
     
     public JTableEx() {
         super();
@@ -150,18 +153,30 @@ public class JTableEx extends JTable implements BindableListWidget {
             this.allPropertiesBound = allPropertyBound;
     }
 
+    @Deprecated
     public Class<?> getBindClass() {
         return beanClass;
     }
 
+    @Deprecated
     public void setBindClass(Class<?> beanClass) {
         this.beanClass = beanClass;
     }
 
+    public String getBindWith() {
+        return (String) getClientProperty(BINDWITH_PROPERTY);
+    }
+
+    public void setBindWith(String bindWith) {
+        putClientProperty(BINDWITH_PROPERTY, bindWith);
+    }
+
+    @Deprecated
     public List<?> getBindList() {
         return beanList;
     }
 
+    @Deprecated
     public void setBindList(List<?> beanList) {
         this.beanList = beanList;
     }
@@ -192,17 +207,30 @@ public class JTableEx extends JTable implements BindableListWidget {
 	@Override
     public void addNotify() {
 
+        if( beanList == null ) {
+
+            if( getBindWith()!=null ) {
+                Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
+
+                BeanProperty<Object, List<?>> p = BeanProperty.create( getBindWith() );
+
+                beanList = p.getValue(client);
+
+            }
+
+        }
         if( beanList!=null ) {
         	  	
             if( beanClass!=null ) {
-                 BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, getBindList(), getBindClass(), isAllPropertiesBound());
+                 BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, beanList, getBindClass(), isAllPropertiesBound());
             }
             else {
                 super.setAutoCreateColumnsFromModel(false);
 
-                BindingUtils.initTableBindingFromTableColumns( null, UpdateStrategy.READ_WRITE, this, getBindList() );
+                BindingUtils.initTableBindingFromTableColumns( null, UpdateStrategy.READ_WRITE, this, beanList );
             }
         }
+
        
         
         super.addNotify();

@@ -17,6 +17,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Converter;
+import org.swixml.SwingEngine;
 
 import org.swixml.jsr295.BindingUtils;
 
@@ -25,7 +28,7 @@ import org.swixml.jsr295.BindingUtils;
  * @author sorrentino
  */
 @SuppressWarnings("serial")
-public class JTreeEx extends JTree {
+public class JTreeEx extends JTree implements BindableBasicWidget {
 
     private Action action;
     private Action dblClickAction = null;
@@ -141,8 +144,35 @@ public class JTreeEx extends JTree {
         this.action = action;
     }
 
+    public String getBindWith() {
+        return (String) getClientProperty(BINDWITH_PROPERTY);
+    }
+
+    public void setBindWith(String bindWith) {
+        putClientProperty(BINDWITH_PROPERTY, bindWith);
+    }
+
+    public void setConverter(Converter<?, ?> converter) {
+    }
+
+    public Converter<?, ?> getConverter() {
+        return null;
+    }
+
+
+
     @Override
     public void addNotify() {
+        if( getBindWith()!=null ) {
+            Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
+
+            BeanProperty<Object, TreeModel> p = BeanProperty.create( getBindWith() );
+
+            TreeModel m = p.getValue(client);
+
+            setModel(m);
+
+        }
     	
     	if( !BindingUtils.boundCheckAndSet(this)) {
 	        if( null!=openIcon || null!=leafIcon || null!=closedIcon) {
