@@ -1336,6 +1336,7 @@
       <xs:attribute name="name" type="xs:string" />
       <xs:attribute name="componentPopupMenu" type="xs:string" />
       <xs:attribute name="focusTraversalPolicyProvider" type="xs:boolean" />
+      <xs:attribute name="bindWith" type="xs:string" />
       <xs:attribute name="selectedIndex" type="xs:string" />
       <xs:attribute name="maximumSize" type="xs:string" />
       <xs:attribute name="nextFocusableComponent" type="xs:string" />
@@ -2759,6 +2760,7 @@
       <xs:attribute name="focusTraversalPolicyProvider" type="xs:boolean" />
       <xs:attribute name="cellEditor" type="xs:string" />
       <xs:attribute name="showHorizontalLines" type="xs:boolean" />
+      <xs:attribute name="bindWith" type="xs:string" />
       <xs:attribute name="maximumSize" type="xs:string" />
       <xs:attribute name="nextFocusableComponent" type="xs:string" />
       <xs:attribute name="cursor" type="xs:string" />
@@ -3428,6 +3430,7 @@
       <xs:attribute name="inputVerifier" type="xs:string" />
       <xs:attribute name="foreground" type="xs:string" />
       <xs:attribute name="ignoreRepaint" type="xs:boolean" />
+      <xs:attribute name="converter" type="xs:string" />
       <xs:attribute name="rootVisible" type="xs:boolean" />
       <xs:attribute name="UI" type="xs:string" />
       <xs:attribute name="focusable" type="xs:boolean" />
@@ -3449,6 +3452,7 @@
       <xs:attribute name="componentPopupMenu" type="xs:string" />
       <xs:attribute name="focusTraversalPolicyProvider" type="xs:boolean" />
       <xs:attribute name="cellEditor" type="xs:string" />
+      <xs:attribute name="bindWith" type="xs:string" />
       <xs:attribute name="showsRootHandles" type="xs:boolean" />
       <xs:attribute name="maximumSize" type="xs:string" />
       <xs:attribute name="nextFocusableComponent" type="xs:string" />
