@@ -36,7 +36,7 @@ public class TestParseBorder {
     @Test
     public void testCompundBorder() {
         String input = "CompoundBorder( EmptyBorder(2,2,2,2) , MatterBorder(1,1,1,1,blue) )";
-        
+
         Pattern p = Pattern.compile( "CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
         
         Matcher m = p.matcher(input);
@@ -48,9 +48,32 @@ public class TestParseBorder {
     }
 
     @Test
+    public void testBorders() {
+        Pattern p = Pattern.compile( "(\\w*)(?:[(](.+)*[)])?");
+
+        {
+	        String input = "EtchedBorder";
+	
+	        Matcher m = p.matcher(input);
+	
+	        Assert.assertTrue(m.matches() );
+	        Assert.assertEquals( "EtchedBorder", m.group(1) );
+        }
+
+        {
+            String input = "EtchedBorder()";
+
+            Matcher m = p.matcher(input);
+
+            Assert.assertTrue(m.matches() );
+            Assert.assertEquals( "EtchedBorder", m.group(1) );
+            }
+    }
+    
+    @Test
     public void testTitledBorder() {
 
-        Pattern p = Pattern.compile( "(\\w*)[(](.+)*[)]");
+        Pattern p = Pattern.compile( "(\\w*)(?:[(](.+)*[)])?");
 
 
         String input = "TitledBorder( Hello ,CENTER ,RIGHT )";
@@ -60,36 +83,20 @@ public class TestParseBorder {
         Assert.assertTrue(m.matches() );
 
         int groupcount = m.groupCount();
-        System.out.println("Found "+groupcount+" groups");
- 
-        for (int i = 0; i <= groupcount; i++) {
-            System.out.println("Match "+i+": "+m.group(i));
-        }
+        Assert.assertEquals(2, groupcount);
+        Assert.assertEquals("TitledBorder", m.group(1));
+         
 
         String [] tt = m.group(2).split(",");
 
-        for( String t : tt ) {
-            System.out.println( "param " + t );
-        }
+        Assert.assertEquals(3, tt.length);
+        Assert.assertEquals("Hello", tt[0].trim());
+        Assert.assertEquals("CENTER", tt[1].trim());
+        Assert.assertEquals("RIGHT", tt[2].trim());
 
+        
         Assert.assertTrue( tt.length > 0);
         
-        Border b;
-        switch( tt.length ) {
-            case 1:
-            b = new TitledBorder( tt[0] );
-            break;
-            case 2:
-            b = new TitledBorder( (Border)null, tt[0], getConstantValue(TitledBorder.class, tt[1], TitledBorder.DEFAULT_JUSTIFICATION), TitledBorder.DEFAULT_POSITION );
-            break;
-            default:
-            {
-            int titleJustification =   getConstantValue(TitledBorder.class, tt[1], TitledBorder.DEFAULT_JUSTIFICATION);
-            int textPosition = getConstantValue(TitledBorder.class, tt[2], TitledBorder.DEFAULT_POSITION );
-            b = new TitledBorder( (Border)null, tt[0],titleJustification, textPosition);
-            }
-        }
-
 /*
         BorderConverter c = new BorderConverter();
 
@@ -99,31 +106,6 @@ public class TestParseBorder {
 
         Assert.assertNotNull(b);
 */
-    }
-
-    //@Test
-    public void testTitledBorder2() {
-
-        Pattern p = Pattern.compile( "TitledBorder[(][\\s]*([\\w]+)[\\s]*((?:(?:[,][\\s]*)[\\w]+(?:[\\s]*))*)[)]");
-
-
-        String inputSeq = "TitledBorder( Hello ,CENTER ,RIGHT ,LEFT )";
-
-        Matcher m = p.matcher(inputSeq);
-
-        Assert.assertTrue(m.matches() );
-
-        int index = 0;
-        int curPos = 0;
-                 while (m.find()) {
-                       System.out.println(inputSeq.subSequence(curPos, m.start()).toString());
-                       curPos = m.end();
-                       index++;
-                 }
-
-                 System.out.println(inputSeq.subSequence(curPos, inputSeq.length()).toString());
-                 index++;
-
     }
 
 

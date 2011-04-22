@@ -111,7 +111,7 @@ public class BorderConverter implements Converter {
 
   private Pattern compoundBorderPattern = Pattern.compile( "CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
 
-  private Pattern borderPattern = Pattern.compile( "(\\w*)[(](.+)*[)]");
+  private Pattern borderPattern = Pattern.compile( "(\\w*)(?:[(](.+)*[)])?");
 
   /**
    * Returns a <code>javax.swing Border</code>
@@ -144,82 +144,35 @@ public class BorderConverter implements Converter {
    */
   protected Border convert(final Class type, final String borderString, Localizer localizer) {
 
-    Border border = null;
-
     Matcher m = borderPattern.matcher(borderString);
 
-    if( !m.matches()) return border;
+    if( !m.matches()) return null;
 
     int groupCount = m.groupCount();
 
     String borderType = m.group(1);
 
-    final String [] params = (groupCount>1) ? m.group(2).split(",") : new String[0] ;
-
-    if( "TitledBorder".equalsIgnoreCase(borderType)) {
-        return convertTitledBorder( params );
-    }
-
-    Method method = null;
-
-    ConverterLibrary cvtlib = ConverterLibrary.getInstance();
-
-    int pLen = params.length;
+    String [] params = new String[0];
     
-    //
-    // Special case for single parameter construction, give priority to String Type
-    //
-    if (pLen == 0) {
-      try {
-        
-          method = BorderFactory.class.getMethod("create" + borderType);
-
-      } catch (NoSuchMethodException e) {
-        // intent. empty
-      }
-
-      if (method == null) pLen = 1 ; // try with empty string
-
+    if( groupCount > 1 ) {
+    	String p = m.group(2);
+    	if( p!=null )
+    		params = p.split(",");
     }
-
-    if (pLen == 1) {
-      try {
-        method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
-      } catch (NoSuchMethodException e) {
-        //  no need to do anything here.
-      }
-    }
-    for (int i = 0; method == null && i < METHODS.length; i++) {
-      if (METHODS[i].getParameterTypes().length == pLen && METHODS[i].getName().endsWith(borderType)) {
-        method = METHODS[i];
-
-        for (int j = 0; j < method.getParameterTypes().length; j++) {
-          if (String.class.equals(method.getParameterTypes()[j])) {
-            continue;
-          }
-          if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
-            method = null;
-            break;
-          }
-        }
-      }
-    }
-    try {
-      Object[] args = new Object[pLen];
-      for (int i = 0; i < pLen; i++) { // fill argument array
-        Converter converter = cvtlib.getConverter(method.getParameterTypes()[i]);
-        Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", params[i].trim(), Attribute.CDATA_TYPE);
-        if (converter != null) {
-          args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
-        } else {
-          args[i] = attrib.getValue();
-        }
-      }
-      border = (Border) method.invoke(null, args);
-    } catch (Exception e) {
+    
+    ConverterLibrary cvtlib = ConverterLibrary.getInstance();
+    
+	try {
+		
+	    if( "TitledBorder".equalsIgnoreCase(borderType)) return convertTitledBorder( cvtlib, localizer, params );
+	    
+	    return convertBorder(cvtlib, localizer, borderType, params);
+	    
+	} catch (Exception e) {
         logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
-    }
-    return border;
+	}
+    return null;
+
   }
 
    /**
@@ -232,22 +185,104 @@ public class BorderConverter implements Converter {
     return TEMPLATE;
   }
 
+  /**
+   * 
+   * @param cvtlib
+   * @param localizer
+   * @param borderType
+   * @param params
+   * @return
+   * @throws Exception
+   */
+  private Border convertBorder( ConverterLibrary cvtlib, Localizer localizer, String borderType, String [] params ) throws Exception {
+	  Border border = null;
+	  
+	  Method method = null;
 
-  private TitledBorder convertTitledBorder( String[] params ) {
+
+	    int pLen = params.length;
+	    
+	    //
+	    // Special case for single parameter construction, give priority to String Type
+	    //
+	    if (pLen == 0) {
+	      try {
+	        
+	          method = BorderFactory.class.getMethod("create" + borderType);
+
+	      } catch (NoSuchMethodException e) {
+	        // intent. empty
+	      }
+
+	      if (method == null) pLen = 1 ; // try with empty string
+
+	    }
+
+	    if (pLen == 1) {
+	      try {
+	        method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
+	      } catch (NoSuchMethodException e) {
+	        //  no need to do anything here.
+	      }
+	    }
+	    for (int i = 0; method == null && i < METHODS.length; i++) {
+	      if (METHODS[i].getParameterTypes().length == pLen && METHODS[i].getName().endsWith(borderType)) {
+	        method = METHODS[i];
+
+	        for (int j = 0; j < method.getParameterTypes().length; j++) {
+	          if (String.class.equals(method.getParameterTypes()[j])) {
+	            continue;
+	          }
+	          if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
+	            method = null;
+	            break;
+	          }
+	        }
+	      }
+	    }
+
+	    
+	    Object[] args = new Object[pLen];
+	    
+	    for (int i = 0; i < pLen; i++) { // fill argument array
+	    	
+	        final Converter converter = cvtlib.getConverter(method.getParameterTypes()[i]);
+	        
+	        Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", params[i].trim(), Attribute.CDATA_TYPE);
+	        
+	        if (converter != null) {
+	          args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
+	        } 
+	        else {
+	          args[i] = attrib.getValue();
+	        }
+	      }
+	      
+	    border = (Border) method.invoke(null, args);
+
+	    return border;
+	  
+  }
+
+  private TitledBorder convertTitledBorder( ConverterLibrary cvtlib, Localizer localizer, String[] params ) throws Exception {
 
       if( params==null || params.length==0 ) return new TitledBorder((Border)null);
 
+      Attribute attrib = new Attribute("title", params[0].trim(), Attribute.CDATA_TYPE);
+
+      String title = (String) cvtlib.getConverter(String.class).convert(String.class, attrib, localizer);
+      
       switch (params.length) {
           case 1:
-              return new TitledBorder(params[0]);
+              return new TitledBorder(title);
           case 2:{
               int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
-              return new TitledBorder((Border) null, params[0], titleJustification, TitledBorder.DEFAULT_POSITION);
+              return new TitledBorder((Border) null, title, titleJustification, TitledBorder.DEFAULT_POSITION);
               }
           default: {
               int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
               int textPosition = getConstantValue(TitledBorder.class, params[2], TitledBorder.DEFAULT_POSITION);
-              return new TitledBorder((Border) null, params[0], titleJustification, textPosition);
+              return new TitledBorder((Border) null, title, titleJustification, textPosition);
           }
 
      }
