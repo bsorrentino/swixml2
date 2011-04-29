@@ -53,7 +53,7 @@
 
 package org.swixml.converters;
 
-import java.util.HashMap;
+import org.jdom.Namespace;
 import static org.swixml.LogUtil.logger;
 
 import java.lang.reflect.Method;
@@ -70,6 +70,7 @@ import org.jdom.Attribute;
 import org.swixml.Converter;
 import org.swixml.ConverterLibrary;
 import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 
 import static org.swixml.converters.PrimitiveConverter.getConstantValue;
 
@@ -98,6 +99,7 @@ import static org.swixml.converters.PrimitiveConverter.getConstantValue;
  * @see org.swixml.ConverterLibrary
  */
 public class BorderConverter implements Converter {
+    
   /**
    * converter's return type
    */
@@ -195,72 +197,78 @@ public class BorderConverter implements Converter {
    * @throws Exception
    */
   private Border convertBorder( ConverterLibrary cvtlib, Localizer localizer, String borderType, String [] params ) throws Exception {
-	  Border border = null;
-	  
-	  Method method = null;
+      Border border = null;
+
+      Method method = null;
 
 
-	    int pLen = params.length;
-	    
-	    //
-	    // Special case for single parameter construction, give priority to String Type
-	    //
-	    if (pLen == 0) {
-	      try {
-	        
-	          method = BorderFactory.class.getMethod("create" + borderType);
+      int pLen = params.length;
 
-	      } catch (NoSuchMethodException e) {
-	        // intent. empty
-	      }
+      //
+      // Special case for single parameter construction, give priority to String Type
+      //
+      if (pLen == 0) {
+          try {
 
-	      if (method == null) pLen = 1 ; // try with empty string
+              method = BorderFactory.class.getMethod("create" + borderType);
 
-	    }
+          } catch (NoSuchMethodException e) {
+              // intent. empty
+          }
 
-	    if (pLen == 1) {
-	      try {
-	        method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
-	      } catch (NoSuchMethodException e) {
-	        //  no need to do anything here.
-	      }
-	    }
-	    for (int i = 0; method == null && i < METHODS.length; i++) {
-	      if (METHODS[i].getParameterTypes().length == pLen && METHODS[i].getName().endsWith(borderType)) {
-	        method = METHODS[i];
+          //if (method == null) pLen = 1 ; // try with empty string
+          if (method == null) return null;
 
-	        for (int j = 0; j < method.getParameterTypes().length; j++) {
-	          if (String.class.equals(method.getParameterTypes()[j])) {
-	            continue;
-	          }
-	          if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
-	            method = null;
-	            break;
-	          }
-	        }
-	      }
-	    }
+      }
 
-	    
-	    Object[] args = new Object[pLen];
-	    
-	    for (int i = 0; i < pLen; i++) { // fill argument array
-	    	
-	        final Converter converter = cvtlib.getConverter(method.getParameterTypes()[i]);
-	        
-	        Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", params[i].trim(), Attribute.CDATA_TYPE);
-	        
-	        if (converter != null) {
-	          args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
-	        } 
-	        else {
-	          args[i] = attrib.getValue();
-	        }
-	      }
-	      
-	    border = (Border) method.invoke(null, args);
+      /*
+      if (pLen == 1) {
+      try {
+      method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
+      } catch (NoSuchMethodException e) {
+      //  no need to do anything here.
+      }
+      }
+       */
 
-	    return border;
+      for (int i = 0; method == null && i < METHODS.length; i++) {
+          if (METHODS[i].getParameterTypes().length == pLen && METHODS[i].getName().endsWith(borderType)) {
+              method = METHODS[i];
+
+              for (int j = 0; j < method.getParameterTypes().length; j++) {
+                  if (String.class.equals(method.getParameterTypes()[j])) {
+                      continue;
+                  }
+                  if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
+                      method = null;
+                      break;
+                  }
+              }
+          }
+      }
+
+      if (method != null) {
+
+          Object[] args = new Object[pLen];
+
+          for (int i = 0; i < pLen; ++i) { // fill argument array
+
+              final Converter converter = cvtlib.getConverter(method.getParameterTypes()[i]);
+
+              Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", params[i].trim(), Attribute.CDATA_TYPE);
+
+              if (converter != null) {
+                  args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
+              } else {
+                  args[i] = attrib.getValue();
+              }
+          }
+
+
+          border = (Border) method.invoke(null, args);
+      }
+      
+      return border;
 	  
   }
 
