@@ -1,5 +1,6 @@
 package examples.explorer;
 
+import examples.tree.TreeExample;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -34,6 +35,7 @@ import examples.spinner.SpinnerSampleApplication;
 import examples.table.TableExample;
 import examples.task.BackgroundTaskExample;
 import examples.util.GenericTreeModel;
+import java.awt.GraphicsEnvironment;
 import org.swixml.XFrame;
 
 
@@ -204,7 +206,7 @@ public class Swixml2Explorer extends SwingApplication  {
 				}
 				{
 					PanelInfo p = new PanelInfo("Tree Example", TreeExample.class);
-					p.setXmlPanel("examples/explorer/TreeDialogContent.xml");
+					p.setXmlPanel("examples/tree/TreeDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
@@ -360,6 +362,12 @@ public class Swixml2Explorer extends SwingApplication  {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+            
+                String[] ff = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+                
+                for( String f : ff ) {
+                    System.out.printf( "font-family [%s]\n", f );
+                }
 		SwingApplication.launch(Swixml2Explorer.class, args);
 
 	}

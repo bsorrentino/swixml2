@@ -1,4 +1,4 @@
-package examples.explorer;
+package examples.tree;
 
 import examples.util.GenericTreeModel;
 

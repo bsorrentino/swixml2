@@ -6,13 +6,13 @@
 
 <panel name="XML Source" layout="BorderLayout">
 <RTextScrollPane>
-	<RSyntaxTextArea id="xmlSource" syntaxEditingStyle="text/xml" bindWith="xmlSource"  editable="false" font="Courier-PLAIN-13"/>
+	<RSyntaxTextArea id="xmlSource" syntaxEditingStyle="text/xml" bindWith="xmlSource"  editable="false" font="Courier New-PLAIN-13"/>
 </RTextScrollPane>
 </panel>
 
 <panel name="Java Source" layout="BorderLayout" >
 <RTextScrollPane>
-	<RSyntaxTextArea id="javaSource" syntaxEditingStyle="text/java" bindWith="javaSource"  editable="false" font="Courier-PLAIN-13"/>
+	<RSyntaxTextArea id="javaSource" syntaxEditingStyle="text/java" bindWith="javaSource"  editable="false" font="Courier New-PLAIN-13"/>
 </RTextScrollPane>
 
 </panel>

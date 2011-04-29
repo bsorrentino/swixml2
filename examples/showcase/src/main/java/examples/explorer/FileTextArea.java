@@ -16,7 +16,7 @@ public class FileTextArea extends RSyntaxTextArea {
 
 	public FileTextArea() {
 		super();
-		setFont( new Font("Courier",Font.PLAIN, 13));
+		setFont( new Font("Courier New",Font.PLAIN, 13));
 	}
 
 	public final String getSource() {

@@ -6,19 +6,19 @@
 
 <panel name="XML Source" layout="BorderLayout">
 <RTextScrollPane>
-<filetextarea syntaxEditingStyle="text/xml" source="examples/explorer/TreeDialog.xml"></filetextarea>
+<filetextarea syntaxEditingStyle="text/xml" source="examples/tree/TreeDialog.xml"></filetextarea>
 </RTextScrollPane>
 </panel>
 
 <panel name="Java Source" layout="BorderLayout">
 <RTextScrollPane>
-<filetextarea syntaxEditingStyle="text/java" source="examples/explorer/TreeExample.java" ></filetextarea>
+<filetextarea syntaxEditingStyle="text/java" source="examples/tree/TreeExample.java" ></filetextarea>
 </RTextScrollPane>
 </panel>
 
 <panel name="MyTreeModel" layout="BorderLayout">
 <RTextScrollPane>
-<filetextarea  syntaxEditingStyle="text/java" source="examples/explorer/MyTreeModel.java" ></filetextarea>
+<filetextarea  syntaxEditingStyle="text/java" source="examples/tree/MyTreeModel.java" ></filetextarea>
 </RTextScrollPane>
 </panel>
 
