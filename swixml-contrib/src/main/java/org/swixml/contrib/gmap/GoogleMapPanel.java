@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.ProgressMonitorInputStream;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import org.swixml.LogUtil;
 
@@ -38,21 +37,20 @@ public class GoogleMapPanel extends JPanel  {
 	private final MapLookup lookup = new MapLookup();
 
 	private JLabel lblImageMap = new JLabel();
-	private JProgressBar progressBar = new JProgressBar(0,100);
+
+	final JProgressBar progressBar = new JProgressBar(0,100);
 	
-	private boolean useProgressBar = true;
-	private final Border pbBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+	private boolean useInternalProgressBar = true;
 	
 	public GoogleMapPanel() {
 		super( new BorderLayout() );
-		
+
 		progressBar.setValue(progressBar.getMinimum());
 		progressBar.setVisible(true);
-		progressBar.setBorder(pbBorder);
+		progressBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		progressBar.setStringPainted(true);
 		
 		this.add( lblImageMap, BorderLayout.CENTER);
-
 		
 		lblImageMap.addMouseListener(new MouseListener() {
 		    public void mouseClicked(MouseEvent e) {}
@@ -64,6 +62,14 @@ public class GoogleMapPanel extends JPanel  {
 		
 	}
 
+	public final boolean isUseInternalProgressBar() {
+		return useInternalProgressBar;
+	}
+
+	public final void setUseInternalProgressBar(boolean useInternalProgressBar) {
+		this.useInternalProgressBar = useInternalProgressBar;
+	}
+
 	public final String getMapToolTipText() {
 		return this.lblImageMap.getToolTipText();
 	}
@@ -72,23 +78,9 @@ public class GoogleMapPanel extends JPanel  {
 		this.lblImageMap.setToolTipText(value);
 	}
 
-	public final boolean isUseProgressBar() {
-		return useProgressBar;
-	}
-
-
-	/**
-	 * 
-	 * @param value true use a progressbar otherwise use a default ProgressMonitor
-	 */
-	public final void setUseProgressBar(boolean value) {
-		this.useProgressBar = value;
-	}
-
 	public final MapLookup getLookup() {
 		return lookup;
 	}
-
 
 	@Override
 	public void addNotify() {
@@ -115,24 +107,39 @@ public class GoogleMapPanel extends JPanel  {
 		return null;
 	}
 	
-	public	static void loadMap( Window w, String panelName, String latitude, String longitude, int zoom, MapMarker ...markers ) {
+	/**
+	 * 
+	 * @param w ancestor window
+	 * @param panelName could be null 
+	 * @return panel or null 
+	 */
+	public static GoogleMapPanel find( Window w, String panelName ) {
 
-		GoogleMapPanel panel = findComponent(w, GoogleMapPanel.class, panelName)	;
+		return findComponent(w, GoogleMapPanel.class, panelName);
 		
-		if( panel!=null ) {
-			panel.loadMap(latitude, longitude, zoom, markers);
-		}
 	}
 	
-	public	static void loadMap( Window w, String latitude, String longitude, int zoom, MapMarker ...markers ) {
-		loadMap(w, null, latitude, longitude, zoom, markers);
+	public	static GoogleMapPanel find( Window w) {
+		return find(w, null);
 	}
 	
-	protected void loadMap( String latitude, String longitude, int zoom, MapMarker ...markers ) {
-		
+	public  void loadMap( String latitude, String longitude, int zoom, MapMarker ...markers ) {
+		this.loadMap(null, latitude, longitude, zoom, markers);
+	}
+	
+	public  void loadMap( final JProgressBar externalProgressBar, String latitude, String longitude, int zoom, MapMarker ...markers ) {
+
+		  final boolean useInternal = ( externalProgressBar==null && isUseInternalProgressBar() );
+		  final boolean useMonitor = (externalProgressBar==null && !isUseInternalProgressBar());
+		  
 		  Dimension sz = new Dimension();
 		  
-		  this.getSize(sz);
+		  if( useInternal || useMonitor ) {
+			  this.getSize(sz);
+		  }
+		  else {
+			  this.lblImageMap.getSize(sz);
+		  }
 		  
 	      // get the uri for the static map
 	      String uri = lookup.getMap(Double.parseDouble(latitude),
@@ -153,7 +160,7 @@ public class GoogleMapPanel extends JPanel  {
 
 			conn.connect();
 
-			if (!isUseProgressBar()) {
+			if (useMonitor) {
 
 				///////////////////////////////////
 				// USE PROGRESS MONITOR FOR DEFAULT
@@ -163,18 +170,29 @@ public class GoogleMapPanel extends JPanel  {
 						"Loading Map .... ", conn.getInputStream());
 
 			} else {
-				add( progressBar, BorderLayout.SOUTH);
-				doLayout();
+				
+				final SwingUIHookAdapter hook = new SwingUIHookAdapter();
 
-				SwingUIHookAdapter hook = new SwingUIHookAdapter();
+				if(useInternal) {
+			
+					add( progressBar, BorderLayout.SOUTH);
+					doLayout();
+				}
+				
 
 				hook.addRecieveStatusListener(new PropertyChangeListener() {
 
 					public void propertyChange(PropertyChangeEvent evt) {
 						
-						progressBar.setValue(ProgressMonitorUtils.parsePercentFrom(evt));
-						progressBar.setString(ProgressMonitorUtils.parseMessageFrom(evt));	
-						
+						if( useInternal ) {
+							progressBar.setValue(ProgressMonitorUtils.parsePercentFrom(evt));
+							progressBar.setString(ProgressMonitorUtils.parseMessageFrom(evt));	
+						}
+						else {
+							externalProgressBar.setValue(ProgressMonitorUtils.parsePercentFrom(evt));
+							externalProgressBar.setString(ProgressMonitorUtils.parseMessageFrom(evt));	
+							
+						}
 					}
 				});
 				
@@ -199,7 +217,10 @@ public class GoogleMapPanel extends JPanel  {
 
 			lblImageMap.setIcon(new ImageIcon(_img));	      
 	      
-			remove( progressBar );
+			if( useInternal ) {
+				remove( progressBar );
+				revalidate();
+			}
 			
 	      }
     	  catch( IOException ioex ) {
@@ -224,19 +245,44 @@ public class GoogleMapPanel extends JPanel  {
 		JFrame frame = new JFrame();
 		
 		final GoogleMapPanel panel = new GoogleMapPanel();
+		final JProgressBar progressBar = new JProgressBar(0,100);
+		progressBar.setValue(progressBar.getMinimum());
+		progressBar.setVisible(true);
+		progressBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		progressBar.setStringPainted(true);
+		
+		
 		
 		panel.setMapToolTipText("THE MAP");
-		panel.setUseProgressBar(true); 
 		
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout( new BorderLayout() );
 		frame.add( panel, BorderLayout.CENTER );
+		frame.add( progressBar, BorderLayout.SOUTH);
 		
 		frame.pack();
 		frame.setSize( 600, 600);		
 		frame.setVisible(true);
 		
-		GoogleMapPanel.loadMap(frame, "40.9166667", "14.7333333", 11);
+		
+		GoogleMapPanel p = GoogleMapPanel.find(frame);
+		
+		// USE PROGRESS MONITOR
+		p.setUseInternalProgressBar(false);
+		p.loadMap("41.8500", "-87.6501", 11);
+		
+		Thread.sleep(5000);
+
+		// USE EXTERNAL
+		p.loadMap(progressBar, "40.9166667", "14.7333333", 11);
+		
+		Thread.sleep(5000);
+		
+		// USE INTERNAL
+		p.setUseInternalProgressBar(true);
+		//progressBar.setVisible(false);		
+		p.loadMap("45.4643", "9.1895", 11);
+
 		
 		
 	}
