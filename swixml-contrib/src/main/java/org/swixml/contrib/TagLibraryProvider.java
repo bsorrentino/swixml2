@@ -3,6 +3,7 @@ package org.swixml.contrib;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.swixml.TagLibrary;
 import org.swixml.TagLibraryService;
+import org.swixml.contrib.gmap.GoogleMapPanel;
 
 public class TagLibraryProvider implements TagLibraryService {
 
@@ -12,6 +13,8 @@ public class TagLibraryProvider implements TagLibraryService {
         
         library.registerTag("RTextScrollPane", RTextScrollPane.class);     
         library.registerTag("RSyntaxTextArea", RSyntaxTextAreaEx.class);
+        
+        library.registerTag("GoogleMapPanel", GoogleMapPanel.class);
 	}
 
 }
