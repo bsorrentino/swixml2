@@ -21,10 +21,25 @@
 	<tagBase>https://swixml2.googlecode.com/svn/tags/</tagBase>
 </properties>	
 
-  <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
-    <url>https://swixml2.googlecode.com/svn/trunk/core</url>
-  </scm>
+
+<developers>
+	<developer>
+		<id>bsorrentino</id>
+		<name>Bartolomeo Sorrentino</name>
+		<email>bartolomeo.sorrentino@gmail.com</email>
+	</developer>
+</developers>
+<licenses>
+   <license>
+     <name>Apache License Version 2</name>
+     <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+   </license>
+</licenses>
+
+<scm>
+  <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
+  <url>https://swixml2.googlecode.com/svn/trunk/core</url>
+</scm>
 
   <dependencies>
 
