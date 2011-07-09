@@ -4,7 +4,7 @@
   <artifactId>swixml-tool</artifactId>
   <name>swixml tool</name>
   <version>2.5-SNAPSHOT</version>
-  <description>swixml tool</description>
+  <description>swixml preview tool</description>
   
 <parent>
   <groupId>org.swixml</groupId>

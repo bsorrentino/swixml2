@@ -7,6 +7,7 @@
   <version>2.5-SNAPSHOT</version>
   <name>SWIXML EXAMPLES 2.5</name>
   <url>http://code.google.com/p/swixml2/</url>
+  <description>swixml2 examples</description>
 
 <parent>
   <groupId>org.swixml</groupId>

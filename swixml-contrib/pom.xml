@@ -6,6 +6,7 @@
   <packaging>jar</packaging>
   <name>SWIXML CONTRIB 2.5</name>
   <url>http://maven.apache.org</url>
+  <description>swixml2 extension</description>
 
 <parent>
   <groupId>org.swixml</groupId>

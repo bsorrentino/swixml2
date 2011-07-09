@@ -11,6 +11,7 @@
   <version>2.5.20110708</version>
   <name>SWIXML SWINGX</name>
   <url>http://code.google.com/p/swixml2/</url>
+  <description>swixml2 swingx module</description>
 
  <scm>
     <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/tags/swixml-2.5.20110708/swingx</developerConnection>
