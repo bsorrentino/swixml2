@@ -6,6 +6,7 @@
   <version>2.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>SWIXML2 PARENT PROJECT</name>
+  <description>swixml2 parent project</description>
   <url>http://code.google.com/p/swixml2/</url>
   
   <modules>
@@ -18,6 +19,20 @@
   	-->
     <module>schema-generator</module>
   </modules>
+  
+  <developers>
+	<developer>
+		<id>bsorrentino</id>
+		<name>Bartolomeo Sorrentino</name>
+		<email>bartolomeo.sorrentino@gmail.com</email>
+	</developer>
+</developers>
+<licenses>
+    <license>
+      <name>Apache License Version 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
   
   <profiles>
 	<profile>
