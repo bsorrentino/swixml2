@@ -4,7 +4,6 @@
  */
 package org.swixml;
 
-import java.util.List;
 import static org.swixml.LogUtil.logger;
 
 import java.awt.LayoutManager;
@@ -13,9 +12,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.logging.Level;
+
 import org.apache.commons.beanutils.BeanUtils;
-
-
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyResolutionException;
@@ -25,7 +23,6 @@ import org.swixml.jsr295.BindingUtils;
 import org.swixml.processor.ButtonGroupTagProcessor;
 import org.swixml.processor.ConstraintsTagProcessor;
 import org.swixml.processor.TagProcessor;
-import sun.reflect.misc.MethodUtil;
 
 /**
  *
