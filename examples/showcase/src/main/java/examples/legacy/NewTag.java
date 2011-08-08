@@ -1,3 +1,4 @@
+package examples.legacy;
 import java.util.TimeZone;
 
 import javax.swing.JFrame;

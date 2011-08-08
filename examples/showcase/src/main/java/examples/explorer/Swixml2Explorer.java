@@ -17,14 +17,6 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.MutableTreeNode;
 
-import legacy.Accelerator;
-import legacy.Actions;
-import legacy.Cards;
-import legacy.CustomTags;
-import legacy.Form;
-import legacy.FormLayout;
-import legacy.GridBag;
-import legacy.Layout;
 
 import org.jdesktop.application.Action;
 import org.swixml.SwingTagLibrary;
@@ -32,6 +24,14 @@ import org.swixml.XFrame;
 import org.swixml.examples.wizard.DDLWizardApplication;
 import org.swixml.jsr296.SwingApplication;
 
+import examples.legacy.Accelerator;
+import examples.legacy.Actions;
+import examples.legacy.Cards;
+import examples.legacy.CustomTags;
+import examples.legacy.Form;
+import examples.legacy.FormLayout;
+import examples.legacy.GridBag;
+import examples.legacy.Layout;
 import examples.spinner.SpinnerExample;
 import examples.table.TableExample;
 import examples.task.BackgroundTaskExample;
@@ -140,42 +140,42 @@ public class Swixml2Explorer extends SwingApplication  {
 				MutableTreeNode node =  applications.addNodeToRoot( pp, true );
 				
 				{
-					PanelInfo p = new PanelInfo("Accelerator", Accelerator.class, "xml/accelerator.xml", "legacy/Accelerator.java");
+					PanelInfo p = new PanelInfo("Accelerator", Accelerator.class, "xml/accelerator.xml", "examples/legacy/Accelerator.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("CustomTags", CustomTags.class, "xml/customtags.xml", "legacy/CustomTags.java");
+					PanelInfo p = new PanelInfo("CustomTags", CustomTags.class, "xml/customtags.xml", "examples/legacy/CustomTags.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Actions", Actions.class, "xml/actions.xml", "legacy/Actions.java");
+					PanelInfo p = new PanelInfo("Actions", Actions.class, "xml/actions.xml", "examples/legacy/Actions.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Cards", Cards.class, "xml/cards.xml", "legacy/Cards.java");
+					PanelInfo p = new PanelInfo("Cards", Cards.class, "xml/cards.xml", "examples/legacy/Cards.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("GridBag", GridBag.class, "xml/gridbag.xml", "legacy/GridBag.java");
+					PanelInfo p = new PanelInfo("GridBag", GridBag.class, "xml/gridbag.xml", "examples/legacy/GridBag.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Layout", Layout.class, "xml/funlayout.xml", "legacy/Layout.java");
+					PanelInfo p = new PanelInfo("Layout", Layout.class, "xml/funlayout.xml", "examples/legacy/Layout.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Form", Form.class, "xml/form.xml", "legacy/Form.java");
+					PanelInfo p = new PanelInfo("Form", Form.class, "xml/form.xml", "examples/legacy/Form.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("FormLayout", FormLayout.class, "xml/formlayout.xml", "legacy/FormLayout.java");
+					PanelInfo p = new PanelInfo("FormLayout", FormLayout.class, "xml/formlayout.xml", "examples/legacy/FormLayout.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}

@@ -1,3 +1,4 @@
+package examples.legacy.mac;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 

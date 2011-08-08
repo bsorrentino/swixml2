@@ -1,3 +1,4 @@
+package examples.legacy;
 import java.util.SimpleTimeZone;
 
 import org.jdom.Attribute;

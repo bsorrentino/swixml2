@@ -1,3 +1,4 @@
+package examples.legacy;
 import java.awt.event.ActionEvent;
 import java.net.URL;
 

@@ -1,4 +1,4 @@
-package legacy;
+package examples.legacy;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 

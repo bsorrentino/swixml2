@@ -1,3 +1,4 @@
+package examples.legacy.mac;
 import javax.swing.JFrame;
 
 import org.swixml.SwingEngine;

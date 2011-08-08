@@ -1,4 +1,4 @@
-package legacy;
+package examples.legacy;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 

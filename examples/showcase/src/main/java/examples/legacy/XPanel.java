@@ -1,3 +1,4 @@
+package examples.legacy;
 import javax.swing.JPanel;
 
 import org.swixml.SwingEngine;
