@@ -33,8 +33,8 @@ public class FileTextArea extends RSyntaxTextArea {
 			java.io.InputStream is = FileTextArea.class.getClassLoader().getResourceAsStream(source);
 			try {
 				read( new java.io.InputStreamReader(is), null);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				logger.log(Level.WARNING, String.format("error loading source [%s]", source), e );
 			}
 		}
 		super.setEditable(false);

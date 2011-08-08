@@ -22,10 +22,10 @@ import static org.swixml.LogUtil.logger;
  *
  * @author bsorrentino
  */
-public class SpinnerSampleApplication extends SwingApplication {
+public class SpinnerExample extends SwingApplication {
 
     public static void main(String args []) {
-            SwingApplication.launch(SpinnerSampleApplication.class, args);
+            SwingApplication.launch(SpinnerExample.class, args);
     }
 
 

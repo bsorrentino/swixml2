@@ -1,9 +1,9 @@
 package examples.explorer;
 
-import examples.tree.TreeExample;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Method;
@@ -28,15 +28,16 @@ import legacy.Layout;
 
 import org.jdesktop.application.Action;
 import org.swixml.SwingTagLibrary;
+import org.swixml.XFrame;
 import org.swixml.examples.wizard.DDLWizardApplication;
 import org.swixml.jsr296.SwingApplication;
 
-import examples.spinner.SpinnerSampleApplication;
+import examples.spinner.SpinnerExample;
 import examples.table.TableExample;
 import examples.task.BackgroundTaskExample;
+import examples.text.TextExample;
+import examples.tree.TreeExample;
 import examples.util.GenericTreeModel;
-import java.awt.GraphicsEnvironment;
-import org.swixml.XFrame;
 
 
 public class Swixml2Explorer extends SwingApplication  {
@@ -223,12 +224,17 @@ public class Swixml2Explorer extends SwingApplication  {
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Spinner Example", SpinnerSampleApplication.class);
+					PanelInfo p = new PanelInfo("Spinner Example", SpinnerExample.class);
 					p.setXmlPanel("examples/spinner/SpinnerDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
-				
+				{
+					PanelInfo p = new PanelInfo("Text Fields Example", TextExample.class);
+					p.setXmlPanel("examples/text/TextDialogContent.xml");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
 				{
 					PanelInfo p = new PanelInfo("Wizard Integration Example", DDLWizardApplication.class);
 					p.setXmlPanel("examples/wizard/WizardExample.xml");
