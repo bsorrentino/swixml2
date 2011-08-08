@@ -29,53 +29,72 @@ public class JDialogEx extends JDialog {
 
     protected JButton defaultButton;
 
-    public JDialogEx(Window window, String string, ModalityType mt, GraphicsConfiguration gc) {
-    }
 
-    public JDialogEx(Window window, String string, ModalityType mt) {
-    }
 
-    public JDialogEx(Window window, String string) {
-    }
+	public JDialogEx() {
+		super();
+	}
 
-    public JDialogEx(Window window, ModalityType mt) {
-    }
+	public JDialogEx(Dialog owner, boolean modal) {
+		super(owner, modal);
+	}
 
-    public JDialogEx(Window window) {
-    }
+	public JDialogEx(Dialog owner, String title, boolean modal, GraphicsConfiguration gc) {
+		super(owner, title, modal, gc);
+	}
 
-    public JDialogEx(Dialog dialog, String string, boolean bln, GraphicsConfiguration gc) {
-    }
+	public JDialogEx(Dialog owner, String title, boolean modal) {
+		super(owner, title, modal);
+	}
 
-    public JDialogEx(Dialog dialog, String string, boolean bln) {
-    }
+	public JDialogEx(Dialog owner, String title) {
+		super(owner, title);
+	}
 
-    public JDialogEx(Dialog dialog, String string) {
-    }
+	public JDialogEx(Dialog owner) {
+		super(owner);
+	}
 
-    public JDialogEx(Dialog dialog, boolean bln) {
-    }
+	public JDialogEx(Frame owner, boolean modal) {
+		super(owner, modal);
+	}
 
-    public JDialogEx(Dialog dialog) {
-    }
+	public JDialogEx(Frame owner, String title, boolean modal,	GraphicsConfiguration gc) {
+		super(owner, title, modal, gc);
+	}
 
-    public JDialogEx(Frame frame, String string, boolean bln, GraphicsConfiguration gc) {
-    }
+	public JDialogEx(Frame owner, String title, boolean modal) {
+		super(owner, title, modal);
+	}
 
-    public JDialogEx(Frame frame, String string, boolean bln) {
-    }
+	public JDialogEx(Frame owner, String title) {
+		super(owner, title);
+	}
 
-    public JDialogEx(Frame frame, String string) {
-    }
+	public JDialogEx(Frame owner) {
+		super(owner);
+	}
 
-    public JDialogEx(Frame frame, boolean bln) {
-    }
+	public JDialogEx(Window owner, ModalityType mt) {
+		super(owner, mt);
+	}
 
-    public JDialogEx(Frame frame) {
-    }
+	public JDialogEx(Window owner, String title, ModalityType mt, GraphicsConfiguration gc) {
+		super(owner, title, mt, gc);
+	}
 
-    public JDialogEx() {
-    }
+	public JDialogEx(Window owner, String arg1, ModalityType arg2) {
+		super(owner, arg1, arg2);
+	}
+
+	public JDialogEx(Window owner, String title) {
+		super(owner, title);
+	}
+
+	public JDialogEx(Window owner) {
+		super(owner);
+	}
+
 
 
 	@Override
