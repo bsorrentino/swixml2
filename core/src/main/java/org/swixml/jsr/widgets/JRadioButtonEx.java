@@ -6,16 +6,23 @@
 package org.swixml.jsr.widgets;
 
 import javax.swing.JRadioButton;
+
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.jsr295.BindingUtils;
-import static org.swixml.SwingEngine.isDesignTime;
 
 /**
  *
  * @author sorrentino
  */
+@SuppressWarnings("serial")
 public class JRadioButtonEx extends JRadioButton implements BindableBasicWidget{
-    public String getBindWith() {
+	
+	
+    public JRadioButtonEx() {
+		super();
+	}
+
+	public String getBindWith() {
         return (String) getClientProperty(BINDWITH_PROPERTY);
     }
 

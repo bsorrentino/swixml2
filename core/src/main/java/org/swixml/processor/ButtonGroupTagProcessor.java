@@ -5,12 +5,13 @@
 
 package org.swixml.processor;
 
-import java.awt.Container;
+import java.awt.Component;
 import java.awt.LayoutManager;
+
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
+
 import org.jdom.Element;
 import org.swixml.Parser;
 
@@ -28,12 +29,13 @@ public class ButtonGroupTagProcessor implements TagProcessor {
      * @param obj <code>Object</code> should be an AbstractButton or JComponent containing AbstractButtons
      * @param grp <code>ButtonGroup</code>
      */
-    private static void putIntoBtnGrp(Object obj, ButtonGroup grp) {
+    private  void putIntoBtnGrp(Component obj, ButtonGroup grp) {
         if (AbstractButton.class.isAssignableFrom(obj.getClass())) {
             grp.add((AbstractButton) obj);
+            
         } else if (JComponent.class.isAssignableFrom(obj.getClass())) {
             JComponent jp = (JComponent) obj;
-            for (int i = 0; i < jp.getComponentCount(); i++) {
+            for (int i = 0; i < jp.getComponentCount(); ++i) {
                 putIntoBtnGrp(jp.getComponent(i), grp);
             }
         } // otherwise just do nothing ...
@@ -43,6 +45,26 @@ public class ButtonGroupTagProcessor implements TagProcessor {
 
         if( !Parser.TAG_BUTTONGROUP.equalsIgnoreCase(child.getName())) return false;
 
+        @SuppressWarnings("unchecked")
+		java.util.List<Element> buttons = child.getChildren();
+        
+        if( buttons==null ) return false;
+
+        ButtonGroup btnGroup = new ButtonGroup();
+
+        if (null != child.getAttribute(Parser.ATTR_ID)) {
+            p.engine.getIdMap().put(child.getAttribute(Parser.ATTR_ID).getValue(), btnGroup);
+        
+        }
+
+        for( Element e : buttons ) {
+        	Component b =  ConstraintsTagProcessor.processComponent(p, obj, e, layoutMgr);
+        	
+        	putIntoBtnGrp( b, btnGroup);
+        	
+        }
+
+        /*
         int k = JMenu.class.isAssignableFrom(obj.getClass()) ? ((JMenu) obj).getItemCount() : ((Container) obj).getComponentCount();
         p.getSwing(child, obj);
         int n = JMenu.class.isAssignableFrom(obj.getClass()) ? ((JMenu) obj).getItemCount() : ((Container) obj).getComponentCount();
@@ -57,6 +79,7 @@ public class ButtonGroupTagProcessor implements TagProcessor {
         while (k < n) {
           putIntoBtnGrp(JMenu.class.isAssignableFrom(obj.getClass()) ? ((JMenu) obj).getItem(k++) : ((Container) obj).getComponent(k++), btnGroup);
         }
+        */
         return true;
     }
 

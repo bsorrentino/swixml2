@@ -37,7 +37,8 @@
 </licenses>
 
 <scm>
-  <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
+	<connection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</connection>
+	<developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
   <url>https://swixml2.googlecode.com/svn/trunk/core</url>
 </scm>
 
