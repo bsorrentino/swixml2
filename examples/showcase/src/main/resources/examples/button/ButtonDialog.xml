@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<dialog name="dialog"
+<dialog xmlns="http://www.swixml.org/2007/Swixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.swixml.org/2007/Swixml http://swixml2.googlecode.com/svn/trunk/schema-generator/swixml2-schema-2.5-SNAPSHOT.xsd" 
+ 
+	name="dialog"
     minimumSize="400,240"
 	resizable="true" 
 	title="Example Button usage" 
@@ -11,9 +13,37 @@
 	>
 
 <panel layout="borderLayout">
+
 <vbox constraints="BorderLayout.CENTER">
 
 <toggleButton name="tb" id="toggleButton" action="onCLick"  />
+
+<box.vstrut height="10"></box.vstrut>
+
+<hbox>
+    <buttongroup >
+        <radiobutton id="am" text="AM"/>
+        <radiobutton id="fm" text="FM"/>
+    </buttongroup>
+</hbox>
+
+
+<box.vstrut height="10"></box.vstrut>
+
+<!-- 
+<panel layout="borderLayout">
+
+<buttongroup >
+    <radiobutton id="north" text="north" constraints="BorderLayout.NORTH"/>
+    <radiobutton id="south" text="south" constraints="BorderLayout.SOUTH"/>
+    <radiobutton id="center" text="center" constraints="BorderLayout.CENTER"/>
+    <radiobutton id="west" text="west" constraints="BorderLayout.WEST"/>
+    <radiobutton id="east" text="east" constraints="BorderLayout.EAST"/>
+</buttongroup>
+
+</panel>
+ -->
+
 
 </vbox>
 
