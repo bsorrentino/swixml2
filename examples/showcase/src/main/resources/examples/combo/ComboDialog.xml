@@ -14,7 +14,7 @@
 
 	<hbox gap="5" border="CompoundBorder(TitledBorder(Template list), EmptyBorder(5,5,10,5))" >
 		<label text="Template:" />
-		<combobox  id="cmbTemplate" bindList="${templateList}" action="selectTemplate"  font="Arial-BOLD-11" editable="false" />
+		<combobox  id="cmbTemplate" bindList="${templateList}" action="selectTemplate" bindWith="template" font="Arial-BOLD-11" editable="false" />
 		<box.hglue/>
 		<checkbox text="remove On Submit" bindWith="removeOnSubmit" />
 	</hbox>

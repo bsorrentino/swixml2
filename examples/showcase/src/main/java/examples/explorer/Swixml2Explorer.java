@@ -24,6 +24,7 @@ import org.swixml.XFrame;
 import org.swixml.examples.wizard.DDLWizardApplication;
 import org.swixml.jsr296.SwingApplication;
 
+import examples.combo.ComboExample;
 import examples.legacy.Accelerator;
 import examples.legacy.Actions;
 import examples.legacy.Cards;
@@ -194,7 +195,7 @@ public class Swixml2Explorer extends SwingApplication  {
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Combo Example", ComboExample.class, "examples/explorer/ComboDialog.xml", "examples/explorer/ComboExample.java");
+					PanelInfo p = new PanelInfo("Combo Example", ComboExample.class, "examples/combo/ComboDialog.xml", "examples/combo/ComboExample.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
