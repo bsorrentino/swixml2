@@ -76,7 +76,7 @@ public class JComboBoxEx extends JComboBox implements BindableListWidget, Bindab
                 if( getBindWith()!=null ) {
                     
                     Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
-
+                    /*
                     Binding b = Bindings.createAutoBinding( UpdateStrategy.READ_WRITE,
                         client,
                         //ELProperty.create( "${testValue}"),
@@ -84,6 +84,19 @@ public class JComboBoxEx extends JComboBox implements BindableListWidget, Bindab
                         getEditor().getEditorComponent(),
                         BeanProperty.create( "text")
                         );
+                    */
+                    
+                    //
+                    // Fix Issue 72
+                    //
+                    Binding b = Bindings.createAutoBinding( UpdateStrategy.READ_WRITE,
+                            client,
+                            //ELProperty.create( "${testValue}"),
+                            BeanProperty.create( getBindWith() ),
+                            this,
+                            BeanProperty.create( "selectedItem")
+                            );
+                    
                     if( getConverter()!=null ) {
                         b.setConverter( getConverter() );
                     }
