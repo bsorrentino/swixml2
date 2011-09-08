@@ -3,6 +3,8 @@ package org.swixml.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import javax.swing.SwingUtilities;
+
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
@@ -11,6 +13,7 @@ import org.swixml.test.data.SimpleApplication;
 import org.swixml.test.data.SimpleDialog;
 import org.swixml.test.data.SimpleDialog1;
 
+//org.junit.Ignore
 public class TestResource {
 
 	private static void print( String msg, ResourceMap rm ) {
@@ -20,13 +23,8 @@ public class TestResource {
 		}
 		System.out.println("}");
 	}
-	
-	@Test
-	public void loadResource() throws Exception {
-		System.setProperty( Application.AUTO_INJECTFIELD, "true" );
-		
-		Application.launch(SimpleApplication.class, new String[0]);
-		
+
+	private void loadResourceTask()  {
 		SimpleApplication app = Application.getInstance(SimpleApplication.class);
 	
 		
@@ -73,6 +71,23 @@ public class TestResource {
 			
 			assertEquals( "test1", dlg.myLabel.getText() );
 		}
+		
+	}
+	
+	@Test
+	public void loadResource() throws Exception {
+		System.setProperty( Application.AUTO_INJECTFIELD, "true" );
+		
+		Application.launch(SimpleApplication.class, new String[0]);
+		
+		SwingUtilities.invokeAndWait( new Runnable() {
+
+			public void run() {
+				loadResourceTask();
+				
+			}
+			
+		});
 
 	}
 	
