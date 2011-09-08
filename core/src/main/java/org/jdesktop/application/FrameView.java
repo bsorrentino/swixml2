@@ -7,16 +7,14 @@
 
 package org.jdesktop.application;
 
-import java.awt.Frame;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
 
 
 public class FrameView extends View {
-    private static final Logger logger = Logger.getLogger(FrameView.class.getName());
+    private static final Logger logger = Logger.getLogger("swixml2");
     private JFrame frame = null;
 
     public FrameView(Application application) {
@@ -74,7 +72,9 @@ public class FrameView extends View {
 	    throw new IllegalArgumentException("null JFrame");
 	}
 	if (this.frame != null) {
-	    throw new IllegalStateException("frame already set");
+		logger.warning( "main frame is already set. operation will be ignored!");
+	    //throw new IllegalStateException("frame already set");
+		return;
 	}
 	this.frame = frame;
 	firePropertyChange("frame", null, this.frame);
