@@ -320,6 +320,8 @@ public abstract class SingleFrameApplication extends Application {
 	if (c == null) {
 	    throw new IllegalArgumentException("null JFrame");
 	}
+	
+	setMainFrame( c );
 	initRootPaneContainer(c);
 	c.setVisible(true);
     }
