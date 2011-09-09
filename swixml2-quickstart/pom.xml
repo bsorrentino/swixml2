@@ -15,8 +15,8 @@
 </parent>
 
  <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swixml2-quickstart</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/trunk//swixml2-quickstart</url>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/branches/swixml-2.5/swixml2-quickstart</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/branches/swixml-2.5/swixml2-quickstart</url>
   </scm>
 
 <dependencies>

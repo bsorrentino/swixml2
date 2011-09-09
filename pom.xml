@@ -85,8 +85,8 @@
 
 
  <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/trunk</url>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/branches/swixml-2.5</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/branches/swixml-2.5</url>
   </scm>
 
 <build>

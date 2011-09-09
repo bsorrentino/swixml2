@@ -13,8 +13,8 @@
   <url>http://code.google.com/p/swixml2/</url>
 
  <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swingx</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/trunk/swingx</url>
+    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/branches/swixml-2.5/swingx</developerConnection>
+    <url>https://swixml2.googlecode.com/svn/branches/swixml-2.5/swingx</url>
   </scm>
 
   <dependencies>
