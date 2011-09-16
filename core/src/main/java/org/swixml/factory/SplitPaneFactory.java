@@ -6,7 +6,6 @@
 package org.swixml.factory;
 
 import org.jdom.Attribute;
-import org.swixml.BeanFactory;
 import org.swixml.XSplitPane;
 import org.swixml.processor.TagProcessor;
 

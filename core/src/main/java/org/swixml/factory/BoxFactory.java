@@ -17,7 +17,6 @@ import javax.swing.JComponent;
 
 import org.jdom.Attribute;
 import org.jdom.Element;
-import org.swixml.BeanFactory;
 import org.swixml.Converter;
 import org.swixml.ConverterLibrary;
 
