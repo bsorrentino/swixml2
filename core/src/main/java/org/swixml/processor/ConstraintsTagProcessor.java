@@ -51,7 +51,7 @@ public class ConstraintsTagProcessor implements TagProcessor {
         //  A constraints or GridBagConstraints grand-childtag is not added at all ..
         //  .. but used to add the child into this container
         //
-        Element grandchild = child.getChild(Parser.TAG_GRIDBAGCONSTRAINTS);
+        Element grandchild = child.getChild(Parser.TAG_GRIDBAGCONSTRAINTS, child.getNamespace());
         if (grandchild != null) {
         	result = (T) p.getSwing(child, null);
           p.addChild((Container) obj, result, p.getSwing(grandchild, null));
