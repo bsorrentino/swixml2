@@ -55,6 +55,8 @@ package org.swixml;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.swixml.factory.BeanFactory;
 import org.swixml.processor.TagProcessor;
 
 /**
