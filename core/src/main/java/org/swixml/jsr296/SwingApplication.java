@@ -13,6 +13,7 @@ import java.io.Reader;
 
 import org.jdesktop.application.SingleFrameApplication;
 import org.swixml.SwingEngine;
+import org.swixml.script.ScriptService;
 
 /**
  *
@@ -70,6 +71,11 @@ public abstract class SwingApplication extends SingleFrameApplication {
         
         logger.info( String.format("render resource [%s]", resource));
         
+        ScriptService service = engine.getScript();
+        if( service != null ) {
+        	service.put("application", this);
+        }
+        
 		return engine.render(resource);
 	}
 	
@@ -85,10 +91,15 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-                //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-                if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
+        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
 
-		return engine.render(resource);
+        ScriptService service = engine.getScript();
+        if( service != null ) {
+        	service.put("application", this);
+        }
+
+        return engine.render(resource);
 	}
 
     /**
@@ -103,9 +114,13 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-                //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-                if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
+        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
 
+        ScriptService service = engine.getScript();
+        if( service != null ) {
+        	service.put("application", this);
+        }
 		return engine.render(reader);
 	}
 
@@ -121,10 +136,15 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-                //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-                if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
+        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
 
-		return engine.render(xmlFile);
+        ScriptService service = engine.getScript();
+        if( service != null ) {
+        	service.put("application", this);
+        }
+
+        return engine.render(xmlFile);
 	}
 
     /**
@@ -139,10 +159,15 @@ public abstract class SwingApplication extends SingleFrameApplication {
     	final SwingEngine<T> engine = new SwingEngine<T>( container );
 		engine.setClassLoader( getClass().getClassLoader() );
 
-                //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-                if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
+        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
 
-                return engine.render(url);
+        ScriptService service = engine.getScript();
+        if( service != null ) {
+        	service.put("application", this);
+        }
+
+        return engine.render(url);
 	}
     
 }
