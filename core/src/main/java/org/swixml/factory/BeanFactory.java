@@ -24,6 +24,7 @@ import org.swixml.Parser;
 import org.swixml.jsr295.BindingUtils;
 import org.swixml.processor.ButtonGroupTagProcessor;
 import org.swixml.processor.ConstraintsTagProcessor;
+import org.swixml.processor.ScriptTagProcessor;
 import org.swixml.processor.TagProcessor;
 
 /**
@@ -219,8 +220,12 @@ public class BeanFactory implements Factory {
             result = ButtonGroupTagProcessor.instance.process(p, parent, child, layoutMgr);
 
             if (!result) {
+                result = ScriptTagProcessor.instance.process(p, parent, child, layoutMgr);
+            }
+            if (!result) {
                 result = ConstraintsTagProcessor.instance.process(p, parent, child, layoutMgr);
             }
+
         }
 
         return result;

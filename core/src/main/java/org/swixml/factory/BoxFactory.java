@@ -19,6 +19,8 @@ import org.jdom.Attribute;
 import org.jdom.Element;
 import org.swixml.Converter;
 import org.swixml.ConverterLibrary;
+import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 
 
 /**
@@ -163,9 +165,9 @@ public class BoxFactory extends BeanFactory {
             
             if( name.equalsIgnoreCase( a.getName() )){
                 attributes.remove(a);
-                Converter c = ConverterLibrary.getInstance().getConverter(int.class);
+                Converter<Integer> c = ConverterLibrary.getInstance().getConverter(Integer.class);
                 
-                return (Integer)c.convert(int.class, a, null);
+                return c.convert(Integer.class, a, (SwingEngine<?>)null);
             }
         }
         
@@ -185,9 +187,9 @@ public class BoxFactory extends BeanFactory {
             
             if( name.equalsIgnoreCase( a.getName() )){
                 attributes.remove(a);
-                Converter c = ConverterLibrary.getInstance().getConverter(Dimension.class);
+                Converter<Dimension> c = ConverterLibrary.getInstance().getConverter(Dimension.class);
                 
-                return (Dimension)c.convert(Dimension.class, a, null);
+                return c.convert(Dimension.class, a, (SwingEngine<?>)null);
             }
         }
 
