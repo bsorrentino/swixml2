@@ -25,7 +25,7 @@
 
   <panel Border="EtchedBorder">
     <label labelfor="cbx" Font="Comic Sans MS-BOLD-12" Foreground="blue">ComboBox</label>
-    <combobox id="cbx" initclass="legacy.Actions$ComboModel" Action="petAction" PrototypeDisplayValue="1234567890|1234567890"/>
+    <combobox id="cbx" initclass="examples.legacy.Actions$ComboModel" Action="petAction" PrototypeDisplayValue="1234567890|1234567890"/>
   </panel>
 
   <panel constraints="BorderLayout.SOUTH">

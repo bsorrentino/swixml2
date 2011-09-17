@@ -2,14 +2,14 @@ package examples.legacy;
 import java.util.SimpleTimeZone;
 
 import org.jdom.Attribute;
-import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 
 
 
 
 
-public class TimeZoneConverter implements Converter {
+public class TimeZoneConverter extends ConverterAdapter {
   /**
    * Convert the value of the given <code>Attribute</code> object into an output object of the
    * specified type.

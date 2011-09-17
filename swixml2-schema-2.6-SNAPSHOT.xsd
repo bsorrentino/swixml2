@@ -2190,6 +2190,13 @@
       <xs:attribute name="pressedIcon" type="xs:string" />
     </xs:complexType>
   </xs:element>
+  <xs:element name="script">
+    <xs:complexType mixed="true">
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:any />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="scrollpane">
     <xs:complexType mixed="true">
       <xs:sequence minOccurs="0" maxOccurs="unbounded">
