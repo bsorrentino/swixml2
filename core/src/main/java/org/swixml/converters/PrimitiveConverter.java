@@ -53,23 +53,33 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.jdom.DataConversionException;
-import org.swixml.Converter;
-import org.swixml.Localizer;
-import org.swixml.Parser;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
+import javax.swing.tree.TreeSelectionModel;
+
+import org.jdom.Attribute;
+import org.jdom.DataConversionException;
+import org.swixml.ConverterAdapter;
+import org.swixml.Localizer;
 import org.swixml.LogUtil;
+import org.swixml.Parser;
 
 /**
  * The <code>PrimitiveConverter</code> class defines a converter that creates primitive objects (wrapper),
@@ -80,8 +90,10 @@ import org.swixml.LogUtil;
  * @see org.swixml.ConverterLibrary
  */
 
-public class PrimitiveConverter implements Converter, SwingConstants, ScrollPaneConstants, KeyEvent, InputEvent {
+public class PrimitiveConverter extends ConverterAdapter implements SwingConstants, ScrollPaneConstants, KeyEvent, InputEvent {
 
+  public static final PrimitiveConverter instance = new PrimitiveConverter();
+  
   /** converter's return type */
   public static final Class<?> TEMPLATE = Object.class;
   /** map contains all constant provider types */
@@ -120,16 +132,20 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
          a.setValue( localizer.getString( a.getValue() ));
 
     try {
-      if (boolean.class.equals( type )) {
-        obj = Boolean.valueOf(a.getBooleanValue());
-      } else if (int.class.equals( type )) {
-        obj = Integer.valueOf( a.getIntValue() );
-      } else if (long.class.equals( type )) {
-        obj = Long.valueOf( a.getLongValue() );
-      } else if (float.class.equals( type )) {
-        obj = Float.valueOf( a.getFloatValue() );
-      } else if (double.class.equals( type )) {
-        obj = Double.valueOf( a.getDoubleValue() );
+      if( type.isPrimitive() ) {
+          if (Boolean.TYPE.equals( type )) { obj = Boolean.valueOf(a.getBooleanValue()); }
+          else if (Integer.TYPE.equals( type )) { obj = Integer.valueOf( a.getIntValue() ); } 
+          else if (Long.TYPE.equals( type )) { obj = Long.valueOf( a.getLongValue() ); } 
+          else if (Float.TYPE.equals( type )) { obj = Float.valueOf( a.getFloatValue() ); } 
+          else if (Double.TYPE.equals( type )) { obj = Double.valueOf( a.getDoubleValue() ); }   	  
+      }
+      else {
+          if (Boolean.class.equals( type )) { obj = Boolean.valueOf(a.getBooleanValue()); }
+          else if (Integer.class.equals( type )) { obj = Integer.valueOf( a.getIntValue() ); } 
+          else if (Long.class.equals( type )) { obj = Long.valueOf( a.getLongValue() ); } 
+          else if (Float.class.equals( type )) { obj = Float.valueOf( a.getFloatValue() ); } 
+          else if (Double.class.equals( type )) { obj = Double.valueOf( a.getDoubleValue() ); }   	  
+    	  
       }
     } catch (DataConversionException e) { 
       // intent. empty
@@ -151,37 +167,6 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
 
     return obj;
   }
-
-  /**
-   * Converts String into java primitive type
-   * @param type <code>Class</code> target type
-   * @param attr <code>Attribute</code> value field needs to provide convertable String
-   * @return <code>Object</code> primitive wrapped into wrapper object
-   * @throws Exception
-   */
-  public Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception {
-    return PrimitiveConverter.conv( type, attr, localizer );
-  }
-
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class<?> convertsTo() {
-    return TEMPLATE;
-  }
-
-  /**
-   * Adds a new class or interface to the dictionary of primitive providers.
-   * @param clazz <code>Class</code> providing primitive constants / public (final) fields
-   */
-  public static void addConstantProvider(final Class<?> clazz) {
-    dictionaries.put( clazz.getSimpleName(), clazz );
-  }
-
-  private static Pattern p = Pattern.compile( "(?:(\\w+)[.])?(\\w+)");
-
   /**
    * retrieve a constant field from class
    *
@@ -230,6 +215,40 @@ public class PrimitiveConverter implements Converter, SwingConstants, ScrollPane
       }
 
   }
+
+  protected PrimitiveConverter() {
+  }
+
+/**
+   * Converts String into java primitive type
+   * @param type <code>Class</code> target type
+   * @param attr <code>Attribute</code> value field needs to provide convertable String
+   * @return <code>Object</code> primitive wrapped into wrapper object
+   * @throws Exception
+   */
+  public Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception {
+    return PrimitiveConverter.conv( type, attr, localizer );
+  }
+
+  /**
+   * A <code>Converters</code> conversTo method informs about the Class type the converter
+   * is returning when its <code>convert</code> method is called
+   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
+   */
+  public Class<?> convertsTo() {
+    return TEMPLATE;
+  }
+
+  /**
+   * Adds a new class or interface to the dictionary of primitive providers.
+   * @param clazz <code>Class</code> providing primitive constants / public (final) fields
+   */
+  public static void addConstantProvider(final Class<?> clazz) {
+    dictionaries.put( clazz.getSimpleName(), clazz );
+  }
+
+  private static Pattern p = Pattern.compile( "(?:(\\w+)[.])?(\\w+)");
+
 
 
 

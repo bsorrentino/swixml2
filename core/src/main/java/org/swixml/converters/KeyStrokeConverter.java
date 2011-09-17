@@ -55,6 +55,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.Parser;
 
@@ -77,7 +78,7 @@ import javax.swing.*;
  * @see javax.swing.KeyStroke#getKeyStroke(java.lang.String)
  * @see org.swixml.ConverterLibrary
  */
-public class KeyStrokeConverter implements Converter {
+public class KeyStrokeConverter extends ConverterAdapter {
 
   /** converter's return type */
   public static final Class TEMPLATE = KeyStroke.class;

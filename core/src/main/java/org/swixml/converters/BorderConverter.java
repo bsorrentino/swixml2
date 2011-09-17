@@ -53,8 +53,8 @@
 
 package org.swixml.converters;
 
-import org.jdom.Namespace;
 import static org.swixml.LogUtil.logger;
+import static org.swixml.converters.PrimitiveConverter.getConstantValue;
 
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
@@ -68,11 +68,9 @@ import javax.swing.border.TitledBorder;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.ConverterLibrary;
 import org.swixml.Localizer;
-import org.swixml.SwingEngine;
-
-import static org.swixml.converters.PrimitiveConverter.getConstantValue;
 
 /**
  * The <code>BorderConverter</code> class defines a converter that creates Border objects based on a provided String.
@@ -98,7 +96,7 @@ import static org.swixml.converters.PrimitiveConverter.getConstantValue;
  * @see javax.swing.border.AbstractBorder
  * @see org.swixml.ConverterLibrary
  */
-public class BorderConverter implements Converter {
+public class BorderConverter extends ConverterAdapter {
     
   /**
    * converter's return type

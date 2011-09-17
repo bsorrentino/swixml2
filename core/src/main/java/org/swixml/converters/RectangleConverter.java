@@ -55,6 +55,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 
 import java.awt.*;
@@ -75,7 +76,7 @@ import java.util.StringTokenizer;
  * @see org.swixml.ConverterLibrary
  */
 
-public final class RectangleConverter implements Converter {
+public final class RectangleConverter extends ConverterAdapter {
   /** converter's return type */
   public static final Class TEMPLATE = Rectangle.class;
 

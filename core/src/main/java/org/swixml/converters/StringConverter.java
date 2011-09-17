@@ -54,6 +54,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Parser;
 import org.swixml.Localizer;
 
@@ -67,7 +68,7 @@ import org.swixml.Localizer;
  * @version $Revision: 1.1 $
  *
  */
-public class StringConverter implements Converter {
+public class StringConverter extends ConverterAdapter {
   /** converter's return type */
   public static final Class TEMPLATE = String.class;
 

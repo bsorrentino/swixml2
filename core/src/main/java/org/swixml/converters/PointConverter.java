@@ -55,6 +55,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 
 import java.awt.*;
@@ -67,7 +68,7 @@ import java.util.StringTokenizer;
  * @see java.awt.Point
  * @see org.swixml.ConverterLibrary
  */
-public class PointConverter implements Converter {
+public class PointConverter extends ConverterAdapter {
   /** converter's return type */
   public static final Class TEMPLATE = Point.class;
 

@@ -55,6 +55,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 
 import javax.swing.*;
@@ -68,7 +69,7 @@ import java.awt.*;
  * @see java.awt.Dimension
  * @see org.swixml.ConverterLibrary
  */
-public class ImageConverter implements Converter {
+public class ImageConverter extends ConverterAdapter {
 
   /** converter's return type */
   public static final Class TEMPLATE = Image.class;

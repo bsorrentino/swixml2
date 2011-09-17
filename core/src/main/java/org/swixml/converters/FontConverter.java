@@ -54,6 +54,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 
 import java.awt.*;
@@ -65,7 +66,7 @@ import java.awt.*;
  * @version $Revision: 1.1 $
  * @since swixml 1.0
  */
-public class FontConverter implements Converter {
+public class FontConverter extends ConverterAdapter {
   /**
    * converter's return type
    */

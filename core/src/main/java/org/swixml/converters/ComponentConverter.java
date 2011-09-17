@@ -55,6 +55,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 
 import java.awt.*;
@@ -66,7 +67,7 @@ import java.awt.*;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
-public class ComponentConverter implements Converter {
+public class ComponentConverter extends ConverterAdapter {
   /**
    * converter's return type
    */

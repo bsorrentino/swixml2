@@ -55,6 +55,7 @@ package org.swixml.converters;
 
 import org.jdom.Attribute;
 import org.swixml.Converter;
+import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.SwingEngine;
 
@@ -81,7 +82,7 @@ import java.util.StringTokenizer;
  * </ul>
  * </pre>
  */
-public class ColorConverter implements Converter {
+public class ColorConverter extends ConverterAdapter {
   /** converter's return type */
   public static final Class TEMPLATE = Color.class;
 
