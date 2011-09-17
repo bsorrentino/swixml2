@@ -6,9 +6,7 @@
     <groupId>org.swixml</groupId>
     <version>2.6-SNAPSHOT</version>
   </parent>
-  <groupId>org.swixml</groupId>
   <artifactId>schema-generator</artifactId>
-  <version>2.6-SNAPSHOT</version>
   <name>SWIXML2 SCHEMA GENERATOR</name>
   <url>http://code.google.com/p/swixml2/</url>
   <description>SWIXML2 Schema Generator tool</description>
