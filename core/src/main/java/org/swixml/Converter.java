@@ -62,7 +62,7 @@ import org.jdom.Attribute;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.2 $
  */
-public interface Converter {
+public interface Converter<T> {
 
   /**
    * Convert the value of the given <code>Attribute</code> object into an output object of the
@@ -72,7 +72,10 @@ public interface Converter {
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    *
    */
+  @Deprecated	
   Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception;
+
+  T convert( final Class<T> type, final Attribute attr, SwingEngine<?> engine ) throws Exception;
 
   /**
    * A <code>Converters</code> conversTo method informs about the Class type the converter

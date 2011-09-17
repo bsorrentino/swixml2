@@ -243,18 +243,12 @@ public class Parser {
    */
   public static final Vector<String> LOCALIZED_ATTRIBUTES = new Vector<String>();
 
-  @SuppressWarnings("serial")
-  private Action EMPTY_ACTION = new AbstractAction() {
-
-        public void actionPerformed(ActionEvent e) {
-            logger.info( "empty action performed " + e.getSource());
-        }
-  };
-
-  /**
+ /**
    * set the bind target
    */
   public static final String ATTR_BIND_WITH = "bindWith";
+
+public static final String TAG_SCRIPT = "script";
   
   //
   //  Private Members
@@ -663,48 +657,6 @@ public class Parser {
   }
 
  
-  /**
-   * 
-   * @param method
-   * @return
-   */
-  private Object getMethodParamValue( Class<?> paraType, Converter converter, Attribute attr ) throws Exception  {
-
-
-        Object para = null;
-        //
-        //  Actions are provided in the engine's member variables.
-        //  a getClass().getFields lookup has to be done to find the correct fields.
-        //
-        if (Action.class.equals(paraType)) {
-            final Object client = engine.getClient();
-
-            if( null==client ) {
-                return EMPTY_ACTION;
-            }
-
-            try {
-              para = client.getClass().getField(attr.getValue()).get(client);
-            }
-            catch (NoSuchFieldException e) {
-                //
-                // At this point we know that a action attribute was put into an XML tag but the client call doesn't
-                // seem to have an Action member varible with a matching name.
-                // Now we look for a public method that could be wrapped into an generated AbstrtactAction instead
-                //
-                try {
-                  para = new XAction(client, attr.getValue());
-                } catch (NoSuchMethodException e1) {
-                    para = EMPTY_ACTION;
-                }
-            }
-        }
-        else {
-            para = converter.convert(paraType, attr, engine.getLocalizer());
-        }
-
-        return para;
-  }
 
   /**
    * 
@@ -852,8 +804,9 @@ public class Parser {
         if (converter != null) {  // call setter with a newly instanced parameter
             try {
 
-              if( null==para ) para = getMethodParamValue(paraType, converter, attr);
-
+              if( null==para ) {
+            	  para = converter.convert(paraType, attr, engine);
+              }
               if( para instanceof Action ) {
                   action = (Action) para;
               }
@@ -940,7 +893,7 @@ public class Parser {
               //
               //  Localize Strings
               //
-              Object fieldValue = converter.convert(field.getType(), attr, null);
+              Object fieldValue = converter.convert(field.getType(), attr, engine);
               if (String.class.equals(converter.convertsTo())) {
                 fieldValue = engine.getLocalizer().getString((String) fieldValue);
               }

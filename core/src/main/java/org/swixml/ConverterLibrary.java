@@ -94,7 +94,7 @@ import java.util.Map;
  */
 public class ConverterLibrary {
   private static ConverterLibrary instance = new ConverterLibrary();
-  private Map<Class<?>, Converter> converters = new HashMap<Class<?>, Converter>();
+  private Map<Class<?>, Converter<?>> converters = new HashMap<Class<?>, Converter<?>>();
 
   /**
    * The only available Ctor is private to make this a Singleton
@@ -114,7 +114,7 @@ public class ConverterLibrary {
    * @return <code>Map</code> - all registered converters.
    *         <pre>Use a class to get to the converters</pre>
    */
-  public Map<Class<?>,Converter> getConverters() {
+  public Map<Class<?>,Converter<?>> getConverters() {
     return converters;
   }
 
@@ -140,11 +140,16 @@ public class ConverterLibrary {
     //
     //  Register the PrimitiveConverter class for java primitive types
     //
-    register(boolean.class, new PrimitiveConverter());
-    register(int.class, new PrimitiveConverter());
-    register(long.class, new PrimitiveConverter());
-    register(float.class, new PrimitiveConverter());
-    register(double.class, new PrimitiveConverter());
+    register(Boolean.TYPE, PrimitiveConverter.instance);
+    register(Integer.TYPE, PrimitiveConverter.instance);
+    register(Long.TYPE, PrimitiveConverter.instance);
+    register(Float.TYPE, PrimitiveConverter.instance);
+    register(Double.TYPE, PrimitiveConverter.instance);
+    register(Boolean.class, PrimitiveConverter.instance);
+    register(Integer.class, PrimitiveConverter.instance);
+    register(Long.class, PrimitiveConverter.instance);
+    register(Float.class, PrimitiveConverter.instance);
+    register(Double.class, PrimitiveConverter.instance);
   }
 
   /**
@@ -152,7 +157,7 @@ public class ConverterLibrary {
    *
    * @param converter <code>Converter</code> Instance of Converter able to convert Strings into objects of the given type
    */
-  public void register(Converter converter) {
+  public void register(Converter<?> converter) {
     converters.put(converter.convertsTo(), converter);
   }
 
@@ -162,7 +167,7 @@ public class ConverterLibrary {
    * @param template  <code>Class</code> type of the objects the Converter creates
    * @param converter <code>Converter</code> Instance of Converter able to convert Strings into objects of the given type
    */
-  public void register(Class<?> template, Converter converter) {
+  public void register(Class<?> template, Converter<?> converter) {
     converters.put(template, converter);
   }
 
@@ -174,7 +179,7 @@ public class ConverterLibrary {
    */
   public boolean hasConverter(Class<?> template) {
     boolean found = converters.keySet().contains(template);
-    Iterator<Converter> it = converters.values().iterator();
+    Iterator<Converter<?>> it = converters.values().iterator();
     while (!found && it != null && it.hasNext()) {
       found = template.isAssignableFrom((it.next()).convertsTo());
     }
@@ -187,7 +192,8 @@ public class ConverterLibrary {
    * @param template <code>Class</code> Class of the object the <code>Converter</code> needs to produce.
    * @return <code>Converter</code> - instance of the given Converter class.
    */
-  public Converter getConverter(Class<?> template) {
-    return converters.get(template);
+  @SuppressWarnings("unchecked")
+  public <T> Converter<T> getConverter(Class<T> template) {
+    return (Converter<T>) converters.get(template);
   }
 }

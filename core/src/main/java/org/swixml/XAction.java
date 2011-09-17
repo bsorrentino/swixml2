@@ -50,7 +50,6 @@
 */
 package org.swixml;
 
-import static org.swixml.LogUtil.logger;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -69,7 +68,7 @@ import org.swixml.jsr296.SwingApplication;
  */
 
 @SuppressWarnings("serial")
-public class XAction extends AbstractAction {
+public class XAction extends AbstractAction implements LogAware {
   Method method;
   Object client;
   ApplicationAction delegate;
@@ -107,7 +106,7 @@ public class XAction extends AbstractAction {
         }
         
     } catch (Exception e1) {
-    	e1.printStackTrace();
+    	logger.log( Level.WARNING, "action performed error", e1);
     } 
   }
 
@@ -129,8 +128,10 @@ public class XAction extends AbstractAction {
 
     @Override
     public void putValue(String key, Object newValue) {
-        if( null!=delegate ) delegate.putValue(key, newValue);
-        super.putValue(key, newValue);
+        if( null!=delegate )
+        	delegate.putValue(key, newValue);
+        else
+        	super.putValue(key, newValue);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class XAction extends AbstractAction {
 
     @Override
     public void setEnabled(boolean newValue) {
-        System.out.printf( "setEnabled(%s)\n", newValue);
+        logger.fine(String.format( "setEnabled(%s)\n", newValue));
         if( null!=delegate ) delegate.setEnabled(newValue);
         super.setEnabled(newValue);
     }

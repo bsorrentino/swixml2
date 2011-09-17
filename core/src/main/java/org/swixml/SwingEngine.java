@@ -77,7 +77,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
 
+import javax.script.ScriptException;
 import javax.swing.AbstractButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -89,8 +91,8 @@ import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.swixml.localization.LocalizerDefaultImpl;
 import org.swixml.localization.LocalizerJSR296Impl;
-
-import static org.swixml.LogUtil.logger;
+import org.swixml.script.ScriptService;
+import org.swixml.script.ScriptServiceDefaultImpl;
 
 /**
  * The SwingEngine class is the rendering engine able to convert an XML descriptor into a java.swing UI.
@@ -101,8 +103,15 @@ import static org.swixml.LogUtil.logger;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.5 $
  */
-public class SwingEngine<T extends Container> {
+public class SwingEngine<T extends Container> implements LogAware {
 
+	public static interface Namespaces {
+		
+	    final String main = "http://www.swixml.org/2007/Swixml";
+	    
+	    final String script = "http://www.swixml.org/2007/Swixml/script";
+
+	}
 	//
 	//  Static Constants
 	//
@@ -158,7 +167,7 @@ public class SwingEngine<T extends Container> {
   //
   /** display the swing release version to system out. */
   static {
-    System.out.println("SwixML 2.5");
+    System.out.println("SwixML 2.6");
   }
 
   public static boolean isDesignTime( ) {
@@ -199,7 +208,9 @@ public class SwingEngine<T extends Container> {
    * Localizer, setup by parameters found in the xml descriptor.
    */
   protected ClassLoader cl = this.getClass().getClassLoader();
-
+  
+  private ScriptService script;
+  
   /**
    * Default ctor for a SwingEngine.
    */
@@ -214,8 +225,6 @@ public class SwingEngine<T extends Container> {
     this.setLocale(SwingEngine.default_locale);
     localizer.setResourceBundle(SwingEngine.default_resource_bundle_name);
     
-
-
   }
 
   /**
@@ -226,10 +235,24 @@ public class SwingEngine<T extends Container> {
   public SwingEngine(T client) {
     this();
     this.client = client;
+
+    try {
+		this.script = new ScriptServiceDefaultImpl();
+		
+		script.put("client", client);
+		
+	} catch (ScriptException e) {
+		logger.log( Level.SEVERE,  "error initializing script", e);
+	}
+
   }
 
 
-  /**
+  public ScriptService getScript() {
+	return script;
+}
+
+/**
    * Gets the parsing of the XML started.
    *
    * @param url <code>URL</code> url pointing to an XML descriptor
@@ -335,8 +358,7 @@ public class SwingEngine<T extends Container> {
         }
 
     } catch (Exception e) {
-      if (SwingEngine.DEBUG_MODE)
-        System.err.println(e);
+      logger.log(Level.SEVERE, "error parsing XML document", e);
       throw (e);
     }
 

@@ -79,6 +79,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.table.JTableHeader;
 import org.swixml.factory.BoxFactory;
+import org.swixml.factory.ScriptFactory;
 
 import org.swixml.factory.BoxFactory.Type;
 import org.swixml.factory.SplitPaneFactory;
@@ -205,6 +206,8 @@ public final class SwingTagLibrary extends TagLibrary {
     registerTag("HBox", BoxFactory.HGapBox.class);
 	
     registerTag("tableColumn", BindingUtils.Column.class );
+
+    registerTag("script", new ScriptFactory() );
     
     ServiceLoader<TagLibraryService> loader = ServiceLoader.load(TagLibraryService.class);
     if( loader== null ) return;
