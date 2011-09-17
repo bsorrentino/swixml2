@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<dialog 
+xmlns="http://www.swixml.org/2007/Swixml" 
+_xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+_xsi:schemaLocation="http://www.swixml.org/2007/Swixml http://swixml2.googlecode.com/svn/trunk/schema-generator/swixml2-schema-2.5-SNAPSHOT.xsd" 
+xmlns:script="http://www.swixml.org/2007/Swixml/script"
+ 
+	name="dialog"
+    minimumSize="400,240"
+	resizable="true" 
+	title="Example Button usage" 
+	undecorated="false" 
+	alwaysOnTop="true"
+	defaultCloseOperation="JFrame.HIDE_ON_CLOSE" 
+	modal="false"
+	>
+
+<script>
+
+function close() {
+
+	client.setVisible(false);
+	
+	application.exit();
+}
+
+</script>
+<panel layout="borderLayout">
+
+<vbox constraints="BorderLayout.CENTER">
+
+<Button name="tb" id="toggleButton" text="action" action="onCLick"  />
+
+<box.vstrut height="10"></box.vstrut>
+
+<hbox>
+    <buttongroup >
+        <radiobutton id="am" text="AM"/>
+        <radiobutton id="fm" text="FM"/>
+    </buttongroup>
+</hbox>
+
+
+<box.vstrut height="10"></box.vstrut>
+
+</vbox>
+
+<hbox constraints="BorderLayout.SOUTH">
+<button text="close" script:action="close"/>
+</hbox>
+</panel>
+
+
+</dialog>
