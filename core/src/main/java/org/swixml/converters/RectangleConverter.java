@@ -53,13 +53,12 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
+import java.awt.Rectangle;
+import java.util.StringTokenizer;
+
 import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
-
-import java.awt.*;
-import java.util.StringTokenizer;
+import org.swixml.dom.Attribute;
 
 /**
  * A Converter that turns a Strings in the form: width,height into Rectangle objects.

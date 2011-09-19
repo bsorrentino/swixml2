@@ -74,12 +74,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.jdom.Attribute;
-import org.jdom.DataConversionException;
 import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.LogUtil;
 import org.swixml.Parser;
+import org.swixml.dom.Attribute;
 
 /**
  * The <code>PrimitiveConverter</code> class defines a converter that creates primitive objects (wrapper),
@@ -127,8 +126,7 @@ public class PrimitiveConverter extends ConverterAdapter implements SwingConstan
   public static Object conv( final Class<?> type, final Attribute attr,  final Localizer localizer ) throws NoSuchFieldException, IllegalAccessException {
     Attribute a = (Attribute) attr.clone();
     Object obj = null;
-    if ( Parser.LOCALIZED_ATTRIBUTES.contains( a.getName().toLowerCase() ))
-      if (a.getAttributeType() == Attribute.CDATA_TYPE )
+    if ( Parser.LOCALIZED_ATTRIBUTES.contains( a.getLocalName().toLowerCase() ))
          a.setValue( localizer.getString( a.getValue() ));
 
     try {
@@ -147,7 +145,7 @@ public class PrimitiveConverter extends ConverterAdapter implements SwingConstan
           else if (Double.class.equals( type )) { obj = Double.valueOf( a.getDoubleValue() ); }   	  
     	  
       }
-    } catch (DataConversionException e) { 
+    } catch (NumberFormatException e) { 
       // intent. empty
     } finally {
       if (obj==null) {

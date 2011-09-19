@@ -53,12 +53,11 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
+import java.awt.Component;
+
 import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
-
-import java.awt.*;
+import org.swixml.dom.Attribute;
 
 /**
  * The ComponentConverter class defines a dummy converter

@@ -17,10 +17,11 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
+
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Converter;
+import org.swixml.LogAware;
 import org.swixml.SwingEngine;
-
 import org.swixml.jsr295.BindingUtils;
 
 /**
@@ -28,7 +29,7 @@ import org.swixml.jsr295.BindingUtils;
  * @author sorrentino
  */
 @SuppressWarnings("serial")
-public class JTreeEx extends JTree implements BindableBasicWidget {
+public class JTreeEx extends JTree implements BindableBasicWidget, LogAware {
 
     private Action action;
     private Action dblClickAction = null;
@@ -76,7 +77,7 @@ public class JTreeEx extends JTree implements BindableBasicWidget {
             public void mousePressed(MouseEvent e) {
             	int selRow = getRowForLocation(e.getX(), e.getY());
                 //TreePath selPath = getPathForLocation(e.getX(), e.getY());
-            	System.out.printf( "mousePressed selRow=[%d] clickCount=[%d]\n", selRow, e.getClickCount());
+            	logger.fine( String.format("mousePressed selRow=[%d] clickCount=[%d]\n", selRow, e.getClickCount()) );
                 if(selRow != -1) {
                     if(e.getClickCount() == 2) {
             			Action a = getDblClickAction();

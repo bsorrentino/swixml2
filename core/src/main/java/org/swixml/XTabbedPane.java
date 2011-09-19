@@ -53,11 +53,13 @@
 
 package org.swixml;
 
-import org.jdom.Attribute;
-import org.swixml.converters.ImageIconConverter;
-
-import javax.swing.*;
 import java.util.StringTokenizer;
+
+import javax.swing.ImageIcon;
+import javax.swing.JTabbedPane;
+
+import org.swixml.converters.ImageIconConverter;
+import org.swixml.dom.Attribute;
 
 /**
  * XSplitPane simple extends JSplitPane to clear components

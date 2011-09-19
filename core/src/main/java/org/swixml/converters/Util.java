@@ -55,8 +55,6 @@ package org.swixml.converters;
 
 import java.util.StringTokenizer;
 
-import org.jdom.Element;
-
 /**
  * Util. Class with static helper methods
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
@@ -126,13 +124,12 @@ public final class Util {
   /**
    * Returns the integer value of the given XML attribute; or the default value.
    */
-  public static final int getInteger( final Element element, final String attr, int def ) {
-    String value = element.getAttributeValue(attr);
-    if (value == null)
+  public static final int getInteger( final org.w3c.dom.Element element, final String attr, int def ) {
+    if( element.getAttributeNode(attr) == null )
       return def;
 
     try {
-      return Integer.parseInt( value.trim() );
+      return Integer.parseInt(  element.getAttribute(attr).trim() );
     } catch (NumberFormatException e) {
       // no exceptiion handling required
       return def;

@@ -15,12 +15,12 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.swixml.Converter;
 import org.swixml.ConverterLibrary;
-import org.swixml.Localizer;
 import org.swixml.SwingEngine;
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 
 
 /**
@@ -155,47 +155,73 @@ public class BoxFactory extends BeanFactory {
         return type;
     }
 
-    protected Integer getIntAttribute( String name, List<Attribute> attributes ) throws Exception {
-        if( null==attributes || attributes.isEmpty() ) {
+    protected Integer getIntAttribute( String name, NamedNodeMap attributes ) throws Exception {
+        if( null==attributes || attributes.getLength()==0 ) {
             final String msg = "attribute list is empty!"; 
             logger.severe( msg );
             throw new IllegalArgumentException(msg);
         } 
+        
+        org.w3c.dom.Node an = attributes.getNamedItem(name);
+        if( an==null ) {
+            final String msg = "required attribute " + name + " not found!"; 
+            logger.severe( msg );
+            throw new Exception(msg);        	
+        }
+        
+        attributes.removeNamedItem(name);
+            
+        Converter<Integer> c = ConverterLibrary.getInstance().getConverter(Integer.class);
+            
+        return c.convert(Integer.class, new Attribute(an), (SwingEngine<?>)null);
+        	
+        /*
         for( Attribute a : attributes ) {
             
-            if( name.equalsIgnoreCase( a.getName() )){
+            if( name.equalsIgnoreCase( a.getLocalName() )){
                 attributes.remove(a);
                 Converter<Integer> c = ConverterLibrary.getInstance().getConverter(Integer.class);
                 
                 return c.convert(Integer.class, a, (SwingEngine<?>)null);
             }
         }
+        */
         
-        final String msg = "required attribute " + name + " not found!"; 
-        logger.severe( msg );
-        throw new Exception(msg);
         
     }
 
-    protected Dimension getDimensionAttribute( String name, List<Attribute> attributes ) throws Exception {
-        if( null==attributes || attributes.isEmpty() ) {
+    protected Dimension getDimensionAttribute( String name, NamedNodeMap attributes ) throws Exception {
+        if( null==attributes || attributes.getLength()==0 ) {
             final String msg = "attribute list is empty!"; 
             logger.severe( msg );
             throw new IllegalArgumentException(msg);
         } 
+        
+        org.w3c.dom.Node an = attributes.getNamedItem(name);
+        if( an==null ) {
+            final String msg = "required attribute " + name + " not found!"; 
+            logger.severe( msg );
+            throw new Exception(msg);        	
+        }
+        
+        attributes.removeNamedItem(name);
+            
+        Converter<Dimension> c = ConverterLibrary.getInstance().getConverter(Dimension.class);
+            
+        return c.convert(Dimension.class, new Attribute(an), (SwingEngine<?>)null);
+        
+        /*
         for( Attribute a : attributes ) {
             
-            if( name.equalsIgnoreCase( a.getName() )){
+            if( name.equalsIgnoreCase( a.getLocalName() )){
                 attributes.remove(a);
                 Converter<Dimension> c = ConverterLibrary.getInstance().getConverter(Dimension.class);
                 
                 return c.convert(Dimension.class, a, (SwingEngine<?>)null);
             }
         }
-
-        final String msg = "required attribute " + name + " not found!"; 
-        logger.severe( msg );
-        throw new Exception(msg);
+		*/
+        
         
     }
     

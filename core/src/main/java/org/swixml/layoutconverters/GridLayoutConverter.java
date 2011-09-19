@@ -55,10 +55,10 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.util.StringTokenizer;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.swixml.LayoutConverter;
 import org.swixml.converters.Util;
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Element;
 
 /**
  * A layout converter for <code>java.awt.GridLayout</code>.

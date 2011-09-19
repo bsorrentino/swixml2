@@ -53,8 +53,8 @@ package org.swixml;
 
 import java.awt.LayoutManager;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Element;
 
 /**
  * <p>The <code>LayoutConverter</code> interface defines a layout converter that

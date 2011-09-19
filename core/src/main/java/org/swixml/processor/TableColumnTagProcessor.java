@@ -5,12 +5,14 @@
 
 package org.swixml.processor;
 
+import static org.swixml.LogUtil.logger;
+
 import java.awt.LayoutManager;
-import org.jdom.Element;
-import org.swixml.Parser;
+
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
-import static org.swixml.LogUtil.logger;
+
+import org.swixml.Parser;
 
 /**
  *
@@ -19,8 +21,8 @@ import static org.swixml.LogUtil.logger;
 public class TableColumnTagProcessor implements TagProcessor {
 
     
-    public boolean process( Parser p, Object obj, Element child, LayoutManager layoutMgr  ) throws Exception {
-        if( !Parser.TAG_TABLECOLUMN.equalsIgnoreCase(child.getName())) return false;
+    public boolean process( Parser p, Object obj, org.w3c.dom.Element child, LayoutManager layoutMgr  ) throws Exception {
+        if( !Parser.TAG_TABLECOLUMN.equalsIgnoreCase(child.getLocalName())) return false;
 
         if (!(obj instanceof JTable)) {
             logger.warning(String.format("%s tag is valid only inside Table Tag. Ignored!", "tablecolumn"));

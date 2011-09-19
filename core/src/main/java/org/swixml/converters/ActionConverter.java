@@ -58,12 +58,12 @@ import java.lang.reflect.Field;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jdom.Attribute;
 import org.swixml.Converter;
 import org.swixml.Localizer;
 import org.swixml.LogAware;
 import org.swixml.SwingEngine;
 import org.swixml.XAction;
+import org.swixml.dom.Attribute;
 import org.swixml.script.ScriptAction;
 
 
@@ -92,13 +92,14 @@ public class ActionConverter implements Converter<Action>, LogAware {
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    *
    */
-  public Action convert( Class<Action> type, Attribute attr, SwingEngine<?> engine ) throws Exception {
+  public Action convert( Class<?> type, Attribute attr, SwingEngine<?> engine ) throws Exception {
       Action para = null;
       
-      logger.fine( String.format("ActionConverter attr[%s] namespace uri[%s] prefix [%s]", 
-    		  		attr.getName(), 
+      logger.info( String.format("ActionConverter attr[%s]=[%s] namespace uri[%s] prefix [%s]", 
+    		  		attr.getLocalName(), 
+    		  		attr.getValue(),
     		  		attr.getNamespaceURI(), 
-    		  		attr.getNamespacePrefix()));
+    		  		attr.getPrefix()));
       
 	  final Object client = engine.getClient();
 
@@ -106,17 +107,19 @@ public class ActionConverter implements Converter<Action>, LogAware {
           return EMPTY_ACTION;
       }
 
-      if( "script".equalsIgnoreCase(attr.getNamespacePrefix())) {
+      if( "script".equalsIgnoreCase(attr.getPrefix())) {
     	  
     	para = new ScriptAction( engine, attr.getValue() );  
       }
       else {
-    	  Field f = client.getClass().getField(attr.getValue());
     	  
-    	  if( f!=null ) {
+    	  try {
+    		  Field f = client.getClass().getField(attr.getValue());
+    	  
     		  para = (Action) f.get(client);
     	  }
-    	  else {
+    	  catch( NoSuchFieldException e  ) {
+    	  
 	          try {
 	            
 	        	  para = new XAction(client, attr.getValue());

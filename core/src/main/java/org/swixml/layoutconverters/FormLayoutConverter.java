@@ -54,10 +54,11 @@ package org.swixml.layoutconverters;
 import java.awt.LayoutManager;
 import java.util.StringTokenizer;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.swixml.LayoutConverter;
 import org.swixml.converters.Util;
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -147,10 +148,10 @@ public class FormLayoutConverter implements LayoutConverter {
    * </ul>
    */
   public LayoutManager convertLayoutElement( final Element element ) {
-    String encodedColumnSpecs = element.getAttributeValue("columns");
-    String encodedRowSpecs = element.getAttributeValue("rows");
-    int[][] columnGroupIndices = convertGroupIndices(element.getAttributeValue("columnGroups"));
-    int[][] rowGroupIndices = convertGroupIndices(element.getAttributeValue("rowGroups"));
+    String encodedColumnSpecs = element.getAttributeNode("columns")!=null ? element.getAttribute("columns") : null;
+    String encodedRowSpecs = element.getAttributeNode("rows")!=null ? element.getAttribute("rows") : null;
+    int[][] columnGroupIndices = convertGroupIndices(element.getAttributeNode("columnGroups"));
+    int[][] rowGroupIndices = convertGroupIndices(element.getAttributeNode("rowGroups"));
 
     FormLayout lm = new FormLayout( encodedColumnSpecs, encodedRowSpecs );
     if (columnGroupIndices != null)
@@ -192,10 +193,10 @@ public class FormLayoutConverter implements LayoutConverter {
     return null;
   }
 
-  private int[][] convertGroupIndices( final String groups ) {
+  private int[][] convertGroupIndices( final Attr groups ) {
     if (groups == null)
       return null;
-    StringTokenizer st = new StringTokenizer( groups, ";" );
+    StringTokenizer st = new StringTokenizer( groups.getValue(), ";" );
     int[][] groupIndices = new int[st.countTokens()][];
     int i = 0;
     while (st.hasMoreTokens() ) {

@@ -51,12 +51,9 @@
 
 package org.swixml;
 
-import static org.swixml.LogUtil.logger;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -71,7 +68,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -89,13 +85,18 @@ import org.jdesktop.application.Application;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyResolutionException;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
 import org.swixml.annotation.SchemaAware;
 import org.swixml.converters.LocaleConverter;
 import org.swixml.converters.PrimitiveConverter;
+import org.swixml.dom.Attribute;
+import org.swixml.dom.DOMUtil;
 import org.swixml.jsr295.BindingUtils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Singleton Parser to render XML for Swing Documents
@@ -110,9 +111,11 @@ import org.swixml.jsr295.BindingUtils;
  * @see org.swixml.ConverterLibrary
  */
 @SuppressWarnings({"unchecked"})
-public class Parser {
+public class Parser implements LogAware{
 
-  public static final String TAG_GRIDBAGCONSTRAINTS = "gridbagconstraints";
+  public static final String ATTR_TEXT = "text";
+
+public static final String TAG_GRIDBAGCONSTRAINTS = "gridbagconstraints";
 
 //
   //  Custom TAGs
@@ -267,7 +270,7 @@ public static final String TAG_SCRIPT = "script";
   /**
    * map to store id-id components, needed to support labelFor attributes
    */
-  private Map lbl_map = new HashMap();
+  private Map<JLabel,String> lbl_map = new HashMap<JLabel,String>(10);
 
   /**
    * map to store specific Mac OS actions mapping
@@ -294,7 +297,7 @@ public static final String TAG_SCRIPT = "script";
     LOCALIZED_ATTRIBUTES.add("mnemonic");
     LOCALIZED_ATTRIBUTES.add("mnemonics");
     LOCALIZED_ATTRIBUTES.add("name");
-    LOCALIZED_ATTRIBUTES.add("text");
+    LOCALIZED_ATTRIBUTES.add(ATTR_TEXT);
     LOCALIZED_ATTRIBUTES.add("title");
     LOCALIZED_ATTRIBUTES.add("titleat");
     LOCALIZED_ATTRIBUTES.add("titles");
@@ -328,7 +331,7 @@ public static final String TAG_SCRIPT = "script";
     this.lbl_map.clear();
     this.mac_map.clear();
     
-    Object result = getSwing(processCustomAttributes(jdoc.getRootElement()), container);
+    Object result = getSwing(processCustomAttributes(jdoc.getDocumentElement()), container);
 
     linkLabels();
     supportMacOS();
@@ -354,15 +357,15 @@ public static final String TAG_SCRIPT = "script";
     //
     //  set Locale
     //
-    Attribute locale = element.getAttribute(Parser.ATTR_LOCALE);
+    Attr locale = element.getAttributeNode(Parser.ATTR_LOCALE);
     if (locale != null && locale.getValue() != null) {
-      engine.setLocale(LocaleConverter.conv(locale));
+      engine.setLocale(LocaleConverter.conv( new Attribute(locale)));
       element.removeAttribute(Parser.ATTR_LOCALE);
     }
     //
     //  set ResourceBundle
     //
-    Attribute bundle = element.getAttribute(Parser.ATTR_BUNDLE);
+    Attr bundle = element.getAttributeNode(Parser.ATTR_BUNDLE);
     if (bundle != null && bundle.getValue() != null) {
       engine.getLocalizer().setResourceBundle(bundle.getValue());
       element.removeAttribute(Parser.ATTR_BUNDLE);
@@ -370,7 +373,7 @@ public static final String TAG_SCRIPT = "script";
     //
     //  Set Look and Feel based on ATTR_PLAF
     //
-    Attribute plaf = element.getAttribute(Parser.ATTR_PLAF);
+    Attr plaf =  element.getAttributeNode(Parser.ATTR_PLAF);
     if (plaf != null && plaf.getValue() != null && 0 < plaf.getValue().length()) {
       try {
         UIManager.setLookAndFeel(plaf.getValue());
@@ -388,14 +391,15 @@ public static final String TAG_SCRIPT = "script";
    * Helper Method to Link Labels to InputFields etc.
    */
   private void linkLabels() {
-    Iterator it = lbl_map.keySet().iterator();
-    while (it != null && it.hasNext()) {
-      JLabel lbl = (JLabel) it.next();
+	  
+    for( JLabel lbl : lbl_map.keySet() ) {	
       String id = lbl_map.get(lbl).toString();
       try {
         lbl.setLabelFor((Component) engine.getIdMap().get(id));
       } catch (ClassCastException e) {
         // intent. empty.
+    	if( logger.isLoggable(Level.FINE))  
+    		logger.warning("linkLabels: class cast exception" );
       }
     }
   }
@@ -409,7 +413,10 @@ public static final String TAG_SCRIPT = "script";
         Application.getInstance().getMacApp().update(mac_map);
       } catch (Throwable t) {
         // intentionally empty
+      	if( logger.isLoggable(Level.FINE))  
+    		logger.log( Level.WARNING, "supportMacOS invocation error", t );
       }
+
     }
   }
 
@@ -423,10 +430,10 @@ public static final String TAG_SCRIPT = "script";
    */
   public Object getSwing(Element element, Object obj ) throws Exception {
 
-    Factory factory = engine.getTaglib().getFactory(element.getName());
+    Factory factory = engine.getTaglib().getFactory(element.getLocalName());
     
     //  look for <id> attribute value
-    final String id = element.getAttribute(Parser.ATTR_ID) != null ? element.getAttribute(Parser.ATTR_ID).getValue().trim() : null;
+    final String id = element.getAttributeNode(Parser.ATTR_ID) != null ? element.getAttribute(Parser.ATTR_ID).trim() : null;
     //  either there is no id or the id is not user so far
     boolean unique = !engine.getIdMap().containsKey(id);
     boolean constructed = false;
@@ -435,18 +442,25 @@ public static final String TAG_SCRIPT = "script";
       throw new IllegalStateException("id already in use: " + id + " : " + engine.getIdMap().get(id).getClass().getName());
     }
     if (factory == null) {
-      throw new Exception("Unknown TAG, implementation class not defined: " + element.getName());
+      throw new Exception("Unknown TAG, implementation class not defined: " + element.getLocalName());
     }
 
     //
     //  XInclude
     //
 
-    if (element.getAttribute(Parser.ATTR_INCLUDE) != null) {
-      StringTokenizer st = new StringTokenizer(element.getAttribute(Parser.ATTR_INCLUDE).getValue(), "#");
+    if (element.getAttributeNode(Parser.ATTR_INCLUDE) != null) {
+      
+      StringTokenizer st = new StringTokenizer(element.getAttribute(Parser.ATTR_INCLUDE), "#");
       element.removeAttribute(Parser.ATTR_INCLUDE);
-      Document doc = new org.jdom.input.SAXBuilder().build(this.engine.getClassLoader().getResourceAsStream(st.nextToken()));
-      Element xelem = find(doc.getRootElement(), st.nextToken());
+      
+      //Document doc = new org.jdom.input.SAXBuilder().build(this.engine.getClassLoader().getResourceAsStream(st.nextToken()));
+      
+      final String token = st.nextToken();
+      Document doc = DOMUtil.getDocumentBuilder().parse( this.engine.getClassLoader().getResourceAsStream(token));
+      
+      Element xelem = find(doc.getDocumentElement(), st.nextToken());
+      
       if (xelem != null) {
         moveContent(xelem, element);
       }
@@ -457,13 +471,13 @@ public static final String TAG_SCRIPT = "script";
     //
 
 
-    if (element.getAttribute(Parser.ATTR_REFID) != null) {
-      element = (Element) element.clone();
+    if (element.getAttributeNode(Parser.ATTR_REFID) != null) {
+      element = (Element) element.cloneNode( true );
       cloneAttributes(element);
       element.removeAttribute(Parser.ATTR_REFID);
-    } else if (element.getAttribute(Parser.ATTR_USE) != null) {
-      logger.warning( String.format("Attribute [%s] for element [%s] is deprecated!", Parser.ATTR_USE, element.getName()));
-      element = (Element) element.clone();
+    } else if (element.getAttributeNode(Parser.ATTR_USE) != null) {
+      logger.warning( String.format("Attribute [%s] for element [%s] is deprecated!", Parser.ATTR_USE, element.getLocalName()));
+      element = (Element) element.cloneNode( true );
       cloneAttributes(element);
       element.removeAttribute(Parser.ATTR_USE);
     }
@@ -471,17 +485,17 @@ public static final String TAG_SCRIPT = "script";
     //  let the factory instantiate a new object
     //
 
-    List attributes = element.getAttributes();
+    NamedNodeMap attributes = element.getAttributes();
     if (obj == null) {
       Object initParameter = null;
 
-      if (element.getAttribute(Parser.ATTR_INITCLASS) != null) {
-        StringTokenizer st = new StringTokenizer(element.getAttributeValue(Parser.ATTR_INITCLASS), "( )");
+      if (element.getAttributeNode(Parser.ATTR_INITCLASS) != null) {
+        StringTokenizer st = new StringTokenizer(element.getAttribute(Parser.ATTR_INITCLASS), "( )");
         element.removeAttribute(Parser.ATTR_INITCLASS);
         //try {
         try {
           if (st.hasMoreTokens()) {
-            Class initClass = Class.forName(st.nextToken());      // load update type
+            Class<?> initClass = Class.forName(st.nextToken());      // load update type
             try {                                                  // look for a getInstance() methode
               Method factoryMethod = initClass.getMethod(Parser.GETINSTANCE);
               if (Modifier.isStatic(factoryMethod.getModifiers())) {
@@ -492,7 +506,7 @@ public static final String TAG_SCRIPT = "script";
             }
             if (initParameter == null && st.hasMoreTokens()) { // now try to instantiate with String taking ctor
               try {
-                Constructor ctor = initClass.getConstructor(new Class[]{String.class});
+                Constructor<?> ctor = initClass.getConstructor(new Class[]{String.class});
                 String pattern = st.nextToken();
                 initParameter = ctor.newInstance(new Object[]{pattern});
               } catch (NoSuchMethodException e) {     // intentionally empty
@@ -507,13 +521,15 @@ public static final String TAG_SCRIPT = "script";
               initParameter = initClass.newInstance();
             }
             if (Action.class.isInstance(initParameter)) {
-              for (int i = 0, n = attributes.size(); i < n; i++) {
-                Attribute attrib = (Attribute) attributes.get(i);
-                String attribName = attrib.getName();
+            	
+              for (int i = 0, n = attributes.getLength(); i < n; i++) {
+                Attr attrib = (Attr) attributes.item(i);
+                String attribName = attrib.getLocalName();
                 if (attribName != null && attribName.startsWith(ATTR_MACOS_PREFIX)) {
                   mac_map.put(attribName, (Action)initParameter);
                 }
               }
+              
             }
           }
         } catch (ClassNotFoundException e) {
@@ -559,11 +575,11 @@ public static final String TAG_SCRIPT = "script";
     //
     if (obj instanceof Container) {
       LayoutManager lm = null;
-      Element layoutElement = element.getChild("layout");
+      Element layoutElement = DOMUtil.getChildByTagName(element, "layout"); //element.getChild("layout");
       if (layoutElement != null) {
-        element.removeChild("layout");
+        element.removeChild(layoutElement);
 
-        String layoutType = layoutElement.getAttributeValue("type");
+        String layoutType = layoutElement.getAttribute("type");
         LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance().getLayoutConverterByID(layoutType);
         if (layoutConverter != null) {
           lm = layoutConverter.convertLayoutElement(layoutElement);
@@ -572,26 +588,31 @@ public static final String TAG_SCRIPT = "script";
 
       if (lm == null) {
         // search for case-insensitive "layout" attribute to ensure compatibiliity
-        Attribute layoutAttr = null;
-        for (int i = 0; i < attributes.size(); i++) {
-          Attribute attr = (Attribute) attributes.get(i);
-          if ("layout".equalsIgnoreCase(attr.getName())) {
-            attributes.remove(i);
+        Attr layoutAttr = null;
+        for (int i = 0; i < attributes.getLength(); i++) {
+        	
+          Attr attr = (Attr) attributes.item(i);
+          
+          if ("layout".equalsIgnoreCase(attr.getLocalName())) {
             layoutAttr = attr;
+            
+            //TODO VERIFY IF THIS REMOVE ALSO FROM DOCUMENT
+            //attributes.removeNamedItem("layout");
             break;
           }
+        
         }
 
         if (layoutAttr != null) {
-          element.removeAttribute(layoutAttr);
-
+          element.removeAttributeNode(layoutAttr);	
+        	
           String layoutType = layoutAttr.getValue();
           int index = layoutType.indexOf('(');
           if (index > 0)
             layoutType = layoutType.substring(0, index); // strip parameters
           LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance().getLayoutConverterByID(layoutType);
           if (layoutConverter != null) {
-            lm = layoutConverter.convertLayoutAttribute(layoutAttr);
+            lm = layoutConverter.convertLayoutAttribute( new Attribute(layoutAttr) );
           }
         }
       }
@@ -602,19 +623,22 @@ public static final String TAG_SCRIPT = "script";
     //
     //  1st attempt to apply attributes (call setters on the objects)
     //    put an action attribute at the beginning of the attribute list
-    Attribute actionAttr = element.getAttribute("Action");
+    Attr actionAttr = element.getAttributeNode(ATTR_ACTION);
     if (actionAttr != null) {
-      element.removeAttribute(actionAttr);
-      attributes.add(0, actionAttr);
+      element.removeAttributeNode(actionAttr);
+      attributes.setNamedItem(actionAttr);
     }
     //
     //  put Tag's Text content into Text Attribute
     //
-    if (element.getAttribute("Text") == null && 0 < element.getTextTrim().length()) {
-      attributes.add(new Attribute("text", element.getTextTrim()));
+    if (element.getAttributeNode(ATTR_TEXT) == null && 0 < element.getTextContent().trim().length()) {
+      
+      Attr _attr = jdoc.createAttribute(ATTR_TEXT); _attr.setValue(element.getTextContent().trim());
+      
+      attributes.setNamedItem( _attr );
     }
     
-    List remainingAttrs = applyAttributes(obj, factory, attributes);
+    List<Attribute> remainingAttrs = applyAttributes(obj, factory, Attribute.asList(attributes) );
     
     ////////////////////////////////////////////////////
     //  process child tags
@@ -623,13 +647,17 @@ public static final String TAG_SCRIPT = "script";
 
     LayoutManager layoutMgr = getLayoutManager(obj);
 
-    Iterator it = element.getChildren().iterator();
+    NodeList children = element.getChildNodes();
     
-    while (it != null && it.hasNext()) {
-      
-      Element child = (Element) it.next();
+    for( int i=0; i< children.getLength(); ++i ) {
+    
+    	Node n = children.item(i);
+    	
+    	if( n instanceof Element ) {
+    		Element child = (Element) n;
 
-      factory.process( this, obj, child, layoutMgr ) ;
+    		factory.process( this, obj, child, layoutMgr ) ;
+    	}
 
 
     }
@@ -637,17 +665,18 @@ public static final String TAG_SCRIPT = "script";
     //
     //  2nd attempt to apply attributes (call setters on the objects)
     //
-    if (remainingAttrs != null && 0 < remainingAttrs.size()) {
-      remainingAttrs = applyAttributes(obj, factory, remainingAttrs);
-      if (remainingAttrs != null) {
-        it = remainingAttrs.iterator();
-        while (it != null && it.hasNext()) {
-          Attribute attr = (Attribute) it.next();
-          if (JComponent.class.isAssignableFrom(obj.getClass())) {
-            ((JComponent) obj).putClientProperty(attr.getName(), attr.getValue());
-             logger.fine( String.format( "putClientProperty %s ( %s ): %s=%s", obj.getClass().getName(), id, attr.getName(), attr.getValue()) );
-          } else {
-             logger.fine( String.format( "%s not applied for tag: <%s>", attr.getName(), element.getName()));
+    if (remainingAttrs != null && !remainingAttrs.isEmpty()) {
+      
+    	remainingAttrs = applyAttributes(obj, factory, remainingAttrs);
+        if (remainingAttrs != null) {
+    	
+        for( Attribute attr : remainingAttrs ) {
+
+        	if (JComponent.class.isAssignableFrom(obj.getClass())) {
+        		((JComponent) obj).putClientProperty(attr.getLocalName(), attr.getValue());
+        		logger.fine( String.format( "putClientProperty %s ( %s ): %s=%s", obj.getClass().getName(), id, attr.getLocalName(), attr.getValue()) );
+        	} else {
+        		logger.fine( String.format( "%s not applied for tag: <%s>", attr.getLocalName(), element.getLocalName()));
           }
         }
       }
@@ -665,7 +694,7 @@ public static final String TAG_SCRIPT = "script";
   private boolean isVariable( Attribute attr ) {
      
 	  final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
-      final boolean isBound = ATTR_BIND_WITH.equalsIgnoreCase(attr.getName());
+      final boolean isBound = ATTR_BIND_WITH.equalsIgnoreCase(attr.getLocalName());
       
       return ( isVariable && !isBound ) ;
 
@@ -695,7 +724,7 @@ public static final String TAG_SCRIPT = "script";
    *                   <br>container.BOTTOM_ALIGNMENT
    *                   </p>
    */
-  private List applyAttributes(Object obj, Factory factory, List attributes) throws Exception {
+  private List<Attribute> applyAttributes(Object obj, Factory factory, List<Attribute> attributes) throws Exception {
     //
     // pass 1: Make an 'action' the 1st attribute to be processed -
     // otherwise the action would override already applied attributes like text etc.
@@ -703,7 +732,7 @@ public static final String TAG_SCRIPT = "script";
 
     for (int i = 0; i < attributes.size(); i++) {
       Attribute attr = (Attribute) attributes.get(i);
-      if (Parser.ATTR_ACTION.equalsIgnoreCase(attr.getName())) {
+      if (Parser.ATTR_ACTION.equalsIgnoreCase(attr.getLocalName())) {
         attributes.remove(i);
         attributes.add(0, attr);
         break;
@@ -714,36 +743,34 @@ public static final String TAG_SCRIPT = "script";
     //  pass 2: process the attributes
     //
 
-    Iterator it = attributes.iterator();
-    List list = new ArrayList();  // remember not applied attributes
-    Action action = null; // used to insert an action into the macmap
 
+    final List<Attribute> notAppliedAttrList = new ArrayList<Attribute>();  // remember not applied attributes
+    Action action = null; // used to insert an action into the macmap
     Attribute attr_id = null;
     Attribute attr_name = null;
     
-    while (it != null && it.hasNext()) { // loop through all available attributes
-      Attribute attr = (Attribute) it.next();
+    for( Attribute attr : attributes ) { // loop through all available attributes
 
-      if (Parser.ATTR_ID.equals(attr.getName())) {
+      if (Parser.ATTR_ID.equals(attr.getLocalName())) {
     	  attr_id = attr;
     	  continue;
       }
-      if ("name".equals(attr.getName())) {
+      if ("name".equals(attr.getLocalName())) {
     	  attr_name = attr;
       }
-      if (Parser.ATTR_REFID.equals(attr.getName()))
+      if (Parser.ATTR_REFID.equals(attr.getLocalName()))
         continue;
-      if (Parser.ATTR_USE.equals(attr.getName())) {
+      if (Parser.ATTR_USE.equals(attr.getLocalName())) {
           continue;
       }
 
-      if (action != null && attr.getName().startsWith(Parser.ATTR_MACOS_PREFIX)) {
-        mac_map.put(attr.getName(), action);
+      if (action != null && attr.getLocalName().startsWith(Parser.ATTR_MACOS_PREFIX)) {
+        mac_map.put(attr.getLocalName(), action);
         continue;
       }
 
-      if (JLabel.class.isAssignableFrom(obj.getClass()) && attr.getName().equalsIgnoreCase("LabelFor")) {
-        lbl_map.put(obj, attr.getValue());
+      if (JLabel.class.isAssignableFrom(obj.getClass()) && attr.getLocalName().equalsIgnoreCase("LabelFor")) {
+        lbl_map.put( (JLabel)obj, attr.getValue());
         continue;
       }
 
@@ -770,13 +797,13 @@ public static final String TAG_SCRIPT = "script";
           
               if( null!=para ) {
 
-                    BeanProperty bp = BeanProperty.create(attr.getName());
+                    BeanProperty bp = BeanProperty.create(attr.getLocalName());
                     if( bp.isWriteable(obj) ) {
-                        //factory.setSimpleProperty(obj, attr.getName(), para);
+                        //factory.setSimpleProperty(obj, attr.getLocalName(), para);
                         bp.setValue(obj, para);
                     }
                     else {
-                        logger.warning( "property " + attr.getName() + " is not writable!" );
+                        logger.warning( "property " + attr.getLocalName() + " is not writable!" );
                     }
                     continue;
 
@@ -792,14 +819,14 @@ public static final String TAG_SCRIPT = "script";
       ////////////////////////
 
 
-    Class<?>[] paraTypes = factory.getPropertyType(obj, attr.getName());
+    Class<?>[] paraTypes = factory.getPropertyType(obj, attr.getLocalName());
 
     if( null!=paraTypes ) {
 
         Class<?> paraType = paraTypes[0];
         
         //  A setter method has successfully been identified.
-        Converter converter = cvtlib.getConverter(paraType);
+        Converter<?> converter = cvtlib.getConverter(paraType);
 
         if (converter != null) {  // call setter with a newly instanced parameter
             try {
@@ -815,13 +842,22 @@ public static final String TAG_SCRIPT = "script";
 
             } catch (NoSuchFieldException e) {
                 // useful for extra attributes
-                logger.warning( "property " + attr.getName() + " doesn't exist!");
-                list.add(attr);
+            	final String msg = String.format("property [%s] doesn't exist!", attr.getLocalName());
+                if( logger.isLoggable(Level.FINE))
+                    logger.log( Level.WARNING, msg, e );                	
+                else 
+                    logger.log( Level.WARNING, msg );                	                	
+
+                notAppliedAttrList.add(attr);
+                
             } catch (InvocationTargetException e) {
 
                 Throwable cause = e.getCause();
                 if( cause!=null ) {
-                        logger.warning( "exception during invocation of " + attr.getName() + ": " + cause.getMessage());
+                    if( logger.isLoggable(Level.FINE))
+                        logger.warning( "exception during invocation of " + attr.getLocalName() + ": " + cause.getMessage());
+                    else 
+                        logger.log( Level.WARNING, "exception during invocation of " + attr.getLocalName() ,  cause );
                 }
                 //
                 // The JFrame class is slightly incompatible with Frame.
@@ -835,14 +871,14 @@ public static final String TAG_SCRIPT = "script";
                   try {
                     f.setProperty(rootpane, attr, para, paraType); // ATTR SET
                   } catch (Exception ex) {
-                      list.add(attr);
+                      notAppliedAttrList.add(attr);
                   }
                 } else {
-                  list.add(attr);
+                  notAppliedAttrList.add(attr);
                 }
             }
             catch (Exception e) {
-                throw new Exception(e + ":" + attr.getName() + ":" + para, e);
+                throw new Exception(e + ":" + attr.getLocalName() + ":" + para, e);
             }
 
             continue;
@@ -854,12 +890,12 @@ public static final String TAG_SCRIPT = "script";
         if (paraType.equals(Object.class)) {
           try {
             String s = attr.getValue();
-            if (Parser.LOCALIZED_ATTRIBUTES.contains(attr.getName().toLowerCase()) && attr.getAttributeType() == Attribute.CDATA_TYPE) {
+            if (Parser.LOCALIZED_ATTRIBUTES.contains(attr.getLocalName().toLowerCase()) ) {
               s = engine.getLocalizer().getString(s);
             }
             factory.setProperty(obj, attr, s, paraType ); // ATTR SET
           } catch (Exception e) {
-            list.add(attr);
+            notAppliedAttrList.add(attr);
           }
           continue;
         }
@@ -871,7 +907,7 @@ public static final String TAG_SCRIPT = "script";
           try {
             factory.setProperty(obj, attr, PrimitiveConverter.conv(paraType, attr, engine.getLocalizer()), paraType); // ATTR SET
           } catch (Exception e) {
-            list.add(attr);
+            notAppliedAttrList.add(attr);
           }
           continue;
         }
@@ -879,14 +915,14 @@ public static final String TAG_SCRIPT = "script";
         //
         // try again later
         //
-        list.add(attr);
+        notAppliedAttrList.add(attr);
         
     } else {
         //
         //  Search for a public field in the obj.class that matches the attribute name
         //
         try {
-          Field field = obj.getClass().getField(attr.getName());
+          Field field = obj.getClass().getField(attr.getLocalName());
           if (field != null) {
             Converter converter = cvtlib.getConverter(field.getType());
             if (converter != null) {
@@ -899,21 +935,21 @@ public static final String TAG_SCRIPT = "script";
               }
               field.set(obj, fieldValue);  // ATTR SET
             } else {
-              list.add(attr);
+              notAppliedAttrList.add(attr);
             }
           } else {
-            list.add(attr);
+            notAppliedAttrList.add(attr);
           }
         } catch (Exception e) {
-          list.add(attr);
+          notAppliedAttrList.add(attr);
         }
       }
     } // end_while
     
     if( attr_id!=null && attr_name==null ) {
-    	list.add( new Attribute("name", attr_id.getValue()));
+    	notAppliedAttrList.add( new Attribute("name", attr_id.getValue()));
     }
-    return list;
+    return notAppliedAttrList;
   }
 
 
@@ -924,25 +960,29 @@ public static final String TAG_SCRIPT = "script";
    */
   private void cloneAttributes(Element target) {
     Element source = null;
-    if (target.getAttribute(Parser.ATTR_REFID) != null) {
-      source = find(jdoc.getRootElement(), target.getAttribute(Parser.ATTR_REFID).getValue().trim());
-    } else if (target.getAttribute(Parser.ATTR_USE) != null) {
-        logger.warning( String.format("Attribute [%s] for Element [%s] is deprecated!", Parser.ATTR_USE, target.getName()));
-        source = find(jdoc.getRootElement(), target.getAttribute(Parser.ATTR_USE).getValue().trim());
+    if (target.getAttributeNode(Parser.ATTR_REFID) != null) {
+      source = find(jdoc.getDocumentElement(), target.getAttribute(Parser.ATTR_REFID).trim());
+    } else if (target.getAttributeNode(Parser.ATTR_USE) != null) {
+        logger.warning( String.format("Attribute [%s] for Element [%s] is deprecated!", Parser.ATTR_USE, target.getLocalName()));
+        source = find(jdoc.getDocumentElement(), target.getAttribute(Parser.ATTR_USE).trim());
     }
+    
     if (source != null) {
-      Iterator it = source.getAttributes().iterator();
-      while (it != null && it.hasNext()) {
-        Attribute attr = (Attribute) it.next();
-        String name = attr.getName().trim();
+    
+      NamedNodeMap attributes =  source.getAttributes();
+      
+      for( int i=0; i<attributes.getLength(); ++i ) {
+
+    	  Attr attr = (Attr) attributes.item(i);
+        String name = attr.getLocalName().trim();
         //
         //  copy but don't overwrite an attr.
         //  also, don't copy the id attr.
         //
-        if (!Parser.ATTR_ID.equals(name) && target.getAttribute(name) == null) {
-          Attribute attrcln = (Attribute) attr.clone();
-          attrcln.detach();
-          target.setAttribute(attrcln);
+        if (!Parser.ATTR_ID.equals(name) && target.getAttributeNode(name) == null) {
+          Attr attrcln = (Attr) attr.cloneNode(true);
+          source.removeAttributeNode(attrcln); //attrcln.detach();
+          target.setAttributeNode(attrcln);
         }
       } // end while
     }
@@ -1067,12 +1107,12 @@ public static final String TAG_SCRIPT = "script";
    * @param target <code>Element</code> Content receiver
    */
   private static void moveContent(Element source, Element target) {
-    List list = source.getContent();
-    while (!list.isEmpty()) {
-      Object obj = list.remove(0);
-      target.getContent().add(obj);
-    }
-  }
+	     NodeList list=source.getChildNodes();
+	      for(int i=0;i<list.getLength();i++) {
+	          Node node=target.getOwnerDocument().importNode(list.item(i), true);
+	          target.appendChild(node);
+	      }  
+   }
 
   /**
    * Recursive element by id finder
@@ -1083,13 +1123,20 @@ public static final String TAG_SCRIPT = "script";
    */
   private static Element find(Element element, String id) {
     Element elem = null;
-    Attribute attr = element.getAttribute(Parser.ATTR_ID);
+    Attr attr =  element.getAttributeNode(Parser.ATTR_ID);
     if (attr != null && id.equals(attr.getValue().trim())) {
       elem = element;
     } else {
-      Iterator it = element.getChildren().iterator();
-      while (it != null && it.hasNext() && elem == null) {
-        elem = find((Element) it.next(), id.trim());
+    	
+      NodeList children = element.getChildNodes();
+      
+      for( int i=0; i<children.getLength(); ++i ) {
+    	
+    	  Node n = children.item(i);
+    	  
+    	  if( n instanceof Element ) {
+    		  elem = find((Element) n, id.trim());
+    	  }
       }
     }
     return elem;

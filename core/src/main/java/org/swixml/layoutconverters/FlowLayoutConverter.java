@@ -55,11 +55,11 @@ import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.util.StringTokenizer;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.swixml.LayoutConverter;
 import org.swixml.converters.PrimitiveConverter;
 import org.swixml.converters.Util;
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Element;
 
 /**
  * A layout converter for <code>java.awt.FlowLayout</code>.
@@ -162,18 +162,20 @@ public class FlowLayoutConverter implements LayoutConverter {
    * </ul>
    */
   public LayoutManager convertLayoutElement( final Element element ) {
-    int align = FlowLayout.CENTER;
-    String value = element.getAttributeValue("alignment");
-    if (value != null) {
-      try {
-        Object o = PrimitiveConverter.conv( null, new Attribute( "NA", value ), null );
-        align = Integer.valueOf( o.toString() ).intValue();
-      } catch (Exception ex) {
-      }
-    }
-    int hgap = Util.getInteger(element, "hgap", 5);
-    int vgap = Util.getInteger(element, "vgap", 5);
-    return new FlowLayout(align, hgap, vgap);
+		int align = FlowLayout.CENTER;
+		if (element.getAttributeNode("alignment") != null) {
+
+			String value = element.getAttribute("alignment");
+			try {
+				Object o = PrimitiveConverter.conv(null, new Attribute("NA",
+						value), null);
+				align = Integer.valueOf(o.toString()).intValue();
+			} catch (Exception ex) {
+			}
+		}
+		int hgap = Util.getInteger(element, "hgap", 5);
+		int vgap = Util.getInteger(element, "vgap", 5);
+		return new FlowLayout(align, hgap, vgap);
   }
 
   /**

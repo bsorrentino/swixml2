@@ -52,13 +52,12 @@
 */
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
+import java.awt.Insets;
+import java.util.StringTokenizer;
+
 import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
-
-import java.awt.*;
-import java.util.StringTokenizer;
+import org.swixml.dom.Attribute;
 
 /**
  * The <code>InsetsConverter</code> class defines a converter that creates Insets objects based on a provided String.

@@ -5,8 +5,8 @@
 
 package org.swixml.factory;
 
-import org.jdom.Attribute;
 import org.swixml.XSplitPane;
+import org.swixml.dom.Attribute;
 import org.swixml.processor.TagProcessor;
 
 /**
@@ -26,7 +26,7 @@ public class SplitPaneFactory extends BeanFactory {
     @Override
     public void setProperty(Object bean, Attribute attr, Object value, Class<?> type) throws Exception {
 
-        final String name = attr.getName();
+        final String name = attr.getLocalName();
         
         if( "dividerlocation".equalsIgnoreCase(name)) {
 

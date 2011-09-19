@@ -52,12 +52,12 @@
 */
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+
 import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
-
-import java.awt.*;
+import org.swixml.dom.Attribute;
 
 /**
  * The FontConverter class defines / describes

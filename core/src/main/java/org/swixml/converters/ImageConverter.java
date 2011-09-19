@@ -53,13 +53,13 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
 import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
-
-import javax.swing.*;
-import java.awt.*;
+import org.swixml.dom.Attribute;
 
 /**
  * A Converter that turns a Strings in the form of a filename into an Image objects.

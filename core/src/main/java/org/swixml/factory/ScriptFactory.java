@@ -6,11 +6,11 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.swixml.Factory;
 import org.swixml.LogAware;
 import org.swixml.Parser;
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Element;
 
 
 public class ScriptFactory implements Factory, LogAware{

@@ -56,11 +56,11 @@ import java.awt.LayoutManager;
 import java.lang.reflect.Field;
 import java.util.StringTokenizer;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.swixml.LayoutConverter;
 import org.swixml.SwingEngine;
 import org.swixml.converters.Util;
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Element;
 
 /**
  * A layout converter for <code>java.awt.GridBagLayout</code>.
@@ -176,21 +176,17 @@ public class GridBagLayoutConverter implements LayoutConverter {
    * </ul>
    */
   public LayoutManager convertLayoutElement( final Element element ) {
-    String columnWidths = element.getAttributeValue("columnWidths");
-    String rowHeights = element.getAttributeValue("rowHeights");
-    String columnWeights = element.getAttributeValue("columnWeights");
-    String rowWeights = element.getAttributeValue("rowWeights");
 
     GridBagLayout lm = new GridBagLayout();
 
-    if (columnWidths != null)
-      lm.columnWidths = Util.ia(new StringTokenizer(columnWidths,","));
-    if (rowHeights != null)
-      lm.rowHeights = Util.ia(new StringTokenizer(rowHeights,","));
-    if (columnWeights != null)
-      lm.columnWeights = Util.da(new StringTokenizer(columnWeights,","));
-    if (rowWeights != null)
-      lm.rowWeights = Util.da(new StringTokenizer(rowWeights,","));
+    if (element.getAttributeNode("columnWidths") != null)
+      lm.columnWidths = Util.ia(new StringTokenizer(element.getAttribute("columnWidths"),","));
+    if (element.getAttributeNode("rowHeights") != null)
+      lm.rowHeights = Util.ia(new StringTokenizer(element.getAttribute("rowHeights"),","));
+    if (element.getAttributeNode("columnWeights") != null)
+      lm.columnWeights = Util.da(new StringTokenizer(element.getAttribute("columnWeights"),","));
+    if (element.getAttributeNode("rowWeights") != null)
+      lm.rowWeights = Util.da(new StringTokenizer(element.getAttribute("rowWeights"),","));
 
     return lm;
   }

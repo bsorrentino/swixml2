@@ -53,7 +53,6 @@
 
 package org.swixml.converters;
 
-import static org.swixml.LogUtil.logger;
 import static org.swixml.converters.PrimitiveConverter.getConstantValue;
 
 import java.lang.reflect.Method;
@@ -66,11 +65,12 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import org.jdom.Attribute;
 import org.swixml.Converter;
 import org.swixml.ConverterAdapter;
 import org.swixml.ConverterLibrary;
 import org.swixml.Localizer;
+import org.swixml.LogAware;
+import org.swixml.dom.Attribute;
 
 /**
  * The <code>BorderConverter</code> class defines a converter that creates Border objects based on a provided String.
@@ -96,12 +96,12 @@ import org.swixml.Localizer;
  * @see javax.swing.border.AbstractBorder
  * @see org.swixml.ConverterLibrary
  */
-public class BorderConverter extends ConverterAdapter {
+public class BorderConverter extends ConverterAdapter implements LogAware {
     
   /**
    * converter's return type
    */
-  public static final Class TEMPLATE = Border.class;
+  public static final Class<?> TEMPLATE = Border.class;
 
   
   /**
@@ -120,7 +120,7 @@ public class BorderConverter extends ConverterAdapter {
    * @param attr <code>Attribute</code> value needs to provide Border type name and optional parameter
    * @return <code>Object</code> runtime type is subclass of <code>AbstractBorder</code>
    */
-  public Object convert(final Class type, final Attribute attr, Localizer localizer) {
+  public Object convert(final Class<?> type, final Attribute attr, Localizer localizer) {
 
       String input = attr.getValue();
       
@@ -142,7 +142,7 @@ public class BorderConverter extends ConverterAdapter {
    *
    *
    */
-  protected Border convert(final Class type, final String borderString, Localizer localizer) {
+  protected Border convert(final Class<?> type, final String borderString, Localizer localizer) {
 
     Matcher m = borderPattern.matcher(borderString);
 
@@ -181,7 +181,7 @@ public class BorderConverter extends ConverterAdapter {
    *
    * @return <code>Class</code> - the Class the converter is returning when its convert method is called
    */
-  public Class convertsTo() {
+  public Class<?> convertsTo() {
     return TEMPLATE;
   }
 
@@ -251,14 +251,15 @@ public class BorderConverter extends ConverterAdapter {
 
           for (int i = 0; i < pLen; ++i) { // fill argument array
 
-              final Converter converter = cvtlib.getConverter(method.getParameterTypes()[i]);
+              final Converter<?> converter = cvtlib.getConverter(method.getParameterTypes()[i]);
 
-              Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", params[i].trim(), Attribute.CDATA_TYPE);
-
+              final String value =  params[i].trim();
+              
               if (converter != null) {
+                  final Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
                   args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
               } else {
-                  args[i] = attrib.getValue();
+                  args[i] = value;
               }
           }
 
@@ -353,12 +354,14 @@ public class BorderConverter extends ConverterAdapter {
     try {
       Object[] args = new Object[n];
       for (int i = 0; i < n; i++) { // fill argument array
-        Converter converter = cvtlib.getConverter(method.getParameterTypes()[i]);
-        Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", st.nextToken().trim(), Attribute.CDATA_TYPE);
+        Converter<?> converter = cvtlib.getConverter(method.getParameterTypes()[i]);
+       
+        final String value = st.nextToken().trim();
         if (converter != null) {
-          args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
+            Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
+            args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
         } else {
-          args[i] = attrib.getValue();
+          args[i] = value;
         }
       }
       border = (Border) method.invoke(null, args);

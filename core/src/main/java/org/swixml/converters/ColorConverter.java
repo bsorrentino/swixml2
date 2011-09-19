@@ -53,16 +53,15 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
-import org.swixml.ConverterAdapter;
-import org.swixml.Localizer;
-import org.swixml.SwingEngine;
-
-import java.awt.*;
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.StringTokenizer;
+
+import org.swixml.ConverterAdapter;
+import org.swixml.Localizer;
+import org.swixml.SwingEngine;
+import org.swixml.dom.Attribute;
 
 /**
  * The ColorConverter class defines a Converter that turns the Strings into a Color object

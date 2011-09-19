@@ -87,12 +87,13 @@ import javax.swing.JMenu;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
+import org.swixml.dom.DOMUtil;
 import org.swixml.localization.LocalizerDefaultImpl;
 import org.swixml.localization.LocalizerJSR296Impl;
 import org.swixml.script.ScriptService;
 import org.swixml.script.ScriptServiceDefaultImpl;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 /**
  * The SwingEngine class is the rendering engine able to convert an XML descriptor into a java.swing UI.
@@ -326,16 +327,16 @@ public class SwingEngine<T extends Container> implements LogAware {
    */
   public T render(final Reader xml_reader) throws Exception {
     if (xml_reader == null) {
-      throw new IOException();
+      throw new IllegalArgumentException( "input reader is null!");
     }
     try {
-      return render(new SAXBuilder().build(xml_reader));
-    } catch (org.xml.sax.SAXParseException e) {
-      System.err.println(e);
-    } catch (org.jdom.input.JDOMParseException e) {
-      System.err.println(e);
+      Document doc = DOMUtil.getDocumentBuilder().parse( new InputSource(xml_reader) );	
+      return render(doc);
+    } catch (Exception e) {
+    	logger.log(Level.SEVERE, "parse exception", e);
+    	throw e;
     }
-    throw new Exception(SwingEngine.XML_ERROR_MSG);
+    //throw new Exception(SwingEngine.XML_ERROR_MSG);
   }
 
   /**
@@ -438,12 +439,14 @@ public class SwingEngine<T extends Container> implements LogAware {
    * @param container <code>Container</code> target, the swing obj, are added to.
    * @throws Exception
    */
-  public void insert(final Reader reader, final T container)
-          throws Exception {
+  public void insert(final Reader reader, final T container) throws Exception {
     if (reader == null) {
-      throw new IOException();
+        throw new IllegalArgumentException( "input reader is null!");
     }
-    insert(new SAXBuilder().build(reader), container);
+    
+    Document doc = DOMUtil.getDocumentBuilder().parse( new InputSource(reader) );	
+
+    insert(doc, container);
   }
 
   /**

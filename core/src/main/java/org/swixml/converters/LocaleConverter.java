@@ -53,13 +53,12 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
-import org.swixml.ConverterAdapter;
-import org.swixml.Localizer;
-
 import java.util.Locale;
 import java.util.StringTokenizer;
+
+import org.swixml.ConverterAdapter;
+import org.swixml.Localizer;
+import org.swixml.dom.Attribute;
 
 /**
  * The LocaleConverter class defines / describes

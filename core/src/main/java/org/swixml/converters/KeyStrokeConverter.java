@@ -53,13 +53,12 @@
 
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
+import javax.swing.KeyStroke;
+
 import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.Parser;
-
-import javax.swing.*;
+import org.swixml.dom.Attribute;
 
 /**
  * A Converter that turns a Strings in the form of a filename into an KeyStroke objects.
@@ -130,10 +129,8 @@ public class KeyStrokeConverter extends ConverterAdapter {
   public static Object conv( final Class type, final Attribute attr, Localizer localizer ) {
     KeyStroke keyStroke = null;
     if (attr != null) {
-      if (Parser.LOCALIZED_ATTRIBUTES.contains( attr.getName().toLowerCase() )) {
-        if (attr.getAttributeType() == Attribute.CDATA_TYPE) {
+      if (Parser.LOCALIZED_ATTRIBUTES.contains( attr.getLocalName().toLowerCase() )) {
           attr.setValue( localizer.getString( attr.getValue() ) );
-        }
       }
       keyStroke = KeyStroke.getKeyStroke( attr.getValue() );
     }

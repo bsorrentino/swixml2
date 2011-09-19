@@ -6,7 +6,7 @@
 package org.swixml.processor;
 
 import java.awt.LayoutManager;
-import org.jdom.Element;
+
 import org.swixml.Parser;
 
 /**
@@ -15,6 +15,6 @@ import org.swixml.Parser;
  */
 public interface TagProcessor {
 
-    boolean process( Parser p, Object obj, Element child, LayoutManager layoutMgr  ) throws Exception;
+    boolean process( Parser p, Object obj, org.w3c.dom.Element child, LayoutManager layoutMgr  ) throws Exception;
 
 }

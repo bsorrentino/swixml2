@@ -57,9 +57,9 @@ import java.awt.LayoutManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
-import org.jdom.Attribute;
-import org.jdom.Element;
+
+import org.swixml.dom.Attribute;
+import org.w3c.dom.Element;
 
 /**
  * An interface to represent a generic factory

@@ -193,7 +193,7 @@ public class ConverterLibrary {
    * @return <code>Converter</code> - instance of the given Converter class.
    */
   @SuppressWarnings("unchecked")
-  public <T> Converter<T> getConverter(Class<T> template) {
+  public <T> Converter<T> getConverter(Class<?> template) {
     return (Converter<T>) converters.get(template);
   }
 }

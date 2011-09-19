@@ -17,15 +17,15 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyResolutionException;
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.swixml.Factory;
 import org.swixml.Parser;
+import org.swixml.dom.Attribute;
 import org.swixml.jsr295.BindingUtils;
 import org.swixml.processor.ButtonGroupTagProcessor;
 import org.swixml.processor.ConstraintsTagProcessor;
 import org.swixml.processor.ScriptTagProcessor;
 import org.swixml.processor.TagProcessor;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -187,7 +187,7 @@ public class BeanFactory implements Factory {
             return;
         }
 
-        final String name = attr.getName();
+        final String name = attr.getLocalName();
         
         Method m = nameMap.get(name.toLowerCase(), type);
 

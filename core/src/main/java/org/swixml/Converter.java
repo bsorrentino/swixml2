@@ -52,7 +52,7 @@
 */
 package org.swixml;
 
-import org.jdom.Attribute;
+import org.swixml.dom.Attribute;
 
 /**
  * <p>General purpose data type converter that can be registered and used
@@ -75,7 +75,7 @@ public interface Converter<T> {
   @Deprecated	
   Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception;
 
-  T convert( final Class<T> type, final Attribute attr, SwingEngine<?> engine ) throws Exception;
+  T convert( final Class<?> type, final Attribute attr, SwingEngine<?> engine ) throws Exception;
 
   /**
    * A <code>Converters</code> conversTo method informs about the Class type the converter

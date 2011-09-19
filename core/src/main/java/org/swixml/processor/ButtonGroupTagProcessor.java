@@ -12,7 +12,6 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 
-import org.jdom.Element;
 import org.swixml.Parser;
 
 /**
@@ -41,26 +40,33 @@ public class ButtonGroupTagProcessor implements TagProcessor {
         } // otherwise just do nothing ...
     }
 
-    public boolean process(Parser p, Object obj, Element child, LayoutManager layoutMgr) throws Exception {
+    public boolean process(Parser p, Object obj, org.w3c.dom.Element child, LayoutManager layoutMgr) throws Exception {
 
-        if( !Parser.TAG_BUTTONGROUP.equalsIgnoreCase(child.getName())) return false;
+        if( !Parser.TAG_BUTTONGROUP.equalsIgnoreCase(child.getLocalName())) return false;
 
-        @SuppressWarnings("unchecked")
-		java.util.List<Element> buttons = child.getChildren();
+		org.w3c.dom.NodeList buttons = child.getChildNodes();
         
         if( buttons==null ) return false;
 
         ButtonGroup btnGroup = new ButtonGroup();
 
-        if (null != child.getAttribute(Parser.ATTR_ID)) {
-            p.engine.getIdMap().put(child.getAttribute(Parser.ATTR_ID).getValue(), btnGroup);
+        if (null != child.getAttributeNode(Parser.ATTR_ID)) {
+            p.engine.getIdMap().put(child.getAttribute(Parser.ATTR_ID), btnGroup);
         
         }
 
-        for( Element e : buttons ) {
-        	Component b =  ConstraintsTagProcessor.processComponent(p, obj, e, layoutMgr);
+        for( int i=0; i<buttons.getLength() ; ++i ) {
         	
-        	putIntoBtnGrp( b, btnGroup);
+        	org.w3c.dom.Node n = buttons.item(i);
+        	
+        	if( n instanceof org.w3c.dom.Element ) {
+
+        		org.w3c.dom.Element e = (org.w3c.dom.Element) buttons.item(i);
+            	Component b =  ConstraintsTagProcessor.processComponent(p, obj, e, layoutMgr);
+            	
+            	putIntoBtnGrp( b, btnGroup);
+        		
+        	}
         	
         }
 

@@ -52,11 +52,10 @@
 */
 package org.swixml.converters;
 
-import org.jdom.Attribute;
-import org.swixml.Converter;
 import org.swixml.ConverterAdapter;
-import org.swixml.Parser;
 import org.swixml.Localizer;
+import org.swixml.Parser;
+import org.swixml.dom.Attribute;
 
 
 /**
@@ -70,7 +69,7 @@ import org.swixml.Localizer;
  */
 public class StringConverter extends ConverterAdapter {
   /** converter's return type */
-  public static final Class TEMPLATE = String.class;
+  public static final Class<?> TEMPLATE = String.class;
 
   /**
    * Convert the value of the given <code>Attribute</code> object into an output object of the
@@ -80,12 +79,11 @@ public class StringConverter extends ConverterAdapter {
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    *
    */
-  public Object convert( Class type, final Attribute attr, Localizer localizer ) throws Exception {
+  public Object convert( Class<?> type, final Attribute attr, Localizer localizer ) throws Exception {
     //
     //  Localize Strings but only if Attribute calls for localization.
     //
-    if ( Parser.LOCALIZED_ATTRIBUTES.contains( attr.getName().toLowerCase() ))
-      if (attr.getAttributeType() == Attribute.CDATA_TYPE )
+    if ( Parser.LOCALIZED_ATTRIBUTES.contains( attr.getLocalName().toLowerCase() ))
          return localizer.getString( attr.getValue() );
     return attr.getValue();
   }
@@ -95,7 +93,7 @@ public class StringConverter extends ConverterAdapter {
    * is returning when its <code>convert</code> method is called
    * @return <code>Class</code> - the Class the converter is returning when its convert method is called
    */
-  public Class convertsTo() {
+  public Class<?> convertsTo() {
     return TEMPLATE;
   }
 }
