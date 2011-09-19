@@ -1,4 +1,4 @@
-package examples.explorer;
+package examples.dialog;
 
 import javax.swing.JOptionPane;
 
@@ -11,7 +11,7 @@ public class LoginExample extends SwingApplication {
 	protected void startup() {
 		
 		try {
-			LoginDialog dialog = super.render(new LoginDialog(), "examples/explorer/LoginDialog.xml");
+			LoginDialog dialog = super.render(new LoginDialog());
 
 			super.show(dialog);
 			

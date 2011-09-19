@@ -20,7 +20,7 @@ public class NewTag extends JFrame {
     // Register a new new Converter,
     // Generally, Converters should be regsitered before Tags
     //
-    ConverterLibrary.getInstance().register( TimeZone.class, (Converter) new TimeZoneConverter() );
+    ConverterLibrary.getInstance().register( TimeZone.class, new TimeZoneConverter() );
     //
     //  Register a Tag that uses a SwingEngine itself ...
     //

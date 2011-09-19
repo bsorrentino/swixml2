@@ -1,4 +1,4 @@
-package examples.explorer;
+package examples.dialog;
 
 import javax.swing.JOptionPane;
 

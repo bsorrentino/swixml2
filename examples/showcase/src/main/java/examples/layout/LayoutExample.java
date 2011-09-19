@@ -1,4 +1,4 @@
-package examples.explorer;
+package examples.layout;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,7 +12,7 @@ public class LayoutExample extends SwingApplication {
     protected void startup() {
 
 		try {
-			JFrame frame = super.render(new JFrame(), "examples/explorer/LayoutFrame.xml");
+			JFrame frame = super.render(new JFrame());
 
 			super.show(frame);
 			

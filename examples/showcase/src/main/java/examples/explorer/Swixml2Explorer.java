@@ -17,7 +17,6 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.MutableTreeNode;
 
-
 import org.jdesktop.application.Action;
 import org.swixml.SwingTagLibrary;
 import org.swixml.XFrame;
@@ -25,6 +24,8 @@ import org.swixml.examples.wizard.DDLWizardApplication;
 import org.swixml.jsr296.SwingApplication;
 
 import examples.combo.ComboExample;
+import examples.dialog.LoginExample;
+import examples.layout.LayoutExample;
 import examples.legacy.Accelerator;
 import examples.legacy.Actions;
 import examples.legacy.Cards;
@@ -33,6 +34,7 @@ import examples.legacy.Form;
 import examples.legacy.FormLayout;
 import examples.legacy.GridBag;
 import examples.legacy.Layout;
+import examples.script.ScriptExample;
 import examples.spinner.SpinnerExample;
 import examples.table.TableExample;
 import examples.task.BackgroundTaskExample;
@@ -190,7 +192,13 @@ public class Swixml2Explorer extends SwingApplication  {
 				
 				MutableTreeNode node =  applications.addNodeToRoot( pp, true );
 				{
-					PanelInfo p = new PanelInfo("Layout", LayoutExample.class, "examples/explorer/LayoutFrame.xml", "examples/explorer/LayoutExample.java");
+					PanelInfo p = new PanelInfo("Script", ScriptExample.class);
+					p.setXmlPanel("examples/script/ScriptDialogContent.xml");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("Layout", LayoutExample.class, "examples/layout/LayoutFrame.xml", "examples/layout/LayoutExample.java");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
@@ -214,7 +222,7 @@ public class Swixml2Explorer extends SwingApplication  {
 				}
 				{
 					PanelInfo p = new PanelInfo("Dialog Example", LoginExample.class);
-					p.setXmlPanel("examples/explorer/LoginDialogContent.xml");
+					p.setXmlPanel("examples/dialog/LoginDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}

@@ -7,7 +7,7 @@
 <panel name="XML Source" layout="BorderLayout">
 
 <RTextScrollPane>
-	<fileTextArea syntaxEditingStyle="text/xml" source="examples/explorer/LoginDialog.xml"  editable="false"/>
+	<fileTextArea syntaxEditingStyle="text/xml" source="examples/dialog/LoginDialog.xml"  editable="false"/>
 </RTextScrollPane>
 
 </panel>
@@ -15,7 +15,7 @@
 <panel name="Application" layout="BorderLayout">
 
 <RTextScrollPane>
-	<fileTextArea syntaxEditingStyle="text/java" source="examples/explorer/LoginExample.java"  editable="false"/>
+	<fileTextArea syntaxEditingStyle="text/java" source="examples/dialog/LoginExample.java"  editable="false"/>
 </RTextScrollPane>
 
 </panel>
@@ -23,7 +23,7 @@
 <panel name="Dialog" layout="BorderLayout">
 
 <RTextScrollPane>
-	<fileTextArea syntaxEditingStyle="text/java" source="examples/explorer/LoginDialog.java"  editable="false"/>
+	<fileTextArea syntaxEditingStyle="text/java" source="examples/dialog/LoginDialog.java"  editable="false"/>
 </RTextScrollPane>
 
 </panel>
