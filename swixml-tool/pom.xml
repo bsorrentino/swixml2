@@ -1,15 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.swixml</groupId>
   <artifactId>swixml-tool</artifactId>
   <name>swixml tool</name>
-  <version>2.5-SNAPSHOT</version>
   <description>swixml tool</description>
   
 <parent>
   <groupId>org.swixml</groupId>
   <artifactId>swixml-parent</artifactId>
-  <version>2.5-SNAPSHOT</version>
+  <version>2.6-SNAPSHOT</version>
 </parent>
   
   <build>
@@ -65,7 +63,7 @@
 					<!-- 
 					<resourcesDirectory>src/main/native</resourcesDirectory>
 					-->
-					<workDirectory>../jnlp</workDirectory>
+					<workDirectory>../../jnlp</workDirectory>
 					<jnlp>
 						<!--
 							we play with the resource path and template relative path to test
@@ -121,7 +119,7 @@
   	<dependency>
   		<groupId>org.swixml</groupId>
   		<artifactId>swixml</artifactId>
-  		<version>2.5-SNAPSHOT</version>
+  		<version>2.6-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 
