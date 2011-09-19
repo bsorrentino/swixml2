@@ -80,7 +80,7 @@ defining this will automatically sign the jar and its dependencies
 	
 	<sign>
 		<alias>swixml2-examples</alias>
-		<validity>180</validity>
+		<validity>360</validity>
 	
 		<dnameCn>Swixml2</dnameCn>
 		<dnameOu>None</dnameOu>
