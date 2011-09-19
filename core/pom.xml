@@ -4,7 +4,7 @@
   <artifactId>swixml</artifactId>
   <version>2.6-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>SWIXML FRAMEWORK 2.5</name>
+  <name>SWIXML FRAMEWORK 2.6</name>
   <url>http://code.google.com/p/swixml2/</url>
   <description>GUI generating engine for Java applications</description>
 

@@ -4,7 +4,7 @@
   <artifactId>swixml-quickstart</artifactId>
   <packaging>jar</packaging>
   <version>2.6-SNAPSHOT</version>
-  <name>SWIXML QUICKSTART 2.5</name>
+  <name>SWIXML QUICKSTART 2.6</name>
   <url>http://code.google.com/p/swixml2/</url>
   <description>Project to define a maven swixml-quickstart archetype</description>
   

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>swixml-examples</artifactId>
   <packaging>pom</packaging>
-  <name>SWIXML EXAMPLES 2.5</name>
+  <name>SWIXML EXAMPLES 2.6</name>
   <url>http://code.google.com/p/swixml2/</url>
 
 <parent>
