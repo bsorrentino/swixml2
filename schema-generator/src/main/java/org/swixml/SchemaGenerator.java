@@ -50,15 +50,7 @@
 */
 package org.swixml;
 
-import javax.swing.Box;
-import org.swixml.annotation.SchemaAware;
 import java.beans.Introspector;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -67,9 +59,17 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+import org.swixml.annotation.SchemaAware;
 import org.swixml.factory.BoxFactory;
-import static org.swixml.factory.BoxFactory.Type.*;
 
 /**
  * Swixml XML Schema Generator
