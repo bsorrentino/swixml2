@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<panel  layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="XML Source" layout="BorderLayout">
+
+<panel name="Application" layout="BorderLayout">
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/java" source="examples/spinner/SpinnerExample.java" ></filetextarea>
+</RTextScrollPane>
+</panel>
+
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/xml" source="examples/spinner/SpinnerDialog.xml" ></filetextarea>
+</RTextScrollPane>
+</panel>
+
+</tabbedpane>
+
+</panel>

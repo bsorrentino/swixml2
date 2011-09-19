@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<panel  layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="XML Source" layout="BorderLayout">
+
+<RTextScrollPane>
+	<fileTextArea syntaxEditingStyle="text/xml" source="examples/explorer/LoginDialog.xml"  editable="false"/>
+</RTextScrollPane>
+
+</panel>
+
+<panel name="Application" layout="BorderLayout">
+
+<RTextScrollPane>
+	<fileTextArea syntaxEditingStyle="text/java" source="examples/explorer/LoginExample.java"  editable="false"/>
+</RTextScrollPane>
+
+</panel>
+
+<panel name="Dialog" layout="BorderLayout">
+
+<RTextScrollPane>
+	<fileTextArea syntaxEditingStyle="text/java" source="examples/explorer/LoginDialog.java"  editable="false"/>
+</RTextScrollPane>
+
+</panel>
+
+</tabbedpane>
+
+</panel>

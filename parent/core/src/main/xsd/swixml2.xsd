@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+xmlns:t="http://www.swixml.org/2007/Swixml-types"
+targetNamespace="http://www.swixml.org/2007/Swixml"
+elementFormDefault="unqualified" attributeFormDefault="unqualified">
+
+<xs:import namespace="http://www.swixml.org/2007/Swixml-types" schemaLocation="types.xsd"/>
+
+
+<xs:element  name="panel" type="t:panel" >
+</xs:element>
+
+<xs:element  name="button" type="t:button" >
+</xs:element>
+
+<xs:element  name="textField" type="t:textField" >
+</xs:element>
+
+<xs:element  name="label" type="t:label" >
+</xs:element>
+
+</xs:schema>

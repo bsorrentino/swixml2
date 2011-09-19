@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<frame Size="500,500" resizable="true" title="Test"  defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+
+<vbox>
+
+
+<menubutton id="btnMenu" text="test" action="action">
+    <popupMenu>
+      <menuitem text="menu1" action="action1"/>
+      <menuitem text="menu2" action="action2"/>
+    </popupMenu>
+</menubutton>
+
+<!-- READ ICONS FROM RESOURCE FILE -->
+<animatedbutton id="btnAnimated" name="btnAnimated" iconCount="2" ></animatedbutton>
+
+<!-- READ ICONS FROM ATTRIBUTES -->
+<animatedbutton id="btnAnimated2" name="btnAnimated2"
+    text=""
+    action="button2"
+    iconCount="2"
+    icon0="/images/RecAni1.png"
+    icon1="/images/RecAni1_gray.png" ></animatedbutton>
+
+
+<RTextScrollPane>
+	<RSyntaxTextArea syntaxEditingStyle="text/java" bindWith="sourceFile" editable="false"/>
+</RTextScrollPane>
+
+</vbox>
+
+</frame>

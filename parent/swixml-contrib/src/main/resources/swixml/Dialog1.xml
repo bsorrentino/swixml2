@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<frame Size="500,500" resizable="true" title="Test"  defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+
+<vbox>
+
+
+<menubutton id="btnMenu" text="test" ></menubutton>
+
+<animatedbutton id="btnAnimated" name="btnAnimated"></animatedbutton>
+
+</vbox>
+
+</frame>

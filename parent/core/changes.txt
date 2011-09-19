@@ -1,0 +1,85 @@
+
+2.5.SNAPSHOT 
+============
+
+Issue 65 - uniform bind model
+Issue 49 - unify the localization model to JSR296 model
+
+
+
+
+2.5.20100414
+============
+- Issue 44
+- add org.jdesktop.application.Application.injectFields to enable/disable auto inject fileds
+- Issue 46
+- Issue 47
+- Issue 48 - If missing attribute 'name' it will be set to value of  attribute 'id' (if present)
+- JavaDoc refinements 
+
+* * * * * * 2.5  * * * * *
+NEW
+---
+change render method of SwingApplication to accept JDialog, JFrame previously instantiated 
+
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <radiobutton> from class JRadioButton to class  org.swixml.jsr.widget.JRadioButtonEx
+
+CHANGES
+-------
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <list> from class JList to class  org.swixml.jsr.widget.JListEx
+ <combobox> from class JComboBox to class  org.swixml.jsr.widget.JComboBoxEx
+
+added to the JSR296 resource convention <package name>.resources.<class name> also the <class name> that simplify the project management and archetype creation 
+
+* * * * * * 2.1  * * * * *
+NEW
+---
+integrated source code of JSR296 1.03
+integrated source code of JSR295 1.2.1
+included classes from com.applet.eawt jar
+
+Added a SwingComponent interface and SwingComponentBase implementation to allow to split application in several modules
+
+Added useful instance methods 
+===============================
+SwingApplication.renderFrame
+SwingApplication.renderDialog
+SwingComponentBase.renderFrame
+SwingComponentBase.renderDialog
+
+
+NEW TAGs
+-------
+<box.glue>
+<box.hglue>
+<box.vglue>
+<box.hstrut>
+<box.vstrut>
+<box.rigidarea>
+<vgapbox>
+<hgapbox>
+
+
+CHANGES
+-------
+
+SwingApplication inherits from org.jdesktop.application.SingleFrameApplication
+
+substitute tags to add binding, action and resource management as described in JSR295,JSR296
+ <Label> from class JLabel to class  org.swixml.jsr.widget.JLabelEx
+ <Table> from class JTable to class  org.swixml.jsr.widget.JTableEx
+ <TextArea> from class JTextArea to class  org.swixml.jsr.widget.JTextAreaEx
+ <TextField> from class JTextField to class  org.swixml.jsr.widget.JTextFieldEx
+ <PasswordField> from class JPasswordField to class  org.swixml.jsr.widget.JPasswordFieldEx
+ <Tree> from class JTree to class  org.swixml.jsr.widget.JTreeEx
+
+Deprecated: 
+
+SwingEngine.setAppFrame()
+SwingEngine.getAppFrame()
+
+BUG FIXES
+---------
+

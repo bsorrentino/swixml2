@@ -1,0 +1,18 @@
+
+ 
+<frame title="TestDivider" resizable="true" _modal="true" size="600,600" _plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+    <splitpane id="split" dividerLocationI="10"  dividerSize="10" orientation="JSplitPane.VERTICAL_SPLIT" oneTouchExpandable="true">
+        <panel id="formPanel1">
+            <layout type="FormLayout" columns="10px, pref, 20dlu, 60dlu, 60dlu, 20dlu" rows="10px, pref, 10dlu, pref"/>
+            <label text="Kd. Nr:" constraints="2,2"/>
+            <label text="Name 1:" constraints="2,4"/>
+            <textfield id="textField1" constraints="4, 2"/>
+            <textfield id="textField2" constraints="4, 4, 3, 1"/>
+        </panel>
+        <tabbedpane>
+            <panel name="Tabelle" border="LoweredBevelBorder" layout="borderlayout">
+                <table name="table"/>
+            </panel>
+        </tabbedpane>
+    </splitpane>
+</frame>

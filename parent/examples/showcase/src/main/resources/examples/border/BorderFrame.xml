@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<frame xmlns="http://www.swixml.org/2007/Swixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.swixml.org/2007/Swixml http://swixml2.googlecode.com/svn/trunk/schema-generator/swixml2-schema-2.5-SNAPSHOT.xsd"
+name="mainframe" minimumSize="740,480" title="Fun with SWIXML - Layouts" defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
+  <desktoppane>
+
+    <internalframe title="TitledBorder" bounds="10,10,150,450" visible="true" resizable="true">
+      
+      <vbox>
+      <panel border="TitledBorder(Simple)"><button>1</button></panel>
+      <panel border="TitledBorder(Simple, CENTER)"><button>1</button></panel>
+      <panel border="TitledBorder(Simple, RIGHT)"><button>1</button></panel>
+      <panel border="TitledBorder(Simple, CENTER, BOTTOM)"><button>1</button></panel>
+      </vbox>
+      
+    </internalframe>
+
+    <internalframe Title="LineBorder" bounds="200,10,150,450" Layout="GridLayout(2,2)" Visible="true" Resizable="true">
+
+      <vbox gap="2">
+      <panel border="LineBorder"><button>1</button></panel>
+      <panel border="LineBorder(red)"><button>1</button></panel>
+      <panel border="LineBorder(green, 3)"><button>1</button></panel>
+      </vbox>
+
+    </internalframe>
+
+    <!--
+    <internalframe xmlns:x="http://code.google.com/p/swinghtmltemplate/" 
+        title="Border from htmltemplate" 
+        bounds="400,10,150,450" 
+        layout="GridLayout(2,2)" 
+        visible="true" r
+        esizable="true">
+
+      <vbox gap="2">
+      <panel  x:border="etched lowered white black;"><button>1</button></panel>
+      <panel border="LineBorder(red)"><button>1</button></panel>
+      <panel x:border='titled "Foo" (line black) left bottom (Arial) red;'><button>1</button></panel>
+      </vbox>
+
+    </internalframe>
+    -->
+
+
+  </desktoppane>
+</frame>

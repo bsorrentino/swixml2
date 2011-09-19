@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<dialog 
+	modal="true" 
+	size="405,330" 
+	resizable="true" 
+	title="test"
+	defaultCloseOperation="JDialog.DISPOSE_ON_CLOSE">
+
+<panel layout="BorderLayout">
+
+    <vbox constraints="BorderLayout.NORTH" >
+        <combobox id="combo" editable="true" bindList="${data}"  />
+        <combobox id="combo2" editable="true" bindList="${data2}" bindWith="item" action="combo2_selection" />
+    </vbox>
+
+    <panel constraints="BorderLayout.CENTER"></panel>
+
+    <vbox constraints="BorderLayout.SOUTH">
+        <button text="submit" action="submit"/>
+    </vbox>
+
+
+</panel>
+
+  
+</dialog>

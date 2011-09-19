@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<dialog xmlns="http://www.swixml.org/2007/Swixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.swixml.org/2007/Swixml http://swixml2.googlecode.com/svn/trunk/schema-generator/swixml2-schema-2.5-SNAPSHOT.xsd" 
+	name="dialog"
+    minimumSize="200,240"
+	resizable="true" 
+	title="Example Text usage" 
+	undecorated="false" 
+	alwaysOnTop="true"
+	defaultCloseOperation="JFrame.HIDE_ON_CLOSE" 
+	modal="false"
+	>
+
+<panel layout="borderLayout">
+<panel constraints="BorderLayout.CENTER">
+
+<textField id="limitedFeld" border="titledBorder(limited text field)" columns="30" document="${textLimit}" />
+
+</panel>
+
+<hbox constraints="BorderLayout.SOUTH">
+<button text="close" action="close"/>
+</hbox>
+</panel>
+
+
+</dialog>

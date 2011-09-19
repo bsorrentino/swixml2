@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<panel  layout="BorderLayout">
+
+<tabbedpane constraints="BorderLayout.CENTER">
+
+<panel name="XML Source" layout="BorderLayout">
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/xml" source="examples/table/TableDialog.xml" ></filetextarea>
+</RTextScrollPane>
+
+</panel>
+
+<panel name="Java Source" layout="BorderLayout">
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/java" source="examples/util/GenericTreeModel.java" ></filetextarea>
+</RTextScrollPane>
+</panel>
+
+<panel name="SimpleBean" layout="BorderLayout">
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/java" source="examples/SimpleBean.java" ></filetextarea>
+</RTextScrollPane>
+</panel>
+
+<panel name="SimpleBeanInfo" layout="BorderLayout">
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/java" source="examples/SimpleBeanBeanInfo.java" ></filetextarea>
+</RTextScrollPane>
+</panel>
+
+<panel name="SimpleBean2" layout="BorderLayout">
+<RTextScrollPane>
+<filetextarea  syntaxEditingStyle="text/java" source="examples/SimpleBean2.java" ></filetextarea>
+</RTextScrollPane>
+</panel>
+
+</tabbedpane>
+
+</panel>
