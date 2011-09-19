@@ -34,6 +34,7 @@ import examples.legacy.Form;
 import examples.legacy.FormLayout;
 import examples.legacy.GridBag;
 import examples.legacy.Layout;
+import examples.legacy.XInclude;
 import examples.script.ScriptExample;
 import examples.spinner.SpinnerExample;
 import examples.table.TableExample;
@@ -179,6 +180,12 @@ public class Swixml2Explorer extends SwingApplication  {
 				}
 				{
 					PanelInfo p = new PanelInfo("FormLayout", FormLayout.class, "xml/formlayout.xml", "examples/legacy/FormLayout.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("Include", XInclude.class);
+					p.setXmlPanel("xml/xincludeContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<frame size="640,480" title="XInclude Sample" defaultCloseOperation="JFrame.EXIT_ON_CLOSE" layout="BorderLayout">
+<frame size="640,480" title="XInclude Sample" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" layout="BorderLayout">
   <panel constraints="BorderLayout.CENTER">
     
     <label id="lbl" Font="Comic Sans MS-BOLD-14" Foreground="blue">
@@ -8,6 +8,8 @@
     
   </panel>
   
-  <panel id="pnl_footer" constraints="BorderLayout.SOUTH" include="xml/fragments.xml#PNL_OK_CANCEL"/>
+  <panel 	id="pnl_footer" 
+  			constraints="BorderLayout.SOUTH" 
+  			include="xml/fragments.xml#PNL_OK_CANCEL"/><!--  INCLUDE FRAGMENT -->
 
 </frame>
