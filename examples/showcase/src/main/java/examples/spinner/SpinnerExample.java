@@ -5,19 +5,22 @@
 
 package examples.spinner;
 
+import static org.swixml.LogUtil.logger;
+
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import javax.swing.JDialog;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
+
 import org.jdesktop.application.Action;
 import org.swixml.jsr296.SwingApplication;
-import static org.swixml.LogUtil.logger;
 /**
  *
  * @author bsorrentino

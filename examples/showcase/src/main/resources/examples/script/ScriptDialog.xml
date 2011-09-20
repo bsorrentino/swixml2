@@ -20,7 +20,7 @@ function close() {
 
 	client.setVisible(false);
 	
-	application.exit();
+	//application.exit();
 }
 
 ]]></script>

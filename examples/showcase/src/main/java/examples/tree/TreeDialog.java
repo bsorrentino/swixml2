@@ -6,10 +6,12 @@ package examples.tree;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JDialog;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.MutableTreeNode;
+
 import org.jdesktop.application.Action;
 
 /**

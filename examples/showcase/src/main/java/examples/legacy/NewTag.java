@@ -3,7 +3,6 @@ import java.util.TimeZone;
 
 import javax.swing.JFrame;
 
-import org.swixml.Converter;
 import org.swixml.ConverterLibrary;
 import org.swixml.SwingEngine;
 

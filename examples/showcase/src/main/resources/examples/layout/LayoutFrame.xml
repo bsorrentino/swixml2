@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<frame name="mainframe" minimumSize="740,480" title="SWIXML2 - Layouts" defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
+<dialog name="mainframe" minimumSize="740,480" title="SWIXML2 - Layouts" defaultCloseOperation="JFrame.HIDE_ON_CLOSE">
   <desktoppane>
 
     <internalframe Title="Grid Layout" Bounds="185,10,175,160" Layout="GridLayout(2,2)" Visible="true" Resizable="true">
@@ -81,4 +81,4 @@
 
 
   </desktoppane>
-</frame>
+</dialog>

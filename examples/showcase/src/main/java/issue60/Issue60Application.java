@@ -7,6 +7,7 @@ package issue60;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.swixml.jsr296.SwingApplication;
 
 /**

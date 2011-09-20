@@ -17,9 +17,4 @@ public class ScriptDialog extends JDialog {
 		System.out.println( e );
 	}
 
-	@Action
-	public void close() {
-	
-		System.out.println( "close" );
-	}
 }

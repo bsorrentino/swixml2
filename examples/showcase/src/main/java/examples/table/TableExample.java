@@ -1,10 +1,8 @@
 package examples.table;
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JTable;
@@ -12,7 +10,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.observablecollections.ObservableCollections;
-import org.swixml.jsr295.BindingUtils;
 import org.swixml.jsr296.SwingApplication;
 
 import examples.SimpleBean;

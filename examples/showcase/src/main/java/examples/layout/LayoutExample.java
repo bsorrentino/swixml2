@@ -1,6 +1,6 @@
 package examples.layout;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Application;
@@ -12,7 +12,7 @@ public class LayoutExample extends SwingApplication {
     protected void startup() {
 
 		try {
-			JFrame frame = super.render(new JFrame(), "examples/layout/LayoutFrame.xml");
+			JDialog frame = super.render(new JDialog(), "examples/layout/LayoutFrame.xml");
 
 			super.show(frame);
 			

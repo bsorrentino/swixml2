@@ -12,9 +12,6 @@ import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 
-import examples.task.ListFilesTask;
-import examples.task.NetworkTimeRetrieverTask;
-
 @SuppressWarnings("serial")
 public class BackgroundTaskDialog extends JDialog  { 
     

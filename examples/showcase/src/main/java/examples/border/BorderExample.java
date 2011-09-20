@@ -5,7 +5,8 @@
 
 package examples.border;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
+
 import org.swixml.jsr296.SwingApplication;
 
 /**
@@ -22,7 +23,7 @@ public class BorderExample extends SwingApplication {
 
         try {
 
-            JFrame frame = render(new BorderFrame());
+            JDialog frame = render(new BorderDialog());
 
             show(frame);
 
