@@ -23,6 +23,7 @@ import org.swixml.XFrame;
 import org.swixml.examples.wizard.DDLWizardApplication;
 import org.swixml.jsr296.SwingApplication;
 
+import examples.border.BorderExample;
 import examples.combo.ComboExample;
 import examples.dialog.LoginExample;
 import examples.layout.LayoutExample;
@@ -199,13 +200,19 @@ public class Swixml2Explorer extends SwingApplication  {
 				
 				MutableTreeNode node =  applications.addNodeToRoot( pp, true );
 				{
-					PanelInfo p = new PanelInfo("Script", ScriptExample.class);
+					PanelInfo p = new PanelInfo("Script example", ScriptExample.class);
 					p.setXmlPanel("examples/script/ScriptDialogContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}
 				{
-					PanelInfo p = new PanelInfo("Layout", LayoutExample.class, "examples/layout/LayoutFrame.xml", "examples/layout/LayoutExample.java");
+					PanelInfo p = new PanelInfo("Layout example", LayoutExample.class, "examples/layout/LayoutFrame.xml", "examples/layout/LayoutExample.java");
+					panels.add( p );
+					applications.addNode(node, p );
+				}
+				{
+					PanelInfo p = new PanelInfo("Border Example", BorderExample.class);
+					p.setXmlPanel("examples/border/BorderExampleContent.xml");
 					panels.add( p );
 					applications.addNode(node, p );
 				}

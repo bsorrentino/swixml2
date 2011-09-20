@@ -12,7 +12,7 @@ public class LayoutExample extends SwingApplication {
     protected void startup() {
 
 		try {
-			JFrame frame = super.render(new JFrame());
+			JFrame frame = super.render(new JFrame(), "examples/layout/LayoutFrame.xml");
 
 			super.show(frame);
 			

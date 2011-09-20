@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<dialog xmlns="http://www.swixml.org/2007/Swixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.swixml.org/2007/Swixml http://swixml2.googlecode.com/svn/trunk/schema-generator/swixml2-schema-2.5-SNAPSHOT.xsd" 
- 
+<dialog xmlns="http://www.swixml.org/2007/Swixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.swixml.org/2007/Swixml http://swixml2.googlecode.com/svn/trunk/schema-generator/swixml2-schema-2.5-SNAPSHOT.xsd"  
 	name="dialog"
     minimumSize="400,240"
 	resizable="true" 
@@ -16,7 +15,7 @@
 
 <vbox constraints="BorderLayout.CENTER">
 
-<toggleButton name="tb" id="toggleButton" action="onCLick"  />
+<toggleButton name="tb" id="toggleButton" action="onCLick"  >Click Me</toggleButton>
 
 <box.vstrut height="10"></box.vstrut>
 
@@ -48,7 +47,7 @@
 </vbox>
 
 <hbox constraints="BorderLayout.SOUTH">
-<button text="close" action="close"/>
+<button action="close">CLOSE</button>
 </hbox>
 </panel>
 
