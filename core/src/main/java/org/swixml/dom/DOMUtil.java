@@ -113,6 +113,18 @@ public class DOMUtil implements LogAware {
 		      }  
 	   }
 
+	  /**
+	   * 
+	   * @param e
+	   * @return
+	   */
+	  public static String getText( Element e ) {
+		  if( e == null ) return null;
+		  
+		  Node n = e.getFirstChild();
+		  
+		  return ( n!=null && n.getNodeType()==Node.TEXT_NODE )  ? n.getNodeValue() : null;		  
+	  }
 	  
 	  /**
 	   * 

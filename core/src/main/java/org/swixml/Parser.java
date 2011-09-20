@@ -110,7 +110,6 @@ import org.w3c.dom.NodeList;
  * @see org.swixml.SwingTagLibrary
  * @see org.swixml.ConverterLibrary
  */
-@SuppressWarnings({"unchecked"})
 public class Parser implements LogAware{
 
   public static final String ATTR_TEXT = "text";
@@ -620,25 +619,37 @@ public static final String TAG_SCRIPT = "script";
       if (lm != null)  setLayoutManager(obj, lm);
     }
 
-    //
+    
+    List<Attribute> remainingAttrs = applyAttributes(obj, factory, Attribute.asList(attributes) );
+
+    ////////////////////////////////////////////////////
     //  1st attempt to apply attributes (call setters on the objects)
     //    put an action attribute at the beginning of the attribute list
+    ////////////////////////////////////////////////////
     Attr actionAttr = element.getAttributeNode(ATTR_ACTION);
     if (actionAttr != null) {
       element.removeAttributeNode(actionAttr);
-      attributes.setNamedItem(actionAttr);
-    }
-    //
-    //  put Tag's Text content into Text Attribute
-    //
-    if (element.getAttributeNode(ATTR_TEXT) == null && element.getNodeValue()!=null && !element.getNodeValue().isEmpty()) {
+      //attributes.setNamedItem(actionAttr);
       
-      Attr _attr = jdoc.createAttribute(ATTR_TEXT); _attr.setValue(element.getNodeValue().trim());
+	  remainingAttrs.add( new Attribute(actionAttr));
       
-      attributes.setNamedItem( _attr );
     }
     
-    List<Attribute> remainingAttrs = applyAttributes(obj, factory, Attribute.asList(attributes) );
+
+    ////////////////////////////////////////////////////
+    //  put Tag's Text content into Text Attribute
+    ////////////////////////////////////////////////////
+    if (element.getAttributeNode(ATTR_TEXT) == null ) {
+    	String text = DOMUtil.getText(element);
+    	
+    	if( text!=null && !text.isEmpty() ){
+      
+    		//Attr _attr = jdoc.createAttribute(ATTR_TEXT); _attr.setValue(element.getNodeValue().trim());
+      
+    		//attributes.setNamedItem( _attr );
+    		remainingAttrs.add( new Attribute(ATTR_TEXT, text));
+    	}
+    }
     
     ////////////////////////////////////////////////////
     //  process child tags
