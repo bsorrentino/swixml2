@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<dialog  
+    id="agentdesktop"
+    title="Toolbar" 
+    resizable="false"
+    undecorated="true"
+    alwaysOnTop="true"
+    defaultCloseOperation="JDialog.DO_NOTHING_ON_CLOSE"
+    >
+<menubar id="mb">
+<box.hglue/>
+<menu id="mnuFile" >
+<menuitem id="mnuInteraction" action="showInteractionInfo"/>
+<menuitem id="mnuOutbound" action="showOutboundDialog"/>
+<separator/>
+<menuitem id="mnuVolume" action="showVolumeControl"/>
+<separator/>
+<menuitem id="mnuScript" action="loadScript"/>
+<separator/>
+<menuitem id="mnuExit" mnemonic="VK_X" ActionCommand="AC_EXIT" action="close" macos_quit="true"/>
+<separator/>
+<menuitem id="mnuAbout" text="?" enabled="true" mnemonic="VK_X" ActionCommand="AC_ABOUT" action="about"/>
+</menu>
+</menubar>
+ 
+ <panel layout="BorderLayout">
+
+ <panel constraints="BorderLayout.CENTER" layout="GridBagLayout" border="EtchedBorder" >
+ 	<toggleButton  id="loginButton" 
+            focusable="true"
+            action="toggleLogin"
+            horizontalAlignment="LEFT"
+            VerticalTextPosition="CENTER"
+            font="Arial-BOLD-10"
+            enabled="false"
+            >
+            <gridbagconstraints 
+            	id="gbc" 
+            	insets="5,5,5,5" 
+            	gridheight="1" 
+            	fill="GridBagConstraints.BOTH" 
+            	gridwidth="GridBagConstraints.REMAINDER"/></toggleButton>
+    <toggleButton id="readyButton" 
+            refid="loginButton"
+            action="toggleReady"
+            ><gridbagconstraints refid="gbc" /></toggleButton>
+    <button id="wrapupButton"
+            refid="loginButton"
+            icon="icons/buttons/acw.png" 
+            text="WRAPUP" 
+            ToolTipText="After Call Work!"  
+            action="afterCallWork"
+            ><gridbagconstraints refid="gbc" /></button>
+    <button id="dialingButton" 
+            refid="loginButton"
+            action="dial"
+            ><gridbagconstraints refid="gbc" /></button>
+    <button id="mailButton" 
+            refid="loginButton"
+            action="toggleMail"
+            enabled="false"
+            ><gridbagconstraints refid="gbc" /></button>
+            
+    <scrollpane border="LoweredBevelBorder">        
+    	<gridbagconstraints refid="gbc" weighty=".1" />
+    	<list	id="interactionList" 			
+    			bindList="${interactionModel}" 
+    			action="onSelectInteraction" />
+	</scrollpane>
+	
+    <button id="interactionButton" 
+            refid="loginButton"
+            action="processInteraction"
+            ><gridbagconstraints refid="gbc" /></button>
+    <button id="singleStepTransferButton" 
+            refid="loginButton"
+            action="transferStart"
+            ><gridbagconstraints refid="gbc"/></button>
+    <toggleButton id="transferButton" 
+            refid="loginButton"
+            action="transferInit"
+            ><gridbagconstraints refid="gbc" /></toggleButton>
+    <button id="transferGroupButton" 
+            refid="loginButton"
+            action="transferGroupInit"
+            ><gridbagconstraints refid="gbc" /></button>
+    <button id="conferenceButton" 
+            refid="loginButton"
+            action="conferenceInit"
+            ><gridbagconstraints refid="gbc" /></button>
+    <button id="resumeTrasfButton" 
+            refid="loginButton"
+            action="resumeTrasf"
+            ><gridbagconstraints refid="gbc"/></button>
+    <toggleButton id="holdResumeButton" 
+            refid="loginButton"
+            action="holdOrResume"
+            ><gridbagconstraints refid="gbc"/></toggleButton>
+    <button id="recordButton" 
+            refid="loginButton"
+            action="recordingStart"
+            ><gridbagconstraints refid="gbc"/></button>
+    
+    <box.vstrut height="25"><gridbagconstraints refid="gbc"/></box.vstrut>
+        
+	<label id="elapsedTimeLabel" 
+	        border="CompoundBorder(EmptyBorder(1,1,1,1), EtchedBorder)"
+	        HorizontalAlignment="CENTER"
+	        font="Arial-BOLD-10"
+	        minimumSize="100,25"    
+	        bindWith="elapsedTime"            	        
+	        ><gridbagconstraints refid="gbc"/></label>
+	<label id="labelAgent" 
+	        refid="elapsedTimeLabel"
+	        bindWith="agentId"            	        
+	        ><gridbagconstraints refid="gbc" /></label>
+	<label id="labelDn"
+	        refid="elapsedTimeLabel"
+	        bindWith="agentDn"            	        
+	        ><gridbagconstraints refid="gbc" /></label>
+	<label id="statusLabel" 
+	        refid="elapsedTimeLabel"
+	        text=""
+	        bindWith="status"
+	        opaque="true" 
+	        ><gridbagconstraints refid="gbc" /></label>
+	<label id="sessionLabel" 
+	        refid="elapsedTimeLabel"
+	        text=""
+	        bindWith=""            	        
+	        ><gridbagconstraints refid="gbc"/></label>
+	<label id="connectionLabel" 
+	        refid="elapsedTimeLabel"
+	        text=""
+	        bindWith="connectionStatus"            	        
+	        ><gridbagconstraints refid="gbc" /></label>
+</panel>
+</panel>
+</dialog>
+

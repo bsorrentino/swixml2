@@ -459,7 +459,7 @@ public static final String TAG_SCRIPT = "script";
       final String token = st.nextToken();
       Document doc = DOMUtil.getDocumentBuilder().parse( this.engine.getClassLoader().getResourceAsStream(token));
       
-      Element xelem = find(doc.getDocumentElement(), st.nextToken());
+      Element xelem = find(doc.getDocumentElement(), st.nextToken().trim());
       
       if (xelem != null) {
         moveContent(xelem, element);
@@ -631,9 +631,9 @@ public static final String TAG_SCRIPT = "script";
     //
     //  put Tag's Text content into Text Attribute
     //
-    if (element.getAttributeNode(ATTR_TEXT) == null && 0 < element.getTextContent().trim().length()) {
+    if (element.getAttributeNode(ATTR_TEXT) == null && element.getNodeValue()!=null && !element.getNodeValue().isEmpty()) {
       
-      Attr _attr = jdoc.createAttribute(ATTR_TEXT); _attr.setValue(element.getTextContent().trim());
+      Attr _attr = jdoc.createAttribute(ATTR_TEXT); _attr.setValue(element.getNodeValue().trim());
       
       attributes.setNamedItem( _attr );
     }
@@ -786,7 +786,7 @@ public static final String TAG_SCRIPT = "script";
           
           try {
 
-              ELProperty p = ELProperty.create(attr.getValue());
+              ELProperty<Object,Object> p = ELProperty.create(attr.getValue());
 
               if( !p.isReadable( owner ) ) {
                   logger.warning( "property " + attr.getValue() + " is not readable!");
@@ -797,7 +797,7 @@ public static final String TAG_SCRIPT = "script";
           
               if( null!=para ) {
 
-                    BeanProperty bp = BeanProperty.create(attr.getLocalName());
+                    BeanProperty<Object,Object> bp = BeanProperty.create(attr.getLocalName());
                     if( bp.isWriteable(obj) ) {
                         //factory.setSimpleProperty(obj, attr.getLocalName(), para);
                         bp.setValue(obj, para);
@@ -924,7 +924,7 @@ public static final String TAG_SCRIPT = "script";
         try {
           Field field = obj.getClass().getField(attr.getLocalName());
           if (field != null) {
-            Converter converter = cvtlib.getConverter(field.getType());
+            Converter<?> converter = cvtlib.getConverter(field.getType());
             if (converter != null) {
               //
               //  Localize Strings
@@ -960,9 +960,11 @@ public static final String TAG_SCRIPT = "script";
    */
   private void cloneAttributes(Element target) {
     Element source = null;
+    
     if (target.getAttributeNode(Parser.ATTR_REFID) != null) {
       source = find(jdoc.getDocumentElement(), target.getAttribute(Parser.ATTR_REFID).trim());
-    } else if (target.getAttributeNode(Parser.ATTR_USE) != null) {
+    } 
+    else if (target.getAttributeNode(Parser.ATTR_USE) != null) {
         logger.warning( String.format("Attribute [%s] for Element [%s] is deprecated!", Parser.ATTR_USE, target.getLocalName()));
         source = find(jdoc.getDocumentElement(), target.getAttribute(Parser.ATTR_USE).trim());
     }
@@ -973,18 +975,19 @@ public static final String TAG_SCRIPT = "script";
       
       for( int i=0; i<attributes.getLength(); ++i ) {
 
-    	  Attr attr = (Attr) attributes.item(i);
-        String name = attr.getLocalName().trim();
+    	final Attr attr = (Attr) attributes.item(i);
+        String name = attr.getName().trim();
         //
         //  copy but don't overwrite an attr.
         //  also, don't copy the id attr.
         //
         if (!Parser.ATTR_ID.equals(name) && target.getAttributeNode(name) == null) {
-          Attr attrcln = (Attr) attr.cloneNode(true);
-          source.removeAttributeNode(attrcln); //attrcln.detach();
-          target.setAttributeNode(attrcln);
+          target.setAttribute(attr.getName(), attr.getValue());
         }
       } // end while
+    }
+    else {
+    	logger.warning( String.format("source element [%s] not found!", target.getAttribute(Parser.ATTR_REFID)));
     }
   }
 
@@ -1107,11 +1110,7 @@ public static final String TAG_SCRIPT = "script";
    * @param target <code>Element</code> Content receiver
    */
   private static void moveContent(Element source, Element target) {
-	     NodeList list=source.getChildNodes();
-	      for(int i=0;i<list.getLength();i++) {
-	          Node node=target.getOwnerDocument().importNode(list.item(i), true);
-	          target.appendChild(node);
-	      }  
+	  DOMUtil.moveContent(source, target);
    }
 
   /**
@@ -1122,24 +1121,7 @@ public static final String TAG_SCRIPT = "script";
    * @return <code>Element</code> - with the given id in the id attribute or null if not found
    */
   private static Element find(Element element, String id) {
-    Element elem = null;
-    Attr attr =  element.getAttributeNode(Parser.ATTR_ID);
-    if (attr != null && id.equals(attr.getValue().trim())) {
-      elem = element;
-    } else {
-    	
-      NodeList children = element.getChildNodes();
-      
-      for( int i=0; i<children.getLength(); ++i ) {
-    	
-    	  Node n = children.item(i);
-    	  
-    	  if( n instanceof Element ) {
-    		  elem = find((Element) n, id.trim());
-    	  }
-      }
-    }
-    return elem;
+	return DOMUtil.findByAttribute(element, Parser.ATTR_ID, id);
   }
 
 

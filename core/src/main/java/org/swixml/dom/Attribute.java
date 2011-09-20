@@ -124,7 +124,7 @@ public class Attribute implements LogAware  {
 		for( int i=0; i < attributes.getLength(); ++ i ) {
 			Node n = attributes.item(i);
 			
-			//System.out.printf( "\tnode [%s] [%s] [%s] [%s]\n", n.getLocalName(), n.getTextContent(), n.getNamespaceURI(), n.getPrefix());
+			//System.out.printf( "\tnode [%s] [%s] [%s] [%s]\n", n.getLocalName(), n.getNodeValue(), n.getNamespaceURI(), n.getPrefix());
 			
 			result.add( new Attribute(n));
 		}
