@@ -620,8 +620,14 @@ public static final String TAG_SCRIPT = "script";
     }
 
     
-    List<Attribute> remainingAttrs = applyAttributes(obj, factory, Attribute.asList(attributes) );
-
+    
+    ////////////////////////////////////////////////////
+    //  process tag
+    //
+    ////////////////////////////////////////////////////
+    
+    List<Attribute> remainingAttrs = new java.util.ArrayList<Attribute>( attributes.getLength() + 2 );
+    
     ////////////////////////////////////////////////////
     //  1st attempt to apply attributes (call setters on the objects)
     //    put an action attribute at the beginning of the attribute list
@@ -629,13 +635,14 @@ public static final String TAG_SCRIPT = "script";
     Attr actionAttr = element.getAttributeNode(ATTR_ACTION);
     if (actionAttr != null) {
       element.removeAttributeNode(actionAttr);
-      //attributes.setNamedItem(actionAttr);
       
-	  remainingAttrs.add( new Attribute(actionAttr));
-      
+      //
+      // Make an 'action' the 1st attribute to be processed -
+      // otherwise the action would override already applied attributes like text etc.
+      //
+      remainingAttrs.add( new Attribute(actionAttr) );
     }
     
-
     ////////////////////////////////////////////////////
     //  put Tag's Text content into Text Attribute
     ////////////////////////////////////////////////////
@@ -644,12 +651,11 @@ public static final String TAG_SCRIPT = "script";
     	
     	if( text!=null && !text.isEmpty() ){
       
-    		//Attr _attr = jdoc.createAttribute(ATTR_TEXT); _attr.setValue(element.getNodeValue().trim());
-      
-    		//attributes.setNamedItem( _attr );
     		remainingAttrs.add( new Attribute(ATTR_TEXT, text));
     	}
     }
+    
+    remainingAttrs = applyAttributes( obj, factory, Attribute.asList(remainingAttrs,attributes) );
     
     ////////////////////////////////////////////////////
     //  process child tags
@@ -678,7 +684,7 @@ public static final String TAG_SCRIPT = "script";
     //
     if (remainingAttrs != null && !remainingAttrs.isEmpty()) {
       
-    	remainingAttrs = applyAttributes(obj, factory, remainingAttrs);
+    	remainingAttrs = applyAttributes( obj, factory, remainingAttrs);
         if (remainingAttrs != null) {
     	
         for( Attribute attr : remainingAttrs ) {
@@ -735,13 +741,13 @@ public static final String TAG_SCRIPT = "script";
    *                   <br>container.BOTTOM_ALIGNMENT
    *                   </p>
    */
-  private List<Attribute> applyAttributes(Object obj, Factory factory, List<Attribute> attributes) throws Exception {
+  private List<Attribute> applyAttributes( Object obj, Factory factory, List<Attribute> attributes) throws Exception {
     //
     // pass 1: Make an 'action' the 1st attribute to be processed -
     // otherwise the action would override already applied attributes like text etc.
     //
-
-    for (int i = 0; i < attributes.size(); i++) {
+	/*
+    for ( int i = 0; i < attributes.size(); i++) {
       Attribute attr = (Attribute) attributes.get(i);
       if (Parser.ATTR_ACTION.equalsIgnoreCase(attr.getLocalName())) {
         attributes.remove(i);
@@ -749,13 +755,15 @@ public static final String TAG_SCRIPT = "script";
         break;
       }
     }
-
+    */
+	  
     //
     //  pass 2: process the attributes
     //
 
 
-    final List<Attribute> notAppliedAttrList = new ArrayList<Attribute>();  // remember not applied attributes
+    final List<Attribute> notAppliedAttrList = new ArrayList<Attribute>( attributes.size() );  // remember not applied attributes
+    
     Action action = null; // used to insert an action into the macmap
     Attribute attr_id = null;
     Attribute attr_name = null;

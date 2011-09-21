@@ -114,12 +114,11 @@ public class Attribute implements LogAware  {
 
 	}
 	
-	public static final java.util.List<Attribute> asList( NamedNodeMap attributes ) {
+	public static final java.util.List<Attribute> asList( java.util.List<Attribute> result, NamedNodeMap attributes ) {
+		if( result == null ) throw new IllegalArgumentException( "result parameter is null!");
 		if( attributes==null || attributes.getLength()==0) {
-			return Collections.emptyList();
+			return result;
 		}
-		
-		java.util.List<Attribute> result = new java.util.ArrayList<Attribute>(attributes.getLength());
 		
 		for( int i=0; i < attributes.getLength(); ++ i ) {
 			Node n = attributes.item(i);
