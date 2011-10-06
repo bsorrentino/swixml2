@@ -5,7 +5,7 @@
   <artifactId>swixml-parent</artifactId>
   <version>2.6-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>SWIXML2 PARENT PROJECT</name>
+  <name>SWIXML2 PARENT PROJECT - ${project.version}</name>
   <description>swixml2 parent project</description>
   <url>http://code.google.com/p/swixml2/</url>
   
