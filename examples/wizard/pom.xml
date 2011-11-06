@@ -8,7 +8,7 @@
     <version>2.6-SNAPSHOT</version>
   </parent>
   <artifactId>swixml-examples-wizard</artifactId>
-  <name>SWIXML WIZARD EXAMPLE</name>
+  <name>SWIXML WIZARD EXAMPLE - ${project.version}</name>
   <url>http://code.google.com/p/swixml2/</url>
   <build>
   	<plugins>
