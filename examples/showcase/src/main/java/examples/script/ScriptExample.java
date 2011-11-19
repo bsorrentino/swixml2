@@ -1,36 +1,88 @@
 package examples.script;
 
+import java.awt.Component;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import org.swixml.SwingEngine;
 import org.swixml.jsr296.SwingApplication;
 
 public class ScriptExample extends SwingApplication {
-	@Override
-	protected void startup() {
-		
-		try {
 
-			JDialog dialog = render( new ScriptDialog() ); 
-			
-			show( dialog );
+    
+    
+    @Override
+    protected void startup() {
 
-			
-		} catch (Exception e) {
+        try {
+            JDialog dialog = render( new ScriptDialog() );
 
-			e.printStackTrace();
-			exit();
-		}
-	}
+            setup( dialog );
+            
+            show(dialog);
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		System.setProperty( IGNORE_RESOURCES_PREFIX, "true");
-		System.setProperty( AUTO_INJECTFIELD, "true");
 
-		SwingApplication.launch(ScriptExample.class, args);
-	}
+        } catch (Exception e) {
 
+            e.printStackTrace();
+            exit();
+        }
+    }
+
+ 
+    public static JDialog setup( JDialog dialog ) {
+    
+            final SwingEngine.Predicate addAncestorListenerPredicate =  new SwingEngine.Predicate() {
+
+                public boolean evaluate(JComponent c) {
+
+                    c.addAncestorListener( new AncestorListener() {
+
+                        public void ancestorAdded(AncestorEvent ae) {
+                            System.out.printf("==> ancestorAdded[%s]\n", ae.getComponent());
+                        }
+
+                        public void ancestorRemoved(AncestorEvent ae) {
+                            //System.out.printf("==> ancestorRemoved[%s]\n", ae.getComponent());
+                        }
+
+                        public void ancestorMoved(AncestorEvent ae) {
+                            //System.out.printf("==> ancestorMoved[%s]\n", ae.getComponent());
+                        }
+                    });
+
+                    return true;
+                }
+            };
+      
+            SwingEngine.traverse( dialog, addAncestorListenerPredicate );
+            
+            dialog.addContainerListener(new ContainerListener() {
+
+                public void componentAdded(ContainerEvent ce) {
+                    System.out.printf("==> componentAdded[%s]\n", ce.getComponent());
+                }
+
+                public void componentRemoved(ContainerEvent ce) {
+                    System.out.printf("==> componentRemoved[%s]\n", ce.getComponent());
+                }
+            });
+            
+            return dialog;
+    }
+    
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+
+        System.setProperty(IGNORE_RESOURCES_PREFIX, "true");
+        System.setProperty(AUTO_INJECTFIELD, "true");
+
+        SwingApplication.launch(ScriptExample.class, args);
+    }
 }
