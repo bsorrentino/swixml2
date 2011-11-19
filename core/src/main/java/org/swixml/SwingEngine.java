@@ -944,6 +944,37 @@ public class SwingEngine<T extends Container> implements LogAware {
   }
 
   /**
+   * 
+   */
+  public static interface Predicate {
+  
+      public boolean evaluate( javax.swing.JComponent c );
+  }
+  
+  /**
+   * Walks the whole tree and evaluate each JComponent using predicate.
+   *
+   * @param container          <code>container</code> recursive start component.
+   * @param predicate          evaluate component. Return false avoid to navigate it
+   * 
+   */
+  public static void traverse(final java.awt.Container container, final Predicate predicate) {
+      if( container==null ) return;
+      if( predicate==null ) return;
+      
+      for (int i = 0; i < container.getComponentCount(); ++i) {
+
+          final java.awt.Component c = container.getComponent(i);
+
+          if (!(c instanceof javax.swing.JComponent)) continue;
+
+          javax.swing.JComponent cc = (javax.swing.JComponent) c;
+
+          if( predicate.evaluate(cc) ) traverse(cc, predicate);
+      }
+  }
+  
+  /**
    * Walks the whole tree to add all components into the <code>components<code> collection.
    *
    * @param c          <code>Component</code> recursive start component.
