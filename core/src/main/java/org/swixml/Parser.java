@@ -927,7 +927,7 @@ public static final String TAG_SCRIPT = "script";
         //
         if (paraType.isPrimitive()) {
           try {
-            factory.setProperty(obj, attr, PrimitiveConverter.conv(paraType, attr, engine.getLocalizer()), paraType); // ATTR SET
+            factory.setProperty(obj, attr, PrimitiveConverter.conv(paraType, attr, engine), paraType); // ATTR SET
           } catch (Exception e) {
             notAppliedAttrList.add(attr);
           }

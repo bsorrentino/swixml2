@@ -73,11 +73,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.TreeSelectionModel;
-
-import org.swixml.Localizer;
-import org.swixml.LogUtil;
-import org.swixml.Parser;
+import org.swixml.*;
 import org.swixml.dom.Attribute;
+import org.swixml.script.ScriptUtil;
 
 /**
  * The <code>PrimitiveConverter</code> class defines a converter that creates primitive objects (wrapper),
@@ -88,7 +86,7 @@ import org.swixml.dom.Attribute;
  * @see org.swixml.ConverterLibrary
  */
 
-public class PrimitiveConverter extends ConverterAdapter implements SwingConstants, ScrollPaneConstants, KeyEvent, InputEvent {
+public class PrimitiveConverter implements Converter<Object>, SwingConstants, ScrollPaneConstants, KeyEvent, InputEvent {
 
   public static final PrimitiveConverter instance = new PrimitiveConverter();
   
@@ -122,11 +120,32 @@ public class PrimitiveConverter extends ConverterAdapter implements SwingConstan
    * @throws NoSuchFieldException in case no class a field matching field name had been regsitered with this converter
    * @throws IllegalAccessException if a matching field can not be accessed
    */
-  public static Object conv( final Class<?> type, final Attribute attr,  final Localizer localizer ) throws NoSuchFieldException, IllegalAccessException {
-    Attribute a = (Attribute) attr.clone();
+  public static Object conv( final Class<?> type, final Attribute attr,  final SwingEngine<?> engine ) throws NoSuchFieldException, IllegalAccessException {
+      if( attr == null ) return null;
+      return conv( attr.getValue(), type, attr, engine );
+  }
+  
+  /**
+   * 
+   * @param value evaluated value
+   * @param type
+   * @param attr
+   * @param engine
+   * @return
+   * @throws NoSuchFieldException
+   * @throws IllegalAccessException 
+   */
+  protected static Object conv( String value, final Class<?> type, final Attribute attr,  final SwingEngine<?> engine ) throws NoSuchFieldException, IllegalAccessException {
+    final Localizer localizer = Util.getLocalizer(engine);
+    final Attribute a = (Attribute) attr.clone();
+    
     Object obj = null;
-    if ( Parser.LOCALIZED_ATTRIBUTES.contains( a.getLocalName().toLowerCase() ))
-         a.setValue( localizer.getString( a.getValue() ));
+    
+    a.setValue( 
+            (Parser.LOCALIZED_ATTRIBUTES.contains(a.getLocalName().toLowerCase())) ? 
+                localizer.getString( value ) : 
+                value 
+            );
 
     try {
       if( type.isPrimitive() ) {
@@ -223,8 +242,13 @@ public class PrimitiveConverter extends ConverterAdapter implements SwingConstan
    * @return <code>Object</code> primitive wrapped into wrapper object
    * @throws Exception
    */
-  public Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception {
-    return PrimitiveConverter.conv( type, attr, localizer );
+  @Override
+  public Object convert( final Class<?> type, final Attribute attr, final SwingEngine<?> engine ) throws Exception {
+      
+    Object value = ScriptUtil.evaluateAttribute(attr, engine);
+    if( null == value ) return null;
+    
+    return PrimitiveConverter.conv( value.toString(), type, attr, engine );
   }
 
   /**

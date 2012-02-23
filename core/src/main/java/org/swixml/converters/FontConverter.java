@@ -55,7 +55,7 @@ package org.swixml.converters;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
-import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -65,7 +65,7 @@ import org.swixml.dom.Attribute;
  * @version $Revision: 1.1 $
  * @since swixml 1.0
  */
-public class FontConverter extends ConverterAdapter {
+public class FontConverter extends AbstractConverter<Font> {
   /**
    * converter's return type
    */
@@ -114,8 +114,9 @@ public class FontConverter extends ConverterAdapter {
    *         describes, or a new default <code>Font</code> if
    *         <code>str</code> is <code>null</code>.
    */
-  public Object convert(Class type, Attribute attr, Localizer localizer) throws Exception {
-    return attr != null ? Font.decode(attr.getValue()) : null;
+  @Override
+  public Font convert( String value, Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+    return Font.decode(value);
   }
 
   /**

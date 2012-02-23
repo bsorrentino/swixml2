@@ -54,6 +54,8 @@
 package org.swixml.converters;
 
 import java.util.StringTokenizer;
+import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 
 /**
  * Util. Class with static helper methods
@@ -62,6 +64,12 @@ import java.util.StringTokenizer;
 
  */
 public final class Util {
+    
+    
+    public static Localizer getLocalizer( SwingEngine<?> engine ) {
+        return (engine==null) ? (Localizer)null : engine.getLocalizer();
+    }
+    
   /**
    * Returns the remaining tokens of a StringTokenizer in an int-Array
    * @param st <code>StringTokenizer</code>

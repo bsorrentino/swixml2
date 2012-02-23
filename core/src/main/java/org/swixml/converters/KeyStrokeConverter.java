@@ -57,6 +57,7 @@ import javax.swing.KeyStroke;
 
 import org.swixml.Localizer;
 import org.swixml.Parser;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -76,7 +77,7 @@ import org.swixml.dom.Attribute;
  * @see javax.swing.KeyStroke#getKeyStroke(java.lang.String)
  * @see org.swixml.ConverterLibrary
  */
-public class KeyStrokeConverter extends ConverterAdapter {
+public class KeyStrokeConverter extends AbstractConverter<KeyStroke> {
 
   /** converter's return type */
   public static final Class TEMPLATE = KeyStroke.class;
@@ -88,8 +89,9 @@ public class KeyStrokeConverter extends ConverterAdapter {
    * @param localizer <code>Localizer</code> allow the use of resource lookups
    * @return <code>Object</code> - a <code>KeyStroke</code>
    */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    return KeyStrokeConverter.conv( type, attr, localizer );
+  @Override
+  public KeyStroke convert( String value, Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
+    return KeyStrokeConverter.conv( type, attr, engine );
   }
 
   /**
@@ -125,8 +127,11 @@ public class KeyStrokeConverter extends ConverterAdapter {
    * @return <code>Object</code> - a <code>KeyStroke</code> object for that String,
    *          or null if the specified String is null, or is formatted incorrectly
    */
-  public static Object conv( final Class type, final Attribute attr, Localizer localizer ) {
+  public static KeyStroke conv( final Class type, final Attribute attr, SwingEngine<?> engine ) {
     KeyStroke keyStroke = null;
+    
+    final Localizer localizer = Util.getLocalizer(engine);
+    
     if (attr != null) {
       if (Parser.LOCALIZED_ATTRIBUTES.contains( attr.getLocalName().toLowerCase() )) {
           attr.setValue( localizer.getString( attr.getValue() ) );

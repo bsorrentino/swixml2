@@ -56,7 +56,7 @@ package org.swixml.converters;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
-import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -66,7 +66,7 @@ import org.swixml.dom.Attribute;
  * @see java.awt.Point
  * @see org.swixml.ConverterLibrary
  */
-public class PointConverter extends ConverterAdapter {
+public class PointConverter extends AbstractConverter<Point> {
   /** converter's return type */
   public static final Class TEMPLATE = Point.class;
 
@@ -76,9 +76,9 @@ public class PointConverter extends ConverterAdapter {
    * @param attr <code>Attribute</code> value fields needs provides convertable String
    * @return <code>Object</code> - runtime type is <code>Point</code>
    */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    if (attr != null) {
-      StringTokenizer st = new StringTokenizer( attr.getValue(), "," );
+  @Override
+  public Point convert( String value, Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
+      StringTokenizer st = new StringTokenizer( value, "," );
       int x = 0;
       int y = 0;
       if (st.hasMoreTokens()) {
@@ -88,8 +88,6 @@ public class PointConverter extends ConverterAdapter {
         y = Integer.parseInt( st.nextToken().trim() );
       }
       return new Point( x, y );
-    }
-    return null;
   }
 
 

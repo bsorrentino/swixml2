@@ -58,11 +58,14 @@ import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import org.swixml.Converter;
+import org.swixml.LogAware;
 
 import org.swixml.SwingEngine;
 import org.swixml.XAction;
 import org.swixml.dom.Attribute;
 import org.swixml.script.ScriptAction;
+import org.swixml.script.ScriptUtil;
 
 /**
  * The ActionConverter is a tagging class that is only used to regsiter the
@@ -73,7 +76,7 @@ import org.swixml.script.ScriptAction;
  *
  * @since swixml 1.0
  */
-public class ActionConverter extends AbstractConverter<Action> {
+public class ActionConverter implements Converter<Action>,LogAware {
 
     @SuppressWarnings("serial")
     private Action EMPTY_ACTION = new AbstractAction() {
@@ -111,7 +114,7 @@ public class ActionConverter extends AbstractConverter<Action> {
             return EMPTY_ACTION;
         }
 
-        if (isScriptAttribute(attr)) {
+        if (ScriptUtil.isScriptAttribute(attr)) {
 
             para = new ScriptAction(engine, attr.getValue());
         } else {

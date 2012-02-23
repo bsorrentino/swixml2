@@ -52,10 +52,12 @@
 */
 package org.swixml.converters;
 
-import org.swixml.Localizer;
+import org.swixml.Converter;
+import org.swixml.LogAware;
 import org.swixml.Parser;
 import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
+import org.swixml.script.ScriptUtil;
 
 
 /**
@@ -67,7 +69,7 @@ import org.swixml.dom.Attribute;
  * @version $Revision: 1.1 $
  *
  */
-public class StringConverter extends AbstractConverter<String> {
+public class StringConverter implements Converter<String>, LogAware {
     /**
      * converter's return type
      */
@@ -101,16 +103,16 @@ public class StringConverter extends AbstractConverter<String> {
      *
      */
     @Override
-    public String convert(Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+    public String convert( Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
         
-        final Object value = super.evaluateAttribute(attr, engine);
+        final Object value = ScriptUtil.evaluateAttribute(attr, engine);
         if( null==value ) return null;
         
         //
         //  Localize Strings but only if Attribute calls for localization.
         //
         if (Parser.LOCALIZED_ATTRIBUTES.contains(attr.getLocalName().toLowerCase())) {
-            return super.getLocalizer(engine).getString(value.toString());
+            return Util.getLocalizer(engine).getString(value.toString());
         }
         return value.toString();
 

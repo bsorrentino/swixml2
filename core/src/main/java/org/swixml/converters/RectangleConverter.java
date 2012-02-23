@@ -56,7 +56,7 @@ package org.swixml.converters;
 import java.awt.Rectangle;
 import java.util.StringTokenizer;
 
-import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -74,7 +74,7 @@ import org.swixml.dom.Attribute;
  * @see org.swixml.ConverterLibrary
  */
 
-public final class RectangleConverter extends ConverterAdapter {
+public final class RectangleConverter extends AbstractConverter<Rectangle> {
   /** converter's return type */
   public static final Class TEMPLATE = Rectangle.class;
 
@@ -84,9 +84,9 @@ public final class RectangleConverter extends ConverterAdapter {
    * @param attr <code>Attribute</code> value fields needs provides convertable String
    * @return <code>Object</code> - runtime type is <code>Dimension</code>
    */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    if (attr != null) {
-      StringTokenizer st = new StringTokenizer( attr.getValue(), "," );
+  @Override
+  public Rectangle convert( String value, Class<?> type, Attribute attr, SwingEngine<?> engine ) {
+      StringTokenizer st = new StringTokenizer( value, "," );
       int x = 0;
       int y = 0;
       int width = 0;
@@ -104,8 +104,6 @@ public final class RectangleConverter extends ConverterAdapter {
         height = Integer.parseInt( st.nextToken().trim() );
       }
       return new Rectangle( x, y, width, height );
-    }
-    return null;
   }
 
 

@@ -99,17 +99,9 @@ public class ColorConverter extends AbstractConverter<Color> {
      * <code>java.awt.Color</code>
      */
     @Override
-    public Color convert(Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+    public Color convert( String value, Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
 
-        final Object value = super.evaluateAttribute(attr, engine);
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof Color) {
-            return (Color) value;
-        }
-
-        return ColorConverter.conv(type, value.toString());
+        return ColorConverter.conv(type, value);
     }
 
     /**

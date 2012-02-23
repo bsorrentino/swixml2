@@ -58,6 +58,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -68,7 +69,7 @@ import org.swixml.dom.Attribute;
  * @see java.awt.Dimension
  * @see org.swixml.ConverterLibrary
  */
-public class ImageConverter extends ConverterAdapter {
+public class ImageConverter extends AbstractConverter<Image> {
 
   /** converter's return type */
   public static final Class TEMPLATE = Image.class;
@@ -80,8 +81,9 @@ public class ImageConverter extends ConverterAdapter {
    * @param localizer <code>Localizer</code> allow the use of resource lookups
    * @return <code>Object</code> - an <code>ImageIcon</code>
    */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    return ImageConverter.conv( type, attr, localizer );
+  @Override
+  public Image convert( String value, Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
+    return ImageConverter.conv( value, type, attr, engine );
   }
 
   /**
@@ -91,8 +93,8 @@ public class ImageConverter extends ConverterAdapter {
    * @param localizer <code>Localizer</code> allow the use of resource lookups
    * @return <code>Object</code> - an <code>ImageIcon</code>
    */
-  public static Object conv( final Class type, final Attribute attr, Localizer localizer ) {
-    ImageIcon icon = (ImageIcon) ImageIconConverter.conv( type, attr, localizer );
+  public static Image conv( String value, Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
+    ImageIcon icon = (ImageIcon) ImageIconConverter.conv( value, type, attr, engine );
     return icon != null ? icon.getImage() : null;
   }
 

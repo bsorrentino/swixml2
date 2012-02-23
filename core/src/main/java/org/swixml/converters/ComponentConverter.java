@@ -54,8 +54,9 @@
 package org.swixml.converters;
 
 import java.awt.Component;
+import org.swixml.Converter;
 
-import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -65,7 +66,7 @@ import org.swixml.dom.Attribute;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
-public class ComponentConverter extends ConverterAdapter {
+public class ComponentConverter implements Converter<Component> {
   /**
    * converter's return type
    */
@@ -88,7 +89,8 @@ public class ComponentConverter extends ConverterAdapter {
    * @param type <code>Class</code> Data type to which the Attribute's value should be converted
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    */
-  public Object convert(Class type, Attribute attr, Localizer localizer) throws Exception {
+  @Override
+  public Component convert(Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
     return ComponentConverter.conv(attr);
   }
 

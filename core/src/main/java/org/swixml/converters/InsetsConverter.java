@@ -55,7 +55,7 @@ package org.swixml.converters;
 import java.awt.Insets;
 import java.util.StringTokenizer;
 
-import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -74,9 +74,9 @@ import org.swixml.dom.Attribute;
  *
  * @see java.awt.Insets
  * @see org.swixml.ConverterLibrary
-
+>
  */
-public class InsetsConverter extends ConverterAdapter {
+public class InsetsConverter extends AbstractConverter<Insets> {
 
   /** converter's return type */
   public static final Class TEMPLATE = Insets.class;
@@ -89,10 +89,10 @@ public class InsetsConverter extends ConverterAdapter {
    * @param attr <code>Attribute</code> value needs to provide String containing comma sep. integers
    * @return <code>Object</code> runtime type is subclass of <code>Insets</code>
    */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
+  @Override
+  public Insets convert( String value, Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
     Insets insets = null;
-    if (attr != null) {
-      StringTokenizer st = new StringTokenizer( attr.getValue(), "(,)" );
+      StringTokenizer st = new StringTokenizer( value, "(,)" );
       if (5 == st.countTokens()) { // assume "insets(...)"
         st.nextToken().trim();
       }
@@ -100,7 +100,6 @@ public class InsetsConverter extends ConverterAdapter {
       if (4 <= param.length) {
         insets = new Insets( param[0], param[1], param[2], param[3] );
       }
-    }
     return insets;
   }
 

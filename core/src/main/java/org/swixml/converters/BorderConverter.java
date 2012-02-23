@@ -117,17 +117,9 @@ public class BorderConverter extends AbstractConverter<Border> {
    * @return <code>Object</code> runtime type is subclass of <code>AbstractBorder</code>
    */
     @Override
-    public Border convert(Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+    public Border convert( String value, Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
 
-        final Object value = super.evaluateAttribute(attr, engine);
-        
-        if( null == value ) return null;
-        if( value instanceof Border ) return (Border) value;
-                             
-        String input = value.toString();
-        
-      
-      Matcher m = compoundBorderPattern.matcher(input);
+      Matcher m = compoundBorderPattern.matcher(value);
       
       if( m.matches() ) {
 
@@ -138,7 +130,7 @@ public class BorderConverter extends AbstractConverter<Border> {
           return BorderFactory.createCompoundBorder(outside, inside);
       }
       
-      return convert(type, input, engine);
+      return convert(type, value, engine);
     }
 
   /**

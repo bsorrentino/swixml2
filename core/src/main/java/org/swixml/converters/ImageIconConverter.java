@@ -54,9 +54,10 @@
 package org.swixml.converters;
 
 import javax.swing.ImageIcon;
-
 import org.swixml.Localizer;
+
 import org.swixml.Parser;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -67,7 +68,7 @@ import org.swixml.dom.Attribute;
  * @see java.awt.Dimension
  * @see org.swixml.ConverterLibrary
  */
-public class ImageIconConverter extends ConverterAdapter {
+public class ImageIconConverter extends AbstractConverter<ImageIcon> {
 
   /** converter's return type */
   public static final Class TEMPLATE = ImageIcon.class;
@@ -80,8 +81,9 @@ public class ImageIconConverter extends ConverterAdapter {
    * @param localizer <code>Localizer</code> allow the use of resource lookups
    * @return <code>Object</code> - an <code>ImageIcon</code>
    */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    return ImageIconConverter.conv( type, attr, localizer );
+  @Override
+  public ImageIcon convert( String value, Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
+    return ImageIconConverter.conv( value, type, attr, engine );
   }
 
   /**
@@ -91,20 +93,35 @@ public class ImageIconConverter extends ConverterAdapter {
    * @param localizer <code>Localizer</code> allow the use of resource lookups
    * @return <code>Object</code> - an <code>ImageIcon</code>
    */
-  public static Object conv( final Class type, final Attribute attr, Localizer localizer ) {
+  public static ImageIcon conv( final Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
+      if( attr == null ) return null;
+      return conv( attr.getValue(), type, attr, engine );
+  }
+
+  /**
+   * 
+   * @param value evaluated value
+   * @param type
+   * @param attr
+   * @param engine
+   * @return 
+   */
+  protected static ImageIcon conv( String value, final Class<?> type, final Attribute attr, SwingEngine<?> engine ) {
     ImageIcon icon = null;
-    if (attr != null) {
-      if (Parser.LOCALIZED_ATTRIBUTES.contains( attr.getLocalName().toLowerCase() )) {
-          attr.setValue( localizer.getString( attr.getValue() ) );
-      }
+
+    final Localizer localizer = Util.getLocalizer(engine);
+    
+    if (Parser.LOCALIZED_ATTRIBUTES.contains( attr.getLocalName().toLowerCase() )) {
+          attr.setValue( localizer.getString( value ) );
+    }
       try {
         //java.net.URL imgURL = Converter.class.getResource( attr.getValue() );
         //icon = new ImageIcon( imgURL );
-        icon = new ImageIcon( localizer.getClassLoader().getResource( attr.getValue() ) );
+        icon = new ImageIcon( localizer.getClassLoader().getResource( value ) );
       } catch (Exception e) {
         // intentionally empty
       }
-    }
+    
     return icon;
   }
 

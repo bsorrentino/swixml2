@@ -56,7 +56,7 @@ package org.swixml.converters;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
@@ -68,7 +68,7 @@ import org.swixml.dom.Attribute;
  * @version $Revision: 1.1 $
  *
  */
-public class LocaleConverter extends ConverterAdapter {
+public class LocaleConverter extends AbstractConverter<Locale> {
   /** converter's return type */
   public static final Class TEMPLATE = Locale.class;
 
@@ -80,9 +80,20 @@ public class LocaleConverter extends ConverterAdapter {
    *
    */
   public static Locale conv( Attribute attr ) throws Exception {
+      if( attr == null ) return null;
+      return conv( attr.getValue(), attr );
+  }
+
+  /**
+   * 
+   * @param value evaluated value
+   * @param attr
+   * @return
+   * @throws Exception 
+   */
+  protected static Locale conv( String value, Attribute attr ) throws Exception {
     Locale locale = null; // Locale.getDefault();
-    if (attr != null) {
-      StringTokenizer st = new StringTokenizer( attr.getValue(), "," );
+      StringTokenizer st = new StringTokenizer( value, "," );
       int n = st.countTokens();
       if (1 == n) {
         locale = new Locale( st.nextToken() );
@@ -91,7 +102,6 @@ public class LocaleConverter extends ConverterAdapter {
       } else if (3 <= n) {
         locale = new Locale( st.nextToken(), st.nextToken(), st.nextToken() );
       }
-    }
     return locale;
   }
 
@@ -103,8 +113,9 @@ public class LocaleConverter extends ConverterAdapter {
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    *
    */
-  public Object convert( Class type, Attribute attr, Localizer localizer ) throws Exception {
-    return LocaleConverter.conv( attr );
+  @Override
+  public Locale convert( String value, Class<?> type, Attribute attr, SwingEngine<?> engine ) throws Exception {
+    return LocaleConverter.conv( value, attr );
   }
 
 

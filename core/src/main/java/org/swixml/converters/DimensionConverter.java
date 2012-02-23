@@ -18,8 +18,8 @@
 
  3. The end-user documentation included with the redistribution,
  if any, must include the following acknowledgment:
-        "This product includes software developed by the
-         SWIXML Project (http://www.swixml.org/)."
+ "This product includes software developed by the
+ SWIXML Project (http://www.swixml.org/)."
  Alternately, this acknowledgment may appear in the software itself,
  if and wherever such third-party acknowledgments normally appear.
 
@@ -49,64 +49,75 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
-
+ */
 package org.swixml.converters;
 
 import java.awt.Dimension;
 import java.util.StringTokenizer;
 
 import org.swixml.Localizer;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 /**
- * A Converter that turns a Strings in the form: width,height into Dimension objects.
- * <br>
- * <h3>Examples for Valid XML attribute notations:</h3>
+ * A Converter that turns a Strings in the form: width,height into Dimension
+ * objects. <br> <h3>Examples for Valid XML attribute notations:</h3>
  * <pre>
  * <ul>
  * <li>size="500,300"</li>
  * </ul>
  * </pre>
+ *
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  * @see java.awt.Dimension
  * @see org.swixml.ConverterLibrary
  */
+public final class DimensionConverter extends AbstractConverter<Dimension> {
 
-public final class DimensionConverter extends ConverterAdapter {
-  /** converter's return type */
-  public static final Class TEMPLATE = Dimension.class;
+    /**
+     * converter's return type
+     */
+    public static final Class TEMPLATE = Dimension.class;
 
-  /**
-   * Converts a String into an Dimension object
-   * @param type <code>Class</code> not used
-   * @param attr <code>Attribute</code> value fields needs provides convertable String
-   * @return <code>Object</code> - runtime type is <code>Dimension</code>
-   */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    if (attr != null) {
-      StringTokenizer st = new StringTokenizer( attr.getValue(), "," );
-      int width = 0;
-      int height = 0;
-      if (st.hasMoreTokens()) {
-        width = Integer.parseInt( st.nextToken().trim() );
-      }
-      if (st.hasMoreTokens()) {
-        height = Integer.parseInt( st.nextToken().trim() );
-      }
-      return new Dimension( width, height );
+    /**
+     * Converts a String into an Dimension object
+     *
+     * @param type
+     * <code>Class</code> not used
+     * @param attr
+     * <code>Attribute</code> value fields needs provides convertable String
+     * @return
+     * <code>Object</code> - runtime type is
+     * <code>Dimension</code>
+     */
+    @Override
+    public Dimension convert(String value, Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+
+        StringTokenizer st = new StringTokenizer(value, ",");
+        int width = 0;
+        int height = 0;
+        if (st.hasMoreTokens()) {
+            width = Integer.parseInt(st.nextToken().trim());
+        }
+        if (st.hasMoreTokens()) {
+            height = Integer.parseInt(st.nextToken().trim());
+        }
+        return new Dimension(width, height);
+
     }
-    return null;
-  }
 
-
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class convertsTo() {
-    return TEMPLATE;
-  }
+    /**
+     * A
+     * <code>Converters</code> conversTo method informs about the Class type the
+     * converter is returning when its
+     * <code>convert</code> method is called
+     *
+     * @return
+     * <code>Class</code> - the Class the converter is returning when its
+     * convert method is called
+     */
+    public Class convertsTo() {
+        return TEMPLATE;
+    }
 }
