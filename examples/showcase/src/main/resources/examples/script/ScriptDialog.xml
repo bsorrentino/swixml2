@@ -28,6 +28,7 @@ function close() {
 	//application.exit();
 }
 
+
 ]]></script>
 
 <panel layout="borderLayout">
@@ -38,7 +39,7 @@ function close() {
 
 <box.vstrut height="10"></box.vstrut>
 
-<hbox>
+<hbox script:border="${javax.swing.BorderFactory.createEtchedBorder()}">
     <buttongroup >
         <radiobutton id="am" script:text="${radioText(0)}"/>
         <radiobutton id="fm" script:text="${radioText(1)}"/>

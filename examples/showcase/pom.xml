@@ -58,7 +58,7 @@ goal ==> webstart:jnlp
 <plugin>
 <groupId>org.codehaus.mojo.webstart</groupId>
 <artifactId>webstart-maven-plugin</artifactId>
-
+<version>1.0-beta-2</version>
 <executions>
 <execution>
 <goals>
