@@ -124,14 +124,15 @@
 
 </build>
 
-<!-- 
+
 <repositories>
+    <!-- need for netbean wizard dependency -->
     <repository>
-      <id>google-swixml2</id>
-      <url>http://swixml2.googlecode.com/svn/mavenrepo</url>
+      <id>geotoolkit</id>
+      <url>http://maven.geotoolkit.org</url>
     </repository>
 </repositories>  
- -->
+
 
 <distributionManagement>
 <!-- 
