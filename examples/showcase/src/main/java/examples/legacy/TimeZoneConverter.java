@@ -3,7 +3,6 @@ import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 import org.swixml.Converter;
-import org.swixml.Localizer;
 import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
@@ -21,12 +20,6 @@ public class TimeZoneConverter implements Converter<TimeZone> {
 	 */
 	public Class<?> convertsTo() {
 		return SimpleTimeZone.class;
-	}
-
-	@Override
-	public Object convert(Class<?> type, Attribute attr, Localizer localizer)
-			throws Exception {
-		return convert(type, attr, (SwingEngine<?>) null);
 	}
 
 	/**

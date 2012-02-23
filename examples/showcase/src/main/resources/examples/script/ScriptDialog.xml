@@ -6,7 +6,7 @@
 	name="dialog"
 	minimumSize="400,240"
 	resizable="true" 
-	title="Example Button usage" 
+	title="Example of Script usage" 
 	undecorated="false" 
 	alwaysOnTop="true"
 	defaultCloseOperation="JFrame.HIDE_ON_CLOSE" 
@@ -15,6 +15,11 @@
 
 <script><![CDATA[
 
+function radioText(i) {
+    var a = ["AM", "FM" ];
+    
+    return a[i];
+}
 
 function close() {
 
@@ -35,8 +40,8 @@ function close() {
 
 <hbox>
     <buttongroup >
-        <radiobutton id="am" text="AM"/>
-        <radiobutton id="fm" text="FM"/>
+        <radiobutton id="am" script:text="${radioText(0)}"/>
+        <radiobutton id="fm" script:text="${radioText(1)}"/>
     </buttongroup>
 </hbox>
 
