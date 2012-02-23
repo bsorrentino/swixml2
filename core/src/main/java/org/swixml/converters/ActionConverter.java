@@ -18,8 +18,8 @@
 
  3. The end-user documentation included with the redistribution,
  if any, must include the following acknowledgment:
-        "This product includes software developed by the
-         SWIXML Project (http://www.swixml.org/)."
+ "This product includes software developed by the
+ SWIXML Project (http://www.swixml.org/)."
  Alternately, this acknowledgment may appear in the software itself,
  if and wherever such third-party acknowledgments normally appear.
 
@@ -49,101 +49,103 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml.converters;
 
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.swixml.Converter;
-import org.swixml.Localizer;
-import org.swixml.LogAware;
 import org.swixml.SwingEngine;
 import org.swixml.XAction;
 import org.swixml.dom.Attribute;
 import org.swixml.script.ScriptAction;
 
-
 /**
- * The ActionConverter is a tagging class that is only used to regsiter the Action.class
- * with the ConverterLibrary
+ * The ActionConverter is a tagging class that is only used to regsiter the
+ * Action.class with the ConverterLibrary
+ *
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  *
  * @since swixml 1.0
  */
-public class ActionConverter implements Converter<Action>, LogAware {
-	
-	@SuppressWarnings("serial")
-	private Action EMPTY_ACTION = new AbstractAction() {
+public class ActionConverter extends AbstractConverter<Action> {
+
+    @SuppressWarnings("serial")
+    private Action EMPTY_ACTION = new AbstractAction() {
 
         public void actionPerformed(ActionEvent e) {
-            logger.info( "empty action performed " + e.getSource());
+            logger.log(Level.INFO, "empty action performed {0}", e.getSource());
         }
-  };	
-  /**
-   * Convert the value of the given <code>Attribute</code> object into an output object of the
-   * specified type.
-   *
-   * @param type <code>Class</code> Data type to which the Attribute's value should be converted
-   * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
-   *
-   */
-  public Action convert( Class<?> type, Attribute attr, SwingEngine<?> engine ) throws Exception {
-      Action para = null;
-      
-      logger.info( String.format("ActionConverter attr[%s]=[%s] namespace uri[%s] prefix [%s]", 
-    		  		attr.getLocalName(), 
-    		  		attr.getValue(),
-    		  		attr.getNamespaceURI(), 
-    		  		attr.getPrefix()));
-      
-	  final Object client = engine.getClient();
+    };
 
-      if( null==client ) {
-          return EMPTY_ACTION;
-      }
+    /**
+     * Convert the value of the given
+     * <code>Attribute</code> object into an output object of the specified
+     * type.
+     *
+     * @param type
+     * <code>Class</code> Data type to which the Attribute's value should be
+     * converted
+     * @param attr
+     * <code>Attribute</code> the attribute, providing the value to be
+     * converted.
+     *
+     */
+    public Action convert(Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+        Action para = null;
 
-      if( "script".equalsIgnoreCase(attr.getPrefix())) {
-    	  
-    	para = new ScriptAction( engine, attr.getValue() );  
-      }
-      else {
-    	  
-    	  try {
-    		  Field f = client.getClass().getField(attr.getValue());
-    	  
-    		  para = (Action) f.get(client);
-    	  }
-    	  catch( NoSuchFieldException e  ) {
-    	  
-	          try {
-	            
-	        	  para = new XAction(client, attr.getValue());
-	            
-	          } catch (NoSuchMethodException e1) {
-	        	  
-	              para = EMPTY_ACTION;
-	          }
-	      }
-      }
-	  return para;
-  }
+        logger.info(String.format("ActionConverter attr[%s]=[%s] namespace uri[%s] prefix [%s]",
+                attr.getLocalName(),
+                attr.getValue(),
+                attr.getNamespaceURI(),
+                attr.getPrefix()));
 
-  /**
-   * A <code>conversTo</code> method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class<?> convertsTo() {
-    return Action.class;
-  }
+        final Object client = engine.getClient();
 
-	@Override
-	public Object convert(Class<?> type, Attribute attr, Localizer localizer) throws Exception {
-		throw new UnsupportedOperationException("old convert method invoked!");
-	}
+        if (null == client) {
+            return EMPTY_ACTION;
+        }
+
+        if (isScriptAttribute(attr)) {
+
+            para = new ScriptAction(engine, attr.getValue());
+        } else {
+
+            try {
+                Field f = client.getClass().getField(attr.getValue());
+
+                para = (Action) f.get(client);
+            } catch (NoSuchFieldException e) {
+
+                try {
+
+                    para = new XAction(client, attr.getValue());
+
+                } catch (NoSuchMethodException e1) {
+
+                    para = EMPTY_ACTION;
+                }
+            }
+        }
+        return para;
+    }
+
+    /**
+     * A
+     * <code>conversTo</code> method informs about the Class type the converter
+     * is returning when its
+     * <code>convert</code> method is called
+     *
+     * @return
+     * <code>Class</code> - the Class the converter is returning when its
+     * convert method is called
+     */
+    public Class<?> convertsTo() {
+        return Action.class;
+    }
 }

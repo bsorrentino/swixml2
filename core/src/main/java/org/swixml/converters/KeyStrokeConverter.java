@@ -55,7 +55,6 @@ package org.swixml.converters;
 
 import javax.swing.KeyStroke;
 
-import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.Parser;
 import org.swixml.dom.Attribute;

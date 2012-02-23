@@ -64,6 +64,7 @@ import org.swixml.dom.Attribute;
  */
 public interface Converter<T> {
 
+
   /**
    * Convert the value of the given <code>Attribute</code> object into an output object of the
    * specified type.
@@ -72,9 +73,6 @@ public interface Converter<T> {
    * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
    *
    */
-  @Deprecated	
-  Object convert( final Class<?> type, final Attribute attr, final Localizer localizer ) throws Exception;
-
   T convert( final Class<?> type, final Attribute attr, SwingEngine<?> engine ) throws Exception;
 
   /**

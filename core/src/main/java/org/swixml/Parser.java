@@ -91,6 +91,7 @@ import org.swixml.converters.PrimitiveConverter;
 import org.swixml.dom.Attribute;
 import org.swixml.dom.DOMUtil;
 import org.swixml.jsr295.BindingUtils;
+import org.swixml.script.ScriptUtil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -709,11 +710,13 @@ public static final String TAG_SCRIPT = "script";
    * @return
    */
   private boolean isVariable( Attribute attr ) {
-     
-	  final boolean isVariable = BindingUtils.isVariablePattern( attr.getValue() );
-      final boolean isBound = ATTR_BIND_WITH.equalsIgnoreCase(attr.getLocalName());
       
-      return ( isVariable && !isBound ) ;
+      if( ScriptUtil.isScriptAttribute( attr ) ) return false;
+      
+      // IS BOUNDED
+      if( ATTR_BIND_WITH.equalsIgnoreCase(attr.getLocalName())) return false;
+      
+      return BindingUtils.isVariablePattern(attr.getValue());
 
   }
 
@@ -799,7 +802,7 @@ public static final String TAG_SCRIPT = "script";
       
       /////////////////////////
   
-      if( isVariable( attr )) {
+      if( isVariable( attr ) ) {
     	  
           Object owner = engine.getClient(); // we can use also Application.getInstance();
           

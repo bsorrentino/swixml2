@@ -52,9 +52,9 @@
 */
 package org.swixml.converters;
 
-import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.Parser;
+import org.swixml.SwingEngine;
 import org.swixml.dom.Attribute;
 
 
@@ -67,33 +67,52 @@ import org.swixml.dom.Attribute;
  * @version $Revision: 1.1 $
  *
  */
-public class StringConverter extends ConverterAdapter {
-  /** converter's return type */
-  public static final Class<?> TEMPLATE = String.class;
+public class StringConverter extends AbstractConverter<String> {
+    /**
+     * converter's return type
+     */
+    public static final Class<?> TEMPLATE = String.class;
 
-  /**
-   * Convert the value of the given <code>Attribute</code> object into an output object of the
-   * specified type.
-   *
-   * @param type <code>Class</code> Data type to which the Attribute's value should be converted
-   * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
-   *
-   */
-  public Object convert( Class<?> type, final Attribute attr, Localizer localizer ) throws Exception {
-    //
-    //  Localize Strings but only if Attribute calls for localization.
-    //
-    if ( Parser.LOCALIZED_ATTRIBUTES.contains( attr.getLocalName().toLowerCase() ))
-         return localizer.getString( attr.getValue() );
-    return attr.getValue();
-  }
+    /**
+     * A
+     * <code>Converters</code> conversTo method informs about the Class type the
+     * converter is returning when its
+     * <code>convert</code> method is called
+     *
+     * @return
+     * <code>Class</code> - the Class the converter is returning when its
+     * convert method is called
+     */
+    public Class<?> convertsTo() {
+        return TEMPLATE;
+    }
 
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class<?> convertsTo() {
-    return TEMPLATE;
-  }
+   /**
+     * Convert the value of the given
+     * <code>Attribute</code> object into an output object of the specified
+     * type.
+     *
+     * @param type
+     * <code>Class</code> Data type to which the Attribute's value should be
+     * converted
+     * @param attr
+     * <code>Attribute</code> the attribute, providing the value to be
+     * converted.
+     *
+     */
+    @Override
+    public String convert(Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+        
+        final Object value = super.evaluateAttribute(attr, engine);
+        if( null==value ) return null;
+        
+        //
+        //  Localize Strings but only if Attribute calls for localization.
+        //
+        if (Parser.LOCALIZED_ATTRIBUTES.contains(attr.getLocalName().toLowerCase())) {
+            return super.getLocalizer(engine).getString(value.toString());
+        }
+        return value.toString();
+
+    }
 }

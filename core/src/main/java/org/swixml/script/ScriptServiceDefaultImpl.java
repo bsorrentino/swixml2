@@ -3,6 +3,7 @@ package org.swixml.script;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.Bindings;
 import javax.script.Invocable;
@@ -129,6 +130,25 @@ public class ScriptServiceDefaultImpl implements ScriptService, LogAware {
 		return result;
 	}
 
+        @Override
+        public Object evalSafe(String script) {
+            try {
+                return engine.eval(script);
+            } catch (ScriptException ex) {
+                logger.log( Level.WARNING, String.format( "evaluation of script [%s] has failed!", script), ex);
+            }
+            return null;
+	}
+        
+        /**
+         * 
+         */ 
+        @Override
+        public Object eval(String script) throws ScriptException {
+		return engine.eval(script);
+	}
+
+
 
 	public Bindings createBindings() {
 		return engine.createBindings();
@@ -161,10 +181,6 @@ public class ScriptServiceDefaultImpl implements ScriptService, LogAware {
 		return engine.eval(script, context);
 	}
 
-
-	public Object eval(String script) throws ScriptException {
-		return engine.eval(script);
-	}
 
 
 	public Object get(String key) {

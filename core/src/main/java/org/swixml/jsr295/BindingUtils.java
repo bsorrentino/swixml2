@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.swixml.jsr295;
 
 import static org.swixml.LogUtil.logger;
@@ -14,6 +13,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JComboBox;
@@ -47,180 +47,214 @@ import static org.swixml.SwingEngine.isDesignTime;
  *
  * @author sorrentino
  */
-public class BindingUtils  {
-    public  static final String TABLE_COLUMN_EDITABLE = "column.editable";
-	public static final String TABLE_COLUMN_IS_BOUND = "bind";
-	public static final String TABLE_COLUMN_INDEX = "column.index";
-	public static final String TABLE_COLUMN_RENDERER = "column.renderer";
-	
-	
-	private static final String pattern =  "[$][{](.*)[}]";
+public class BindingUtils {
 
-    private BindingUtils() {}
+    public static final String TABLE_COLUMN_EDITABLE = "column.editable";
+    public static final String TABLE_COLUMN_IS_BOUND = "bind";
+    public static final String TABLE_COLUMN_INDEX = "column.index";
+    public static final String TABLE_COLUMN_RENDERER = "column.renderer";
 
-    @SuppressWarnings("serial")
-	static public class Column extends TableColumn {
-    	
-    	boolean editable = false;
-    	String type = null;
-    	
-		public Column() {
-			super();
-		}
-		
-		public final String getBindWith() {
-			return (String)super.getIdentifier();
-		}
-
-		public final void setBindWith(String bindWith) {
-			super.setIdentifier(bindWith);
-		}
-
-		public final boolean isEditable() {
-			return editable;
-		}
-
-		public final void setEditable(boolean editable) {
-			this.editable = editable;
-		}
-
-		public final String getType() {
-			return type;
-		}
-
-		public final void setType(String type) {
-			this.type = type;
-		}
-
-		
-	}
-
-    public static boolean isBound( JComponent comp ) {
-    	if( comp==null) throw new IllegalArgumentException( "comp argument is null!");
-
-    	final String name = comp.getClass().getName().concat(".bound");
-
-    	return (Boolean.TRUE.equals( comp.getClientProperty(name) ) );
+    private static final String PATTERN = "[$][{](.*)[}]";
+    private static final Pattern pattern = Pattern.compile(PATTERN);
+    
+    private BindingUtils() {
     }
 
-    public static boolean boundCheckAndSet( JComponent comp ) {
-    	if( comp==null) throw new IllegalArgumentException( "comp argument is null!");
+    @SuppressWarnings("serial")
+    static public class Column extends TableColumn {
 
-    	final String name = comp.getClass().getName().concat(".bound");
-    	
-    	if( Boolean.TRUE.equals( comp.getClientProperty(name) ) ) {
+        boolean editable = false;
+        String type = null;
+
+        public Column() {
+            super();
+        }
+
+        public final String getBindWith() {
+            return (String) super.getIdentifier();
+        }
+
+        public final void setBindWith(String bindWith) {
+            super.setIdentifier(bindWith);
+        }
+
+        public final boolean isEditable() {
+            return editable;
+        }
+
+        public final void setEditable(boolean editable) {
+            this.editable = editable;
+        }
+
+        public final String getType() {
+            return type;
+        }
+
+        public final void setType(String type) {
+            this.type = type;
+        }
+    }
+
+    public static boolean isBound(JComponent comp) {
+        if (comp == null) {
+            throw new IllegalArgumentException("comp argument is null!");
+        }
+
+        final String name = comp.getClass().getName().concat(".bound");
+
+        return (Boolean.TRUE.equals(comp.getClientProperty(name)));
+    }
+
+    public static boolean boundCheckAndSet(JComponent comp) {
+        if (comp == null) {
+            throw new IllegalArgumentException("comp argument is null!");
+        }
+
+        final String name = comp.getClass().getName().concat(".bound");
+
+        if (Boolean.TRUE.equals(comp.getClientProperty(name))) {
             return true;
         }
 
-    	comp.putClientProperty( name , Boolean.TRUE);
+        comp.putClientProperty(name, Boolean.TRUE);
         return false;
-    }
-    
-    /**
-     * 
-     * @param value
-     * @return
-     */
-    public static boolean isVariablePattern( String value ) {
-        if( null==value ) return false;
-        return Pattern.matches(pattern, value);
     }
 
     /**
-     * 
+     *
+     * @param value
+     * @return
+     */
+    public static boolean isVariablePattern(String value) {
+        if (null == value) {
+            return false;
+        }
+        return pattern.matcher(value).matches();
+        //return Pattern.matches(PATTERN, value);
+    }
+
+    /**
+     *
+     * @param value
+     * @return
+     */
+    public static Matcher getVariableMatcher(String value) {
+        if (null == value) throw new IllegalArgumentException( "value is null!");
+        return pattern.matcher(value);
+    }
+
+    /**
+     *
      * @param beanClass
      * @param propertyName
      * @return
      */
-    public static PropertyDescriptor findProperty( Class<?> beanClass, String propertyName ) {
+    public static PropertyDescriptor findProperty(Class<?> beanClass, String propertyName) {
 
-    	if( null==propertyName ) throw new IllegalArgumentException( "propertyName param is null!");
-    	PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
-    	for( PropertyDescriptor pd : pp ) {
-    		if( propertyName.equalsIgnoreCase(pd.getName()) ) {
-    	    	return pd;
-    		}
-    	}
-    	return null;
+        if (null == propertyName) {
+            throw new IllegalArgumentException("propertyName param is null!");
+        }
+        PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
+        for (PropertyDescriptor pd : pp) {
+            if (propertyName.equalsIgnoreCase(pd.getName())) {
+                return pd;
+            }
+        }
+        return null;
     }
-    
+
     /**
-     * 
+     *
      * @param beanClass
      * @return
      */
-    public static Map<String,PropertyDescriptor> getPropertyMap( Class<?> beanClass ) {
-    	PropertyDescriptor pp[] = PropertyUtils.getPropertyDescriptors(beanClass);
-    	
-		Map<String,PropertyDescriptor> map = new HashMap<String,PropertyDescriptor>(pp.length);
-		for( PropertyDescriptor pd : pp ) {
-			map.put( pd.getName(), pd);
-		}
-		
-		return map;
+    public static Map<String, PropertyDescriptor> getPropertyMap(Class<?> beanClass) {
+        PropertyDescriptor pp[] = PropertyUtils.getPropertyDescriptors(beanClass);
+
+        Map<String, PropertyDescriptor> map = new HashMap<String, PropertyDescriptor>(pp.length);
+        for (PropertyDescriptor pd : pp) {
+            map.put(pd.getName(), pd);
+        }
+
+        return map;
 
     }
-    
-    public static void setTableColumnRenderer( PropertyDescriptor pd, TableCellRenderer renderer ) {
-    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
-    	
-    	pd.setValue(BindingUtils.TABLE_COLUMN_RENDERER, renderer);
+
+    public static void setTableColumnRenderer(PropertyDescriptor pd, TableCellRenderer renderer) {
+        if (pd == null) {
+            throw new IllegalArgumentException("parameter pd is null!");
+        }
+
+        pd.setValue(BindingUtils.TABLE_COLUMN_RENDERER, renderer);
     }
-    
-    public static void setTableColumnIndex( PropertyDescriptor pd, int index ) {
-    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
-    	
-    	pd.setValue(BindingUtils.TABLE_COLUMN_INDEX, index);
+
+    public static void setTableColumnIndex(PropertyDescriptor pd, int index) {
+        if (pd == null) {
+            throw new IllegalArgumentException("parameter pd is null!");
+        }
+
+        pd.setValue(BindingUtils.TABLE_COLUMN_INDEX, index);
     }
-    
-    public static void setTableColumnIsBound( PropertyDescriptor pd, boolean bind ) {
-    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
-    	
-    	pd.setValue(BindingUtils.TABLE_COLUMN_IS_BOUND, bind);
+
+    public static void setTableColumnIsBound(PropertyDescriptor pd, boolean bind) {
+        if (pd == null) {
+            throw new IllegalArgumentException("parameter pd is null!");
+        }
+
+        pd.setValue(BindingUtils.TABLE_COLUMN_IS_BOUND, bind);
     }
-    
-    public static void setTableColumnEditable( PropertyDescriptor pd, boolean editable ) {
-    	if( pd==null ) throw new IllegalArgumentException("parameter pd is null!");
-    	
-    	pd.setValue(BindingUtils.TABLE_COLUMN_EDITABLE, editable);
+
+    public static void setTableColumnEditable(PropertyDescriptor pd, boolean editable) {
+        if (pd == null) {
+            throw new IllegalArgumentException("parameter pd is null!");
+        }
+
+        pd.setValue(BindingUtils.TABLE_COLUMN_EDITABLE, editable);
     }
 
     /**
      * parse bind for UpdateStrategy.READ_WRITE
-     * 
+     *
      * @param owner
      * @param bind
      */
-    public static AutoBinding parseBind( JComponent owner, String property, String bindProperty, Converter<?, ?> converter ) {
-        if( isDesignTime() ) return null;
-        if( boundCheckAndSet(owner)) return null;
+    public static AutoBinding parseBind(JComponent owner, String property, String bindProperty, Converter<?, ?> converter) {
+        if (isDesignTime()) {
+            return null;
+        }
+        if (boundCheckAndSet(owner)) {
+            return null;
+        }
 
 
-        Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
+        Object client = owner.getClientProperty(SwingEngine.CLIENT_PROPERTY);
 
-        return addAutoBinding( null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property, converter, null );
-        
+        return addAutoBinding(null, UpdateStrategy.READ_WRITE, client, bindProperty, owner, property, converter, null);
+
     }
-    
-    
+
     /**
      * parse bind for UpdateStrategy.READ
-     * 
+     *
      * @param owner
      * @param bind
      */
-    public static AutoBinding parseBindR( JComponent owner, String property, String bindProperty, Converter<?, ?> converter ) {
-        if( isDesignTime() ) return null;
-        if( boundCheckAndSet(owner)) return null;
-       
-        Object client = owner.getClientProperty( SwingEngine.CLIENT_PROPERTY );
+    public static AutoBinding parseBindR(JComponent owner, String property, String bindProperty, Converter<?, ?> converter) {
+        if (isDesignTime()) {
+            return null;
+        }
+        if (boundCheckAndSet(owner)) {
+            return null;
+        }
 
-        return addAutoBinding( null, UpdateStrategy.READ, client, bindProperty, owner, property, converter, null );
-        
+        Object client = owner.getClientProperty(SwingEngine.CLIENT_PROPERTY);
+
+        return addAutoBinding(null, UpdateStrategy.READ, client, bindProperty, owner, property, converter, null);
+
     }
-    
+
     /**
-     * 
+     *
      * @param bindingGroup
      * @param strategy
      * @param source
@@ -229,117 +263,134 @@ public class BindingUtils  {
      * @param targetProperty
      */
     @SuppressWarnings("unchecked")
-    public static AutoBinding addAutoBinding( BindingGroup bindingGroup,
-                                                UpdateStrategy strategy,
-                                                Object source,
-                                                String beanProperty,
-                                                Object target,
-                                                String targetProperty,
-                                                Converter<?, ?> converter,
-                                                Validator<?> validator ) {
-        
-        if( null==source )			throw new IllegalArgumentException( "bean argument is null!");
-        if( null==target )			throw new IllegalArgumentException( "target argument is null!");
-        if( null==targetProperty )	throw new IllegalArgumentException( "targetProperty argument is null!");
+    public static AutoBinding addAutoBinding(BindingGroup bindingGroup,
+            UpdateStrategy strategy,
+            Object source,
+            String beanProperty,
+            Object target,
+            String targetProperty,
+            Converter<?, ?> converter,
+            Validator<?> validator) {
 
-        final Property tp = ( targetProperty.startsWith("$") )
-              ? ELProperty.create(targetProperty)
-              : BeanProperty.create(targetProperty);
+        if (null == source) {
+            throw new IllegalArgumentException("bean argument is null!");
+        }
+        if (null == target) {
+            throw new IllegalArgumentException("target argument is null!");
+        }
+        if (null == targetProperty) {
+            throw new IllegalArgumentException("targetProperty argument is null!");
+        }
+
+        final Property tp = (targetProperty.startsWith("$"))
+                ? ELProperty.create(targetProperty)
+                : BeanProperty.create(targetProperty);
 
         final AutoBinding binding = Bindings.createAutoBinding(
-              strategy,
-              source,
-              BeanProperty.create(beanProperty),
-              target,
-              tp);
+                strategy,
+                source,
+                BeanProperty.create(beanProperty),
+                target,
+                tp);
 
-        if(converter!=null) {
+        if (converter != null) {
             binding.setConverter(converter);
         }
-        if(validator!=null) {
+        if (validator != null) {
             binding.setValidator(validator);
         }
-        
-        if( null!=bindingGroup ) {
-                bindingGroup.addBinding(binding);
+
+        if (null != bindingGroup) {
+            bindingGroup.addBinding(binding);
         } else {
-                binding.bind();
+            binding.bind();
         }
 
         return binding;
     }
 
     /**
-     * 
+     *
      * @param p
      * @return
      */
-    private static  int getColumnIndex( PropertyDescriptor p ) {
+    private static int getColumnIndex(PropertyDescriptor p) {
         final Object i = p.getValue(TABLE_COLUMN_INDEX);
-        return (i instanceof Integer ) ? (Integer)i : Integer.MAX_VALUE;
+        return (i instanceof Integer) ? (Integer) i : Integer.MAX_VALUE;
     }
-    
+
     /**
-     * 
+     *
      * @param table
      * @param beanList
      */
     @SuppressWarnings("unchecked")
-    public static JTableBinding initTableBindingFromTableColumns( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList ) {
-        if( null==table )	throw new IllegalArgumentException( "table argument is null!");
-        if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
+    public static JTableBinding initTableBindingFromTableColumns(BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList) {
+        if (null == table) {
+            throw new IllegalArgumentException("table argument is null!");
+        }
+        if (null == beanList) {
+            throw new IllegalArgumentException("beanList argument is null!");
+        }
 
 
-        if( isDesignTime() ) return null;
-        if( boundCheckAndSet(table)) return null;
+        if (isDesignTime()) {
+            return null;
+        }
+        if (boundCheckAndSet(table)) {
+            return null;
+        }
 
         final TableColumnModel columnModel = table.getColumnModel();
 
-        if( null==columnModel ) throw new IllegalStateException( "columnModel is not set!" );
-    		
+        if (null == columnModel) {
+            throw new IllegalStateException("columnModel is not set!");
+        }
+
         Enumeration<TableColumn> tableColumns = columnModel.getColumns();
 
-        if( null==tableColumns ) throw new IllegalStateException( "columnModel hasn't not tableColumns!" );
+        if (null == tableColumns) {
+            throw new IllegalStateException("columnModel hasn't not tableColumns!");
+        }
 
-        JTableBinding binding = SwingBindings.createJTableBinding( startegy, beanList, table);
+        JTableBinding binding = SwingBindings.createJTableBinding(startegy, beanList, table);
 
-        while( tableColumns.hasMoreElements() ) {
+        while (tableColumns.hasMoreElements()) {
 
             TableColumn tc = tableColumns.nextElement();
 
-            if( !(tc instanceof Column) ) {
+            if (!(tc instanceof Column)) {
 
-                    logger.warning( String.format("column [%s] is not valid. It will be ignored in binding!", tc.getIdentifier()));
-                    continue;
+                logger.warning(String.format("column [%s] is not valid. It will be ignored in binding!", tc.getIdentifier()));
+                continue;
             }
 
             Column c = (Column) tc;
 
 
-              logger.info( String.format("column [%s] header=[%s] modelIndex=[%d] resizable=[%b] minWidth=[%s] maxWidth=[%d] preferredWidth=[%d]\n",
-                              tc.getIdentifier(),
-                              tc.getHeaderValue(),
-                              tc.getModelIndex(),
-                              tc.getResizable(),
-                              tc.getMinWidth(),
-                              tc.getMaxWidth(),
-                              tc.getPreferredWidth()
-                              ));
+            logger.info(String.format("column [%s] header=[%s] modelIndex=[%d] resizable=[%b] minWidth=[%s] maxWidth=[%d] preferredWidth=[%d]\n",
+                    tc.getIdentifier(),
+                    tc.getHeaderValue(),
+                    tc.getModelIndex(),
+                    tc.getResizable(),
+                    tc.getMinWidth(),
+                    tc.getMaxWidth(),
+                    tc.getPreferredWidth()));
 
             final String propertyName = c.getBindWith();
-                
-            if( null==propertyName ) {
-                    logger.warning( String.format("column [%s] has not set bindWith property. It will be ignored in binding!", tc.getIdentifier()));
-                    continue;
+
+            if (null == propertyName) {
+                logger.warning(String.format("column [%s] has not set bindWith property. It will be ignored in binding!", tc.getIdentifier()));
+                continue;
 
             }
-                
+
             //
             // Property Binding
             //
             Property bp = BeanProperty.create(propertyName);
 
-            ColumnBinding cb = binding.addColumnBinding( bp) ;
+            ColumnBinding cb = binding.addColumnBinding(bp);
 
             //
             // set Header
@@ -348,208 +399,227 @@ public class BindingUtils  {
 
             final Object headerValue = c.getHeaderValue();
 
-            if( null==headerValue ) {
-                    c.setHeaderValue(propertyName);
+            if (null == headerValue) {
+                c.setHeaderValue(propertyName);
             }
-            cb.setColumnName( c.getHeaderValue().toString());
-                               
+            cb.setColumnName(c.getHeaderValue().toString());
+
             //
             // set Property type
             //
             final String typeName = c.getType();
 
-            if( null!=typeName ) {
+            if (null != typeName) {
 
                 Class<?> typeClass = null;
                 try {
-                        typeClass = Class.forName(typeName);
+                    typeClass = Class.forName(typeName);
 
-                        cb.setColumnClass(typeClass);
+                    cb.setColumnClass(typeClass);
                 } catch (ClassNotFoundException e) {
-                    logger.warning( String.format("column type [%s] is not valid java type. It will be ignored in binding!", typeName));
+                    logger.warning(String.format("column type [%s] is not valid java type. It will be ignored in binding!", typeName));
                 }
 
             }
-              
+
 
             //
             // set Editable
             //
-            cb.setEditable( c.isEditable() ) ;
+            cb.setEditable(c.isEditable());
 
-                
+
         }
 
-            
-        if( null!=group ) {
+
+        if (null != group) {
             group.addBinding(binding);
-        }
-        else {
+        } else {
             binding.bind();
         }
 
         return binding;
-            
+
     }
 
     /**
-     * 
+     *
      * @param table
      * @param beanList
      */
     @SuppressWarnings("unchecked")
-    public static JTableBinding initTableBindingFromBeanInfo( BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass, boolean isAllPropertiesBound ) {
-        if( null==table )	throw new IllegalArgumentException( "table argument is null!");
-        if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
-        if( null==beanClass )	throw new IllegalArgumentException( "beanClass argument is null!");
+    public static JTableBinding initTableBindingFromBeanInfo(BindingGroup group, UpdateStrategy startegy, JTable table, List<?> beanList, Class<?> beanClass, boolean isAllPropertiesBound) {
+        if (null == table) {
+            throw new IllegalArgumentException("table argument is null!");
+        }
+        if (null == beanList) {
+            throw new IllegalArgumentException("beanList argument is null!");
+        }
+        if (null == beanClass) {
+            throw new IllegalArgumentException("beanClass argument is null!");
+        }
 
-        if( isDesignTime() ) return null;
-        if( boundCheckAndSet(table)) return null;
-            
+        if (isDesignTime()) {
+            return null;
+        }
+        if (boundCheckAndSet(table)) {
+            return null;
+        }
+
         PropertyDescriptor[] pp = PropertyUtils.getPropertyDescriptors(beanClass);
 
-        JTableBinding binding = SwingBindings.createJTableBinding( startegy, beanList, table);
-            
-        if( null==pp ) {
+        JTableBinding binding = SwingBindings.createJTableBinding(startegy, beanList, table);
+
+        if (null == pp) {
             logger.warning("getPropertyDescriptors has returned null!");
             return null;
         }
-            
-        Arrays.sort( pp, new Comparator<PropertyDescriptor>() {
+
+        Arrays.sort(pp, new Comparator<PropertyDescriptor>() {
 
             public int compare(PropertyDescriptor p1, PropertyDescriptor p2) {
 
                 final int i1 = getColumnIndex(p1);
                 final int i2 = getColumnIndex(p2);
 
-                return ( i1-i2 );
+                return (i1 - i2);
             }
         });
-            
-            
-        for( PropertyDescriptor p : pp ) {
+
+
+        for (PropertyDescriptor p : pp) {
 
             Boolean isBinded = (Boolean) p.getValue(TABLE_COLUMN_IS_BOUND);
-            if( null==isBinded && isAllPropertiesBound==false) {
-                    continue;
+            if (null == isBinded && isAllPropertiesBound == false) {
+                continue;
             }
-            if( (null!=isBinded && Boolean.FALSE.equals(isBinded)) ) {
+            if ((null != isBinded && Boolean.FALSE.equals(isBinded))) {
                 continue; // skip property
             }
 
             final String name = p.getName();
 
-            if( "class".equals(name)) {
+            if ("class".equals(name)) {
                 continue;
             }
 
             Property bp = BeanProperty.create(name);
 
-            ColumnBinding cb = binding.addColumnBinding( bp) ;
+            ColumnBinding cb = binding.addColumnBinding(bp);
 
             final String displayName = p.getDisplayName();
 
-            cb.setColumnName( (null==displayName) ? name : displayName);
+            cb.setColumnName((null == displayName) ? name : displayName);
 
             final Class<?> type = p.getPropertyType();
 
-            if( type.isPrimitive()) {
-                cb.setColumnClass( MethodUtils.toNonPrimitiveClass(type) );
+            if (type.isPrimitive()) {
+                cb.setColumnClass(MethodUtils.toNonPrimitiveClass(type));
 
-            }
-            else {
+            } else {
                 cb.setColumnClass(type);
             }
-                
+
 
             Boolean isEditable = (Boolean) p.getValue(TABLE_COLUMN_EDITABLE);
 
-            cb.setEditable( (null!=isEditable && Boolean.TRUE.equals(isEditable)) ) ;
+            cb.setEditable((null != isEditable && Boolean.TRUE.equals(isEditable)));
 
 
         }
 
-        if( null!=group ) {
+        if (null != group) {
             group.addBinding(binding);
-        }
-        else {
+        } else {
             binding.bind();
         }
 
         return binding;
-            
+
     }
-    
+
     /**
-     * 
+     *
      * @param group
      * @param startegy
      * @param combo
      * @param beanList
      */
-	@SuppressWarnings("unchecked")
-	public static JComboBoxBinding initComboBinding(    BindingGroup group,
-                                                            UpdateStrategy strategy,
-                                                            JComboBox combo,
-                                                            List<?> beanList,
-                                                            Converter<?,?> converter )
-        {
-		if( null==combo )	throw new IllegalArgumentException( "combo argument is null!");
-		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
+    @SuppressWarnings("unchecked")
+    public static JComboBoxBinding initComboBinding(BindingGroup group,
+            UpdateStrategy strategy,
+            JComboBox combo,
+            List<?> beanList,
+            Converter<?, ?> converter) {
+        if (null == combo) {
+            throw new IllegalArgumentException("combo argument is null!");
+        }
+        if (null == beanList) {
+            throw new IllegalArgumentException("beanList argument is null!");
+        }
 
-                if( isDesignTime() ) return null;
-                if( boundCheckAndSet(combo)) return null;
-    
-		JComboBoxBinding binding = SwingBindings.createJComboBoxBinding(strategy, beanList, combo);
-        
-                if( converter!=null ) {
-                    binding.setConverter(converter);
-                }
-                
-                if( null!=group ) {
-                        group.addBinding(binding);
-                }
-                else {
-                        binding.bind();
-                }
+        if (isDesignTime()) {
+            return null;
+        }
+        if (boundCheckAndSet(combo)) {
+            return null;
+        }
 
-                return binding;
-        
-	}
-           
-	/**
-	 * 
-	 * @param group
-	 * @param strategy
-	 * @param list
-	 * @param beanList
-	 */
-	@SuppressWarnings("unchecked")
-	public static JListBinding initListBinding( BindingGroup group, 
-                                                    UpdateStrategy strategy,
-                                                    JList list,
-                                                    List<?> beanList,
-                                                    Converter<?,?> converter )
-        {
-		if( null==list )	throw new IllegalArgumentException( "list argument is null!");
-		if( null==beanList )	throw new IllegalArgumentException( "beanList argument is null!");
-        
-                if( isDesignTime() ) return null;
-                if( boundCheckAndSet(list)) return null;
-    
-		JListBinding binding = SwingBindings.createJListBinding(strategy, beanList, list);
-        
-                if( converter!=null ) {
-                    binding.setConverter(converter);
-                }
+        JComboBoxBinding binding = SwingBindings.createJComboBoxBinding(strategy, beanList, combo);
 
-                if( null!=group ) {
-                        group.addBinding(binding);
-                }
-                else {
-                        binding.bind();
-                }
+        if (converter != null) {
+            binding.setConverter(converter);
+        }
 
-                return binding;
-	}
+        if (null != group) {
+            group.addBinding(binding);
+        } else {
+            binding.bind();
+        }
+
+        return binding;
+
+    }
+
+    /**
+     *
+     * @param group
+     * @param strategy
+     * @param list
+     * @param beanList
+     */
+    @SuppressWarnings("unchecked")
+    public static JListBinding initListBinding(BindingGroup group,
+            UpdateStrategy strategy,
+            JList list,
+            List<?> beanList,
+            Converter<?, ?> converter) {
+        if (null == list) {
+            throw new IllegalArgumentException("list argument is null!");
+        }
+        if (null == beanList) {
+            throw new IllegalArgumentException("beanList argument is null!");
+        }
+
+        if (isDesignTime()) {
+            return null;
+        }
+        if (boundCheckAndSet(list)) {
+            return null;
+        }
+
+        JListBinding binding = SwingBindings.createJListBinding(strategy, beanList, list);
+
+        if (converter != null) {
+            binding.setConverter(converter);
+        }
+
+        if (null != group) {
+            group.addBinding(binding);
+        } else {
+            binding.bind();
+        }
+
+        return binding;
+    }
 }

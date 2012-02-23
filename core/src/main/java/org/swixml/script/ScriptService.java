@@ -29,5 +29,12 @@ public interface ScriptService extends javax.script.ScriptEngine {
 	  * @throws NoSuchMethodException
 	  */
 	 Object invokeFunction( String method, Object... args ) throws ScriptException, NoSuchMethodException  ;
+         
+        
+         Object evalSafe(String script);
+         
+         
+         Object eval(String script) throws ScriptException;
+
 	 
 }

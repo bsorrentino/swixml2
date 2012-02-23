@@ -57,7 +57,6 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.dom.Attribute;
 

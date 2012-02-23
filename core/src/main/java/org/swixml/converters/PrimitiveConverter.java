@@ -74,7 +74,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.LogUtil;
 import org.swixml.Parser;

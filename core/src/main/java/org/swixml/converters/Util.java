@@ -111,7 +111,7 @@ public final class Util {
    * @param s <code>String</code> The property name
    * @return <code>String</code> given String with 1st letter capitalized
    */
-  public static final String capitalize( final String s ) {
+  public static String capitalize( final String s ) {
     String cs = null;
     if (s != null && 0 < s.length()) {
       final char[] chars = s.toCharArray();
@@ -124,7 +124,7 @@ public final class Util {
   /**
    * Returns the integer value of the given XML attribute; or the default value.
    */
-  public static final int getInteger( final org.w3c.dom.Element element, final String attr, int def ) {
+  public static int getInteger( final org.w3c.dom.Element element, final String attr, int def ) {
     if( element.getAttributeNode(attr) == null )
       return def;
 

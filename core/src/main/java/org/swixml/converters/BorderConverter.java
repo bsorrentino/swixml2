@@ -65,11 +65,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import org.swixml.Converter;
-import org.swixml.ConverterAdapter;
-import org.swixml.ConverterLibrary;
-import org.swixml.Localizer;
-import org.swixml.LogAware;
+import org.swixml.*;
 import org.swixml.dom.Attribute;
 
 /**
@@ -96,7 +92,7 @@ import org.swixml.dom.Attribute;
  * @see javax.swing.border.AbstractBorder
  * @see org.swixml.ConverterLibrary
  */
-public class BorderConverter extends ConverterAdapter implements LogAware {
+public class BorderConverter extends AbstractConverter<Border> {
     
   /**
    * converter's return type
@@ -120,29 +116,36 @@ public class BorderConverter extends ConverterAdapter implements LogAware {
    * @param attr <code>Attribute</code> value needs to provide Border type name and optional parameter
    * @return <code>Object</code> runtime type is subclass of <code>AbstractBorder</code>
    */
-  public Object convert(final Class<?> type, final Attribute attr, Localizer localizer) {
+    @Override
+    public Border convert(Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
 
-      String input = attr.getValue();
+        final Object value = super.evaluateAttribute(attr, engine);
+        
+        if( null == value ) return null;
+        if( value instanceof Border ) return (Border) value;
+                             
+        String input = value.toString();
+        
       
       Matcher m = compoundBorderPattern.matcher(input);
       
       if( m.matches() ) {
 
-          Border outside = convert(type, m.group(1), localizer); 
+          Border outside = convert(type, m.group(1), engine); 
           
-          Border inside  = convert( type, m.group(2), localizer);
+          Border inside  = convert( type, m.group(2), engine);
           
           return BorderFactory.createCompoundBorder(outside, inside);
       }
       
-      return convert(type, input, localizer);
-  }
+      return convert(type, input, engine);
+    }
 
   /**
    *
    *
    */
-  protected Border convert(final Class<?> type, final String borderString, Localizer localizer) {
+  protected Border convert(final Class<?> type, final String borderString, SwingEngine<?> engine) {
 
     Matcher m = borderPattern.matcher(borderString);
 
@@ -164,9 +167,9 @@ public class BorderConverter extends ConverterAdapter implements LogAware {
     
 	try {
 		
-	    if( "TitledBorder".equalsIgnoreCase(borderType)) return convertTitledBorder( cvtlib, localizer, params );
+	    if( "TitledBorder".equalsIgnoreCase(borderType)) return convertTitledBorder( cvtlib, engine, params );
 	    
-	    return convertBorder(cvtlib, localizer, borderType, params);
+	    return convertBorder(cvtlib, engine, borderType, params);
 	    
 	} catch (Exception e) {
         logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
@@ -194,7 +197,7 @@ public class BorderConverter extends ConverterAdapter implements LogAware {
    * @return
    * @throws Exception
    */
-  private Border convertBorder( ConverterLibrary cvtlib, Localizer localizer, String borderType, String [] params ) throws Exception {
+  private Border convertBorder( ConverterLibrary cvtlib, SwingEngine<?> engine, String borderType, String [] params ) throws Exception {
       Border border = null;
 
       Method method = null;
@@ -257,7 +260,7 @@ public class BorderConverter extends ConverterAdapter implements LogAware {
               
               if (converter != null) {
                   final Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
-                  args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
+                  args[i] = converter.convert(method.getParameterTypes()[i], attrib, engine);
               } else {
                   args[i] = value;
               }
@@ -271,13 +274,13 @@ public class BorderConverter extends ConverterAdapter implements LogAware {
 	  
   }
 
-  private TitledBorder convertTitledBorder( ConverterLibrary cvtlib, Localizer localizer, String[] params ) throws Exception {
+  private TitledBorder convertTitledBorder( ConverterLibrary cvtlib, SwingEngine<?> engine, String[] params ) throws Exception {
 
       if( params==null || params.length==0 ) return new TitledBorder((Border)null);
 
       Attribute attrib = new Attribute("title", params[0].trim(), Attribute.CDATA_TYPE);
 
-      String title = (String) cvtlib.getConverter(String.class).convert(String.class, attrib, localizer);
+      String title = (String) cvtlib.getConverter(String.class).convert(String.class, attrib, engine);
       
       switch (params.length) {
           case 1:
@@ -301,7 +304,7 @@ public class BorderConverter extends ConverterAdapter implements LogAware {
    *
    */
   @Deprecated
-  protected Border _convert_old(final Class type, final String borderString, Localizer localizer) {
+  protected Border _convert_old(final Class type, final String borderString, SwingEngine<?> engine) {
 
     Border border = null;
 
@@ -359,7 +362,7 @@ public class BorderConverter extends ConverterAdapter implements LogAware {
         final String value = st.nextToken().trim();
         if (converter != null) {
             Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
-            args[i] = converter.convert(method.getParameterTypes()[i], attrib, localizer);
+            args[i] = converter.convert(method.getParameterTypes()[i], attrib, engine);
         } else {
           args[i] = value;
         }

@@ -55,7 +55,6 @@ package org.swixml.converters;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
-import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.dom.Attribute;
 

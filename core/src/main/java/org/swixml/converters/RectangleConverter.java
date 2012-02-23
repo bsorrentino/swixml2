@@ -56,7 +56,6 @@ package org.swixml.converters;
 import java.awt.Rectangle;
 import java.util.StringTokenizer;
 
-import org.swixml.ConverterAdapter;
 import org.swixml.Localizer;
 import org.swixml.dom.Attribute;
 
