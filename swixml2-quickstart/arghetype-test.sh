@@ -1,0 +1,1 @@
+mvn archetype:generate -DarchetypeCatalog=local -DgroupId=test -DartifactId=test -Dversion=1.0-SNAPSHOT -Dpackage=org.bsc

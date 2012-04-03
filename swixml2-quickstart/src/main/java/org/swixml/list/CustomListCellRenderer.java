@@ -10,10 +10,10 @@ import javax.swing.ListCellRenderer;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
-import org.swixml.LogUtil;
+import org.swixml.LogAware;
 
 @SuppressWarnings("serial")
-public class CustomListCellRenderer extends JLabel implements ListCellRenderer {
+public class CustomListCellRenderer extends JLabel implements ListCellRenderer, LogAware {
 	
 	public CustomListCellRenderer() {
 		super();
@@ -31,7 +31,7 @@ public class CustomListCellRenderer extends JLabel implements ListCellRenderer {
 			}
 		}
 		catch( Exception ex  ) {
-			LogUtil.logger.log( Level.WARNING, "icon doesn't exist", ex );
+			logger.log( Level.WARNING, "icon doesn't exist", ex );
 		}
 	}
 

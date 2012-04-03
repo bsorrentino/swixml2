@@ -15,7 +15,7 @@ public class SimpleApplication extends SwingApplication {
 	protected void startup() {
 
 		try {
-			JFrame frame = render( new BindingExamplesFrame() );
+			JFrame frame = render( new ExplorerFrame() );
 
 			show( frame );
 			

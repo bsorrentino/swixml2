@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-generate-archetype</actionName>
+            <displayName>generate-archetype</displayName>
+            <recursive>false</recursive>
+            <goals>
+                <goal>archetype:create-from-project</goal>
+            </goals>
+        </action>
+    </actions>

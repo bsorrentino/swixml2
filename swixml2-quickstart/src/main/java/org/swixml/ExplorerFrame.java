@@ -30,7 +30,7 @@ import org.swixml.tree.TestTreeModel;
  * @since swixml 0.98
  */
 @SuppressWarnings("serial")
-public class BindingExamplesFrame extends JFrame  {
+public class ExplorerFrame extends JFrame  {
 
   public JTable testTable;
   
