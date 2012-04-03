@@ -19,8 +19,8 @@
 </properties>
 
   <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swixml-contrib</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/trunk/swixml-contrib</url>
+    <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/swixml-contrib</developerConnection>
+    <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/swixml-contrib</url>
   </scm>
 
 	<dependencies>

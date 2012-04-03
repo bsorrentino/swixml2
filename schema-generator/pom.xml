@@ -27,6 +27,13 @@
  
     
   </dependencies>
+  
+  
+<scm>
+    <connection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/swixml-contrib</connection>
+    <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/swixml-contrib</developerConnection>  
+    <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/swixml-contrib</url>
+</scm>
 
   <build>
       <plugins>

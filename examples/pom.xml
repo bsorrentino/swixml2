@@ -58,8 +58,8 @@
 
 </dependencies>
 <scm>
-	<developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/examples</developerConnection>
-	<url>https://swixml2.googlecode.com/svn/trunk/examples</url>
+	<developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/examples</developerConnection>
+	<url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/examples</url>
 </scm>
   
 <build>

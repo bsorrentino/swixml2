@@ -11,8 +11,8 @@
   <url>http://code.google.com/p/swixml2/</url>
 
  <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swingx</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/trunk/swingx</url>
+    <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/swingx</developerConnection>
+    <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/swingx</url>
   </scm>
 
   <dependencies>

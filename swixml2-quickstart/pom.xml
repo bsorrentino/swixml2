@@ -13,8 +13,8 @@
 </parent>
 
  <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/swixml2-quickstart</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/trunk//swixml2-quickstart</url>
+    <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/swixml2-quickstart</developerConnection>
+    <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/swixml2-quickstart</url>
   </scm>
 
 <dependencies>

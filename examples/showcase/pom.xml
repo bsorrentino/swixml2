@@ -32,6 +32,12 @@
 
   </dependencies>
 
+<scm>
+    <connection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/examples/showcase</connection>
+    <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/examples/showcase</developerConnection>  
+    <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/core</url>
+</scm>
+
 <build>
 
 	<resources>

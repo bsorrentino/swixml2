@@ -10,6 +10,14 @@
   <artifactId>swixml-examples-wizard</artifactId>
   <name>SWIXML WIZARD EXAMPLE - ${project.version}</name>
   <url>http://code.google.com/p/swixml2/</url>
+  
+  
+<scm>
+    <connection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/examples/wizard</connection>
+    <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/examples/wizard</developerConnection>  
+    <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/core</url>
+</scm>
+  
   <build>
   	<plugins>
   		<plugin>

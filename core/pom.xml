@@ -13,10 +13,6 @@
 </parent>
 
 <properties>
-	<!-- SCM properties  -->
-	<addTimestamp>true</addTimestamp>
-	<!--tag>${pom.artifactId}-${pom.version}</tag-->
-	<tagBase>https://swixml2.googlecode.com/svn/tags/</tagBase>
 </properties>	
 
 
@@ -35,9 +31,9 @@
 </licenses>
 
 <scm>
-	<connection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</connection>
-	<developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk/core</developerConnection>  
-  <url>https://swixml2.googlecode.com/svn/trunk/core</url>
+	<connection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/core</connection>
+	<developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2/core</developerConnection>  
+  <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/core</url>
 </scm>
 
   <dependencies>

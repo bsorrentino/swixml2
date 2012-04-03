@@ -12,12 +12,11 @@
   <modules>
   	<module>core</module>
   	<module>swixml-contrib</module>
-    <module>swixml2-quickstart</module>
-    <module>swingx</module>
-	<!--
+        <module>swixml2-quickstart</module>
+        <module>swingx</module>
   	<module>examples</module>
-  	-->
-    <module>schema-generator</module>
+  	<module>swixml-tool</module>
+  	<module>schema-generator</module>
   </modules>
   
   <developers>
@@ -79,14 +78,12 @@
 <properties>
 	<!-- SCM properties  -->
 	<addTimestamp>true</addTimestamp>
-	<!--tag>${pom.artifactId}-${pom.version}</tag-->
-	<tagBase>https://swixml2.googlecode.com/svn/tags/</tagBase>
 </properties>
 
 
  <scm>
-    <developerConnection>scm:svn:https://swixml2.googlecode.com/svn/trunk</developerConnection>
-    <url>https://swixml2.googlecode.com/svn/trunk</url>
+    <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/swixml2</developerConnection>
+    <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2</url>
   </scm>
 
 <build>
