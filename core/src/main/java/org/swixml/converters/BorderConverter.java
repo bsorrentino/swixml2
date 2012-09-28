@@ -94,277 +94,300 @@ import org.swixml.dom.Attribute;
  */
 public class BorderConverter extends AbstractConverter<Border> {
     
-  /**
-   * converter's return type
-   */
-  public static final Class<?> TEMPLATE = Border.class;
+    /**
+     * converter's return type
+     */
+    public static final Class<?> TEMPLATE = Border.class;
+    /**
+     * all methods the BorderFactory provides
+     */
+    private static final Method[] METHODS = BorderFactory.class.getMethods();
+    private static final Pattern compoundBorderPattern = 
+                Pattern.compile("CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
+    private static final Pattern borderPattern = 
+                Pattern.compile( "(\\w+)(?:[(]([\\w, -]+)*[)])?");
+    //private Pattern borderPattern = Pattern.compile("(\\w*)(?:[(](.+)*[)])?");
 
-  
-  /**
-   * all methods the BorderFactory provides
-   */
-  private static final Method[] METHODS = BorderFactory.class.getMethods();
-
-  private Pattern compoundBorderPattern = Pattern.compile( "CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
-
-  private Pattern borderPattern = Pattern.compile( "(\\w*)(?:[(](.+)*[)])?");
-
-  /**
-   * Returns a <code>javax.swing Border</code>
-   *
-   * @param type <code>Class</code>  not used
-   * @param attr <code>Attribute</code> value needs to provide Border type name and optional parameter
-   * @return <code>Object</code> runtime type is subclass of <code>AbstractBorder</code>
-   */
+    /**
+     * Returns a
+     * <code>javax.swing Border</code>
+     *
+     * @param type
+     * <code>Class</code> not used
+     * @param attr
+     * <code>Attribute</code> value needs to provide Border type name and
+     * optional parameter
+     * @return
+     * <code>Object</code> runtime type is subclass of
+     * <code>AbstractBorder</code>
+     */
     @Override
-    public Border convert( String value, Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
+    public Border convert(String value, Class<?> type, Attribute attr, SwingEngine<?> engine) throws Exception {
 
-      Matcher m = compoundBorderPattern.matcher(value);
-      
-      if( m.matches() ) {
+        Matcher m = compoundBorderPattern.matcher(value);
 
-          Border outside = convert(type, m.group(1), engine); 
-          
-          Border inside  = convert( type, m.group(2), engine);
-          
-          return BorderFactory.createCompoundBorder(outside, inside);
-      }
-      
-      return convert(type, value, engine);
-    }
+        if (m.matches()) {
 
-  /**
-   *
-   *
-   */
-  protected Border convert(final Class<?> type, final String borderString, SwingEngine<?> engine) {
+            Border outside = convert(type, m.group(1), engine);
 
-    Matcher m = borderPattern.matcher(borderString);
+            Border inside = convert(type, m.group(2), engine);
 
-    if( !m.matches()) return null;
-
-    int groupCount = m.groupCount();
-
-    String borderType = m.group(1);
-
-    String [] params = new String[0];
-    
-    if( groupCount > 1 ) {
-    	String p = m.group(2);
-    	if( p!=null )
-    		params = p.split(",");
-    }
-    
-    ConverterLibrary cvtlib = ConverterLibrary.getInstance();
-    
-	try {
-		
-	    if( "TitledBorder".equalsIgnoreCase(borderType)) return convertTitledBorder( cvtlib, engine, params );
-	    
-	    return convertBorder(cvtlib, engine, borderType, params);
-	    
-	} catch (Exception e) {
-        logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
-	}
-    return null;
-
-  }
-
-   /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   *
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class<?> convertsTo() {
-    return TEMPLATE;
-  }
-
-  /**
-   * 
-   * @param cvtlib
-   * @param localizer
-   * @param borderType
-   * @param params
-   * @return
-   * @throws Exception
-   */
-  private Border convertBorder( ConverterLibrary cvtlib, SwingEngine<?> engine, String borderType, String [] params ) throws Exception {
-      Border border = null;
-
-      Method method = null;
-
-
-      int pLen = params.length;
-
-      //
-      // Special case for single parameter construction, give priority to String Type
-      //
-      if (pLen == 0) {
-          try {
-
-              method = BorderFactory.class.getMethod("create" + borderType);
-
-          } catch (NoSuchMethodException e) {
-              // intent. empty
-          }
-
-          //if (method == null) pLen = 1 ; // try with empty string
-          if (method == null) return null;
-
-      }
-
-      /*
-      if (pLen == 1) {
-      try {
-      method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
-      } catch (NoSuchMethodException e) {
-      //  no need to do anything here.
-      }
-      }
-       */
-
-      for (int i = 0; method == null && i < METHODS.length; i++) {
-          if (METHODS[i].getParameterTypes().length == pLen && METHODS[i].getName().endsWith(borderType)) {
-              method = METHODS[i];
-
-              for (int j = 0; j < method.getParameterTypes().length; j++) {
-                  if (String.class.equals(method.getParameterTypes()[j])) {
-                      continue;
-                  }
-                  if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
-                      method = null;
-                      break;
-                  }
-              }
-          }
-      }
-
-      if (method != null) {
-
-          Object[] args = new Object[pLen];
-
-          for (int i = 0; i < pLen; ++i) { // fill argument array
-
-              final Converter<?> converter = cvtlib.getConverter(method.getParameterTypes()[i]);
-
-              final String value =  params[i].trim();
-              
-              if (converter != null) {
-                  final Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
-                  args[i] = converter.convert(method.getParameterTypes()[i], attrib, engine);
-              } else {
-                  args[i] = value;
-              }
-          }
-
-
-          border = (Border) method.invoke(null, args);
-      }
-      
-      return border;
-	  
-  }
-
-  private TitledBorder convertTitledBorder( ConverterLibrary cvtlib, SwingEngine<?> engine, String[] params ) throws Exception {
-
-      if( params==null || params.length==0 ) return new TitledBorder((Border)null);
-
-      Attribute attrib = new Attribute("title", params[0].trim(), Attribute.CDATA_TYPE);
-
-      String title = (String) cvtlib.getConverter(String.class).convert(String.class, attrib, engine);
-      
-      switch (params.length) {
-          case 1:
-              return new TitledBorder(title);
-          case 2:{
-              int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
-              return new TitledBorder((Border) null, title, titleJustification, TitledBorder.DEFAULT_POSITION);
-              }
-          default: {
-              int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
-              int textPosition = getConstantValue(TitledBorder.class, params[2], TitledBorder.DEFAULT_POSITION);
-              return new TitledBorder((Border) null, title, titleJustification, textPosition);
-          }
-
-     }
-    }
-
-
- /**
-   *
-   *
-   */
-  @Deprecated
-  protected Border _convert_old(final Class type, final String borderString, SwingEngine<?> engine) {
-
-    Border border = null;
-
-    StringTokenizer st = new StringTokenizer(borderString, "(,)"); // border type + parameters
-
-    int n = st.countTokens() - 1; // number of parameter to create a border
-
-    String borderType = st.nextToken().trim();
-
-    Method method = null;
-
-    ConverterLibrary cvtlib = ConverterLibrary.getInstance();
-    //
-    // Special case for single parameter construction, give priority to String Type
-    //
-    if (n == 0) {
-      try {
-        method = BorderFactory.class.getMethod("create" + borderType);
-
-      } catch (NoSuchMethodException e) {
-        // intent. empty
-      }
-      if (method == null) { // try with empty string
-        n = 1;
-        st = new StringTokenizer(" ", "(,)");
-      }
-    }
-    if (n == 1) {
-      try {
-        method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
-      } catch (NoSuchMethodException e) {
-        //  no need to do anything here.
-      }
-    }
-    for (int i = 0; method == null && i < METHODS.length; i++) {
-      if (METHODS[i].getParameterTypes().length == n && METHODS[i].getName().endsWith(borderType)) {
-        method = METHODS[i];
-
-        for (int j = 0; j < method.getParameterTypes().length; j++) {
-          if (String.class.equals(method.getParameterTypes()[j])) {
-            continue;
-          }
-          if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
-            method = null;
-            break;
-          }
+            return BorderFactory.createCompoundBorder(outside, inside);
         }
-      }
-    }
-    try {
-      Object[] args = new Object[n];
-      for (int i = 0; i < n; i++) { // fill argument array
-        Converter<?> converter = cvtlib.getConverter(method.getParameterTypes()[i]);
-       
-        final String value = st.nextToken().trim();
-        if (converter != null) {
-            Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
-            args[i] = converter.convert(method.getParameterTypes()[i], attrib, engine);
-        } else {
-          args[i] = value;
-        }
-      }
-      border = (Border) method.invoke(null, args);
-    } catch (Exception e) {
-        logger.log( Level.SEVERE, "Couldn't create border, " + borderString, e );
-    }
-    return border;
-  }
 
+        return convert(type, value, engine);
+    }
+
+    /**
+     *
+     * @param type
+     * @param borderString
+     * @param engine
+     * @return
+     */
+    protected Border convert(final Class<?> type, final String borderString, SwingEngine<?> engine) {
+
+        Matcher m = borderPattern.matcher(borderString);
+
+        if (!m.matches()) {
+            return null;
+        }
+
+        int groupCount = m.groupCount();
+
+        String borderType = m.group(1);
+
+        String[] params = new String[0];
+
+        if (groupCount > 1) {
+            String p = m.group(2);
+            if (p != null) {
+                params = p.split(",");
+            }
+        }
+
+        ConverterLibrary cvtlib = ConverterLibrary.getInstance();
+
+        try {
+
+            if ("TitledBorder".equalsIgnoreCase(borderType)) {
+                return convertTitledBorder(cvtlib, engine, params);
+            }
+
+            return convertBorder(cvtlib, engine, borderType, params);
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Couldn't create border, " + borderString, e);
+        }
+        return null;
+
+    }
+
+    /**
+     * A
+     * <code>Converters</code> conversTo method informs about the Class type the
+     * converter is returning when its
+     * <code>convert</code> method is called
+     *
+     * @return
+     * <code>Class</code> - the Class the converter is returning when its
+     * convert method is called
+     */
+    public Class<?> convertsTo() {
+        return TEMPLATE;
+    }
+
+    /**
+     *
+     * @param cvtlib
+     * @param localizer
+     * @param borderType
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    private Border convertBorder(ConverterLibrary cvtlib, SwingEngine<?> engine, String borderType, String[] params) throws Exception {
+        Border border = null;
+
+        Method method = null;
+
+
+        int pLen = params.length;
+
+        //
+        // Special case for single parameter construction, give priority to String Type
+        //
+        if (pLen == 0) {
+            try {
+
+                method = BorderFactory.class.getMethod("create" + borderType);
+
+            } catch (NoSuchMethodException e) {
+                // intent. empty
+            }
+
+            //if (method == null) pLen = 1 ; // try with empty string
+            if (method == null) {
+                return null;
+            }
+
+        }
+
+        /*
+         * if (pLen == 1) { try { method =
+         * BorderFactory.class.getMethod("create" + borderType, new
+         * Class[]{String.class}); } catch (NoSuchMethodException e) { // no
+         * need to do anything here. } }
+         */
+
+        for (int i = 0; method == null && i < METHODS.length; i++) {
+            if (METHODS[i].getParameterTypes().length == pLen && METHODS[i].getName().endsWith(borderType)) {
+                method = METHODS[i];
+
+                for (int j = 0; j < method.getParameterTypes().length; j++) {
+                    if (String.class.equals(method.getParameterTypes()[j])) {
+                        continue;
+                    }
+                    if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
+                        method = null;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (method != null) {
+
+            Object[] args = new Object[pLen];
+
+            for (int i = 0; i < pLen; ++i) { // fill argument array
+
+                final Converter<?> converter = cvtlib.getConverter(method.getParameterTypes()[i]);
+
+                final String value = params[i].trim();
+
+                if (converter != null) {
+                    final Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
+                    args[i] = converter.convert(method.getParameterTypes()[i], attrib, engine);
+                } else {
+                    args[i] = value;
+                }
+            }
+
+
+            border = (Border) method.invoke(null, args);
+        }
+
+        return border;
+
+    }
+
+    private TitledBorder convertTitledBorder(ConverterLibrary cvtlib, SwingEngine<?> engine, String[] params) throws Exception {
+
+        if (params == null || params.length == 0) {
+            return new TitledBorder((Border) null);
+        }
+
+        Attribute attrib = new Attribute("title", params[0].trim(), Attribute.CDATA_TYPE);
+
+        String title = (String) cvtlib.getConverter(String.class).convert(String.class, attrib, engine);
+
+        switch (params.length) {
+            case 1:
+                return new TitledBorder(title);
+            case 2: {
+                int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
+                return new TitledBorder((Border) null, title, titleJustification, TitledBorder.DEFAULT_POSITION);
+            }
+            case 3: 
+            {
+                int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
+                int textPosition = getConstantValue(TitledBorder.class, params[2], TitledBorder.DEFAULT_POSITION);
+                return new TitledBorder((Border) null, title, titleJustification, textPosition);
+            }
+            default: {
+
+                int titleJustification = getConstantValue(TitledBorder.class, params[1], TitledBorder.DEFAULT_JUSTIFICATION);
+                int textPosition = getConstantValue(TitledBorder.class, params[2], TitledBorder.DEFAULT_POSITION);
+                return new TitledBorder((Border) null, title, titleJustification, textPosition, java.awt.Font.decode(params[3]));
+                
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     */
+    @Deprecated
+    protected Border _convert_old(final Class type, final String borderString, SwingEngine<?> engine) {
+
+        Border border = null;
+
+        StringTokenizer st = new StringTokenizer(borderString, "(,)"); // border type + parameters
+
+        int n = st.countTokens() - 1; // number of parameter to create a border
+
+        String borderType = st.nextToken().trim();
+
+        Method method = null;
+
+        ConverterLibrary cvtlib = ConverterLibrary.getInstance();
+        //
+        // Special case for single parameter construction, give priority to String Type
+        //
+        if (n == 0) {
+            try {
+                method = BorderFactory.class.getMethod("create" + borderType);
+
+            } catch (NoSuchMethodException e) {
+                // intent. empty
+            }
+            if (method == null) { // try with empty string
+                n = 1;
+                st = new StringTokenizer(" ", "(,)");
+            }
+        }
+        if (n == 1) {
+            try {
+                method = BorderFactory.class.getMethod("create" + borderType, new Class[]{String.class});
+            } catch (NoSuchMethodException e) {
+                //  no need to do anything here.
+            }
+        }
+        for (int i = 0; method == null && i < METHODS.length; i++) {
+            if (METHODS[i].getParameterTypes().length == n && METHODS[i].getName().endsWith(borderType)) {
+                method = METHODS[i];
+
+                for (int j = 0; j < method.getParameterTypes().length; j++) {
+                    if (String.class.equals(method.getParameterTypes()[j])) {
+                        continue;
+                    }
+                    if (null == cvtlib.getConverter(method.getParameterTypes()[j])) {
+                        method = null;
+                        break;
+                    }
+                }
+            }
+        }
+        try {
+            Object[] args = new Object[n];
+            for (int i = 0; i < n; i++) { // fill argument array
+                Converter<?> converter = cvtlib.getConverter(method.getParameterTypes()[i]);
+
+                final String value = st.nextToken().trim();
+                if (converter != null) {
+                    Attribute attrib = new Attribute(String.class.equals(converter.convertsTo()) ? "title" : "NA", value, Attribute.CDATA_TYPE);
+                    args[i] = converter.convert(method.getParameterTypes()[i], attrib, engine);
+                } else {
+                    args[i] = value;
+                }
+            }
+            border = (Border) method.invoke(null, args);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Couldn't create border, " + borderString, e);
+        }
+        return border;
+    }
 
 }

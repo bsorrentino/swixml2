@@ -53,6 +53,8 @@
 
 package org.swixml.converters;
 
+import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.StringTokenizer;
 import org.swixml.Localizer;
 import org.swixml.SwingEngine;
@@ -65,9 +67,24 @@ import org.swixml.SwingEngine;
  */
 public final class Util {
     
+    private static final Localizer defaultLocalizer = new Localizer() {
+
+        @Override
+        public String getString(String key) {return key;}
+
+        @Override
+        public boolean isUsable() {return true;}
+
+        @Override
+        public void setLocale(Locale locale) {}
+
+        @Override
+        public void setResourceBundle(String bundleName) throws MissingResourceException {}
+        
+    };
     
     public static Localizer getLocalizer( SwingEngine<?> engine ) {
-        return (engine==null) ? (Localizer)null : engine.getLocalizer();
+        return (engine==null) ? defaultLocalizer : engine.getLocalizer();
     }
     
   /**

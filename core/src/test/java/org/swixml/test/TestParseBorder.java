@@ -9,10 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import junit.framework.Assert;
 
 import org.junit.Test;
-import static org.swixml.converters.PrimitiveConverter.getConstantValue;
+import org.hamcrest.core.*;
+import org.hamcrest.core.IsInstanceOf;
+import org.junit.Assert;
+import org.swixml.converters.BorderConverter;
 
 
 
@@ -22,90 +24,124 @@ import static org.swixml.converters.PrimitiveConverter.getConstantValue;
  */
 public class TestParseBorder {
 
-/*
-  public static void main( String args[] ) {
-    System.out.println(
-      getConstantValue( TitledBorder.class, "TitledBorder.CENTER", TitledBorder.DEFAULT_POSITION ));
+    static final Pattern borderPattern = Pattern.compile( "(\\w+)(?:[(]([\\w, -]+)*[)])?");
+    static final Pattern compoundBorderPattern = Pattern.compile("CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
 
-    System.out.println(
-      getConstantValue( BorderLayout.class, "CENTER", BorderLayout.CENTER));
-  }
-*/
+    @Test
+    public void testConverters() throws Exception {
+
+        {
+        String value = "CompoundBorder(EmptyBorder(1,1,1,1), EtchedBorder)";
+        
+        BorderConverter c = new BorderConverter();
+
+        Border b = (Border) c.convert(value, Border.class, null, null);
+
+        Assert.assertThat( b, IsNull.notNullValue() );
+        
+        }
+        
+        {
+        String value = "TitledBorder(test,LEFT,TOP,Arial-BOLD-10)";
+        
+        BorderConverter c = new BorderConverter();
+
+        Border b = (Border) c.convert(value, Border.class, null, null);
+
+        Assert.assertThat( b, IsNull.notNullValue() );
+        Assert.assertThat( b, IsInstanceOf.instanceOf(TitledBorder.class) );
+        
+        TitledBorder tb = (TitledBorder) b;
+                
+        Assert.assertThat( tb.getTitleFont(), IsNull.notNullValue() );
+        Assert.assertThat( tb.getTitleFont().getName().trim(), IsEqual.equalTo("Arial") );
+        
+        
+        }
+        
+        {
+        String value = "CompoundBorder(EmptyBorder(1,1,1,1), TitledBorder(test,LEFT,TOP,Arial-BOLD-10))";
+        
+        BorderConverter c = new BorderConverter();
+
+        Border b = (Border) c.convert(value, Border.class, null, null);
+
+        Assert.assertThat( b, IsNull.notNullValue() );
+        
+        }
+    }
 	
 	
     @Test
     public void testCompundBorder() {
-        String input = "CompoundBorder( EmptyBorder(2,2,2,2) , MatterBorder(1,1,1,1,blue) )";
+        testCompundBorder("CompoundBorder(EmptyBorder(2,2,2,2), MatterBorder(1,1,1,1,blue))");
+        testCompundBorder("CompoundBorder(EmptyBorder(1,1,1,1), TitledBorder(test,LEFT,TOP,Arial-BOLD-10))");
 
-        Pattern p = Pattern.compile( "CompoundBorder[(][\\s]*(.*)[\\s]*[,][\\s]+(.*)[\\s]*[)]");
+    }
+    
+    private void testCompundBorder( String input ) {
+
+        Matcher m = compoundBorderPattern.matcher(input);
         
-        Matcher m = p.matcher(input);
+        Assert.assertThat( m, IsNull.notNullValue() );
+        Assert.assertThat( m.matches(), Is.is(true) );
+        Assert.assertThat( m.groupCount(), IsEqual.equalTo(2) );
         
         if( m.matches() ) {
             
-            System.out.printf( "CompoundBorder - boder1 = %s border2=%s\n", m.group(1), m.group(2));
+            System.out.printf( "CompoundBorder\n\toutside[%s]\n\tinside[%s]\n", m.group(1), m.group(2));
         }
+    }
+
+    
+    private void testBorder( String input, String borderType ) {
+        
+        final Matcher m = borderPattern.matcher(input);
+
+        Assert.assertThat(m.matches(), Is.is(true) );
+        Assert.assertThat( borderType, IsEqual.equalTo(m.group(1)) );
+    }
+    
+    private void testBorderNotMatch( String input ) {
+        
+        final Matcher m = borderPattern.matcher(input);
+
+        Assert.assertThat(m.matches(), Is.is(false) );
     }
 
     @Test
     public void testBorders() {
-        Pattern p = Pattern.compile( "(\\w*)(?:[(](.+)*[)])?");
-
-        {
-	        String input = "EtchedBorder";
-	
-	        Matcher m = p.matcher(input);
-	
-	        Assert.assertTrue(m.matches() );
-	        Assert.assertEquals( "EtchedBorder", m.group(1) );
-        }
-
-        {
-            String input = "EtchedBorder()";
-
-            Matcher m = p.matcher(input);
-
-            Assert.assertTrue(m.matches() );
-            Assert.assertEquals( "EtchedBorder", m.group(1) );
-            }
+        testBorder("EtchedBorder()", "EtchedBorder" );
+        testBorder("TitledBorder(Hello,CENTER,RIGHT)", "TitledBorder" );
+        testBorder("EmptyBoder(1,1,1,1)", "EmptyBoder" );
+        testBorderNotMatch("EmptyBorder(1,1,1,1), TitledBorder(test,LEFT,TOP");
+        
     }
     
     @Test
     public void testTitledBorder() {
 
-        Pattern p = Pattern.compile( "(\\w*)(?:[(](.+)*[)])?");
+        String input = "TitledBorder(Hello, CENTER,RIGHT)";
 
-
-        String input = "TitledBorder( Hello ,CENTER ,RIGHT )";
-
-        Matcher m = p.matcher(input);
+        Matcher m = borderPattern.matcher(input);
 
         Assert.assertTrue(m.matches() );
 
         int groupcount = m.groupCount();
-        Assert.assertEquals(2, groupcount);
-        Assert.assertEquals("TitledBorder", m.group(1));
+        Assert.assertThat(groupcount, IsEqual.equalTo(2));
+        Assert.assertThat(m.group(1), IsEqual.equalTo("TitledBorder"));
          
 
         String [] tt = m.group(2).split(",");
 
-        Assert.assertEquals(3, tt.length);
-        Assert.assertEquals("Hello", tt[0].trim());
-        Assert.assertEquals("CENTER", tt[1].trim());
-        Assert.assertEquals("RIGHT", tt[2].trim());
+        Assert.assertThat(3, IsEqual.equalTo(tt.length));
+        Assert.assertThat("Hello", IsEqual.equalTo(tt[0].trim()));
+        Assert.assertThat("CENTER", IsEqual.equalTo(tt[1].trim()));
+        Assert.assertThat("RIGHT", IsEqual.equalTo(tt[2].trim()));
 
         
-        Assert.assertTrue( tt.length > 0);
+        Assert.assertThat( tt.length > 0, Is.is(true));
         
-/*
-        BorderConverter c = new BorderConverter();
-
-        org.jdom.Attribute a = new org.jdom.Attribute("border", input);
-
-        Border b = (Border) c.convert(Border.class, a, null);
-
-        Assert.assertNotNull(b);
-*/
     }
 
 
