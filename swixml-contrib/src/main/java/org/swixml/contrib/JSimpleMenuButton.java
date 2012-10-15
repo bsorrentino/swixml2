@@ -7,12 +7,12 @@
  */
 package org.swixml.contrib;
 
-import java.awt.Component;
-import java.awt.Point;
+import java.awt.*;
 
 import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -24,36 +24,71 @@ import org.jdesktop.application.SingleFrameApplication;
  * @author Richard Bair
  */
 public class JSimpleMenuButton extends JButton {
-	private JPopupMenu popupMenu;
+
+    class RegularArrow {
+        // to draw a nice curved arrow, fill a V shape rather than stroking it with lines
+
         
-        public JSimpleMenuButton() {
+        public void draw(Graphics g) {
+            // as we're filling rather than stroking, control point is at the apex,
+
+            Rectangle bounds = getBounds();
+            
+            int y = bounds.y+(bounds.height/2);
+            
+            int size = 5;
+ 
+            g.translate( (bounds.x + bounds.width), y  );
+            g.setColor(Color.BLACK);
+
+            int ox = -size*3;
+            int oy = -size-1;
+
+            g.fillPolygon(new int[]{ox, ox + size, ox}, new int[]{oy, oy + size, oy + size * 2}, 3);
+
         }
+    }
+    private RegularArrow arrow = new RegularArrow();
+    
+    private JPopupMenu popupMenu;
 
+    public JSimpleMenuButton() {
+    }
 
-        @Override
-        public void addNotify() {
-            super.addNotify();
+    @Override
+    public void addNotify() {
+        super.addNotify();
+    }
+
+    @Override
+    public Component add(Component c) {
+        if (c instanceof JPopupMenu) {
+            this.popupMenu = (JPopupMenu) c;
+            return c;
         }
+        return super.add(c);
+    }
 
-        @Override
-        public Component add(Component c) {
-            if( c instanceof JPopupMenu ) {
-                this.popupMenu = (JPopupMenu) c;
-                return c;
-            }
-            return super.add(c);
-        }
+    @Override
+    protected void paintComponent(Graphics g) {
 
-        public void showPopup() {
-
-            Point p = new Point(getLocation());
-
-            SingleFrameApplication app = Application.getInstance(SingleFrameApplication.class);
-            //Not sure if this next line is doing anything...weird
-            SwingUtilities.convertPoint(this, p, app.getMainFrame());
-
-            popupMenu.show(this, p.x + this.getWidth(), p.y);
-        }
+        super.paintComponent(g);
+        
+        arrow.draw(g);
 
 
- }
+    }
+
+    public void showPopup() {
+
+        Rectangle bounds = getBounds(new Rectangle());
+        
+        Point p = new Point((bounds.x + bounds.width), bounds.y+(bounds.height/2));
+
+        SingleFrameApplication app = Application.getInstance(SingleFrameApplication.class);
+        //Not sure if this next line is doing anything...weird
+        SwingUtilities.convertPoint(this, p, app.getMainFrame());
+
+        popupMenu.show(this, p.x, p.y);
+    }
+}

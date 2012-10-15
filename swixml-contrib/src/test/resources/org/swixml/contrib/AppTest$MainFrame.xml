@@ -5,7 +5,7 @@
 <vbox>
 
 
-<menubutton id="btnMenu" text="test" action="action">
+<menubutton id="btnMenu" text="test" action="action" font="ARIAL-BOLD-16" preferredSize="70,100">
     <popupMenu>
       <menuitem text="menu1" action="action1"/>
       <menuitem text="menu2" action="action2"/>
