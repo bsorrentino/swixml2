@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<frame Size="500,500" resizable="true" title="Test"  defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+
+<vbox>
+
+
+<!--
+<menubutton id="btnMenu" text="test" action="action" font="ARIAL-BOLD-16" preferredSize="70,100">
+    <popupMenu>
+      <menuitem text="menu1" action="action1"/>
+      <menuitem text="menu2" action="action2"/>
+    </popupMenu>
+</menubutton>
+-->
+
+
+</vbox>
+
+</frame>
