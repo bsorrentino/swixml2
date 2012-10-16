@@ -18,36 +18,38 @@
     <url>https://bartolomeo.sorrentino@code.google.com/p/swixml2/core</url>
 </scm>
   
-  <build>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-deploy-plugin</artifactId>
-  			<version>2.5</version>
+    <build>
+        <plugins>
+            <!--    
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.5</version>
 			
-  			<executions>
-				<execution>
+                <executions>
+                    <execution>
 				
-					<phase>deploy</phase>
-					<id>deploy-wizard</id>
-					<goals>
-						<goal>deploy-file</goal>
-					</goals>
-					<configuration>
-						<generatePom>true</generatePom>
-						<groupId>org.netbeans.api</groupId>
-						<artifactId>wizard</artifactId>
-						<version>0.998.1</version>
-						<packaging>jar</packaging>
-						<file>deps/wizard-0.998.1.jar</file>
-						<repositoryId>google-project</repositoryId>
-						<url>svn:https://swixml2.googlecode.com/svn/mavenrepo</url>
-					</configuration>
-				</execution>
-  			</executions>
-  		</plugin>
-  	</plugins>
-  </build>
+                        <phase>deploy</phase>
+                        <id>deploy-wizard</id>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>true</generatePom>
+                            <groupId>org.netbeans.api</groupId>
+                            <artifactId>wizard</artifactId>
+                            <version>0.998.1</version>
+                            <packaging>jar</packaging>
+                            <file>deps/wizard-0.998.1.jar</file>
+                            <repositoryId>google-project</repositoryId>
+                            <url>svn:https://swixml2.googlecode.com/svn/mavenrepo</url>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+        </plugins>
+    </build>
   <dependencies>
   <!-- 
         <dependency>
@@ -100,5 +102,16 @@
 
   </dependencies>
   
-  
+  <repositories>
+      <repository>
+          <id>geotoolkit</id>
+          <url>http://maven.geotoolkit.org/</url>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+          <snapshots>
+              <enabled>false</enabled>
+          </snapshots>
+      </repository>
+  </repositories>
 </project>
