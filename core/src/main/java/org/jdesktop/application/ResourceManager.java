@@ -14,6 +14,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+import org.swixml.jsr296.SystemResourceMap;
 
 
 /**
@@ -148,6 +149,8 @@ public class ResourceManager extends AbstractBean {
 	}
     }
 
+    final ResourceMap systemResourceMap = new SystemResourceMap();
+    
     /* Lazily creates the Application ResourceMap chain,
      * appResourceMap.  If the Application hasn't been launched yet,
      * i.e. if the ApplicationContext applicationClass property hasn't
@@ -163,7 +166,7 @@ public class ResourceManager extends AbstractBean {
 		appClass = Application.class;
 	    }
 	    ClassLoader classLoader = appClass.getClassLoader();
-	    appResourceMap = createResourceMapChain(classLoader, null, appBundleNames.listIterator());
+	    appResourceMap = createResourceMapChain(classLoader, systemResourceMap, appBundleNames.listIterator());
 	}
 	return appResourceMap;
     }
