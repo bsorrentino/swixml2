@@ -93,6 +93,7 @@ import javax.swing.RootPaneContainer;
  * </pre>
  */
 public abstract class SingleFrameApplication extends Application {
+    private static final String ROOT_PANECLIENT_PROPERTY = "SingleFrameApplication.initRootPaneContainer";
     private static final Logger logger = Logger.getLogger(SingleFrameApplication.class.getName());
     //private ResourceMap appResources = null;
 
@@ -179,20 +180,19 @@ public abstract class SingleFrameApplication extends Application {
      * @see #show(JDialog)
      */
     protected void configureWindow(Window root) {
-		ResourceMap rootMap = getContext().getResourceMap();
-		
-		rootMap.injectComponents(root);
-		
+        ResourceMap rootMap = getContext().getResourceMap();
+
+        rootMap.injectComponents(root);		
     }
 
+    
     private void initRootPaneContainer(RootPaneContainer c) {
 	JComponent rootPane = c.getRootPane();
 	// These initializations are only done once
-	Object k = "SingleFrameApplication.initRootPaneContainer";
-	if (rootPane.getClientProperty(k) != null) {
+	if (rootPane.getClientProperty(ROOT_PANECLIENT_PROPERTY) != null) {
 	    return;
 	}
-	rootPane.putClientProperty(k, Boolean.TRUE);
+	rootPane.putClientProperty(ROOT_PANECLIENT_PROPERTY, Boolean.TRUE);
 	// Inject resources
 	Container root = rootPane.getParent();
 	if (root instanceof Window) {
@@ -292,11 +292,20 @@ public abstract class SingleFrameApplication extends Application {
      * @see #configureWindow
      */
     public void show(JDialog c) {
-	if (c == null) {
-	    throw new IllegalArgumentException("null JDialog");
-	}
+	if (c == null) throw new IllegalArgumentException("null JDialog");
 	initRootPaneContainer(c);
 	c.setVisible(true);
+    }
+
+    /**
+     * Initialize and hide dialog
+     * 
+     * @param c 
+     */
+    public void hide(JDialog c) {
+	if (c == null) throw new IllegalArgumentException("null JDialog");	
+	initRootPaneContainer(c);
+	c.setVisible(false);
     }
 
     /**
@@ -317,15 +326,30 @@ public abstract class SingleFrameApplication extends Application {
      * @see #configureWindow
      */
     public void show(JFrame c) {
-	if (c == null) {
-	    throw new IllegalArgumentException("null JFrame");
-	}
+	if (c == null) throw new IllegalArgumentException("null JFrame");
 	
 	setMainFrame( c );
 	initRootPaneContainer(c);
 	c.setVisible(true);
     }
+ 
+    /**
+     * Initialize and hide the secondary JFrame.
+     * 
+     * @param c 
+     */
+    public void hide(JFrame c) {
+	if (c == null) throw new IllegalArgumentException("null JFrame");
+	
+	setMainFrame( c );
+	initRootPaneContainer(c);
+	c.setVisible(false);
+    }
 
+    /**
+     * 
+     * @param window 
+     */
     private void saveSession(Window window) {
 	String filename = sessionFilename(window);
 	if (filename != null) {
@@ -338,6 +362,11 @@ public abstract class SingleFrameApplication extends Application {
 	}
     }
 
+    /**
+     * 
+     * @param w
+     * @return 
+     */
     private boolean isVisibleWindow(Window w) {
 	return w.isVisible() && 
 	    ((w instanceof JFrame) || (w instanceof JDialog) || (w instanceof JWindow));
@@ -398,6 +427,7 @@ public abstract class SingleFrameApplication extends Application {
     }
 
     private class MainFrameListener extends WindowAdapter {
+        @Override
 	public void windowClosing(WindowEvent e) {
 	    exit(e);
 	}
@@ -460,6 +490,7 @@ public abstract class SingleFrameApplication extends Application {
         return mainView;
     }
 
+    @Override
     public void show(View view) {
         if ((mainView == null) && (view instanceof FrameView)) {
             mainView = (FrameView)view;
