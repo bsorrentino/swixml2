@@ -1,12 +1,49 @@
 package org.swixml.contrib;
 
+/**
+ * This java file is copyright by Daniele Piras ("danielepiras80", no email known) released under the
+ * Apache Software License 2.0. It has been downloaded in december 2009 from the CVS web interface
+ * of the sourceforge project http://sourceforge.net/projects/jtoaster/ . The web interface to CVS
+ * is not available anymore on sourceforge.
+ *
+ */
+
+/**
+ * Java Toaster is a java utility class for your swing applications
+ * that show an animate box coming from the bottom of your screen
+ * with a notification message and/or an associated image
+ * (like msn online/offline notifications).
+ *
+ * Toaster panel in windows system follow the taskbar; So if
+ * the taskbar is into the bottom the panel coming from the bottom
+ * and if the taskbar is on the top then the panel coming from the top.
+ *
+ * This is a simple example of utilization:
+ *
+ * import com.nitido.utils.toaster.*;
+ * import javax.swing.*;
+ *
+ * public class ToasterTest
+ * {
+ *
+ *  public static void main(String[] args)
+ *  {
+ *   // Initialize toaster manager...
+ *   Toaster toasterManager = new Toaster();
+ *
+ *   // Show a simple toaster
+ *   toasterManager.showToaster( new ImageIcon( "mylogo.gif" ), "A simple toaster with an image" );
+ *  }
+ * }
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Rectangle;
+
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -15,294 +52,436 @@ import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import javax.swing.border.EtchedBorder;
 
+/**
+ * Class to show tosters in multiplatform
+ *
+ * @author daniele piras
+ *
+ */
 public class Toaster
 {
-  private int toasterWidth = 300;
+	// Width of the toster
+	private int toasterWidth = 300;
 
-  private int toasterHeight = 80;
+	// Height of the toster
+	private int toasterHeight = 80;
 
-  private int step = 20;
+	// Step for the toaster
+	private int step = 20;
 
-  private int stepTime = 20;
+	// Step time
+	private int stepTime = 20;
 
-  private int displayTime = 3000;
+	// Show time
+	private int displayTime = 3000;
 
-  private int currentNumberOfToaster = 0;
+	// Current number of toaster...
+	private int currentNumberOfToaster = 0;
 
-  private int maxToaster = 0;
-  private int maxToasterInSceen;
-  private Font font;
-  private Color borderColor;
-  private Color toasterColor;
-  private Color messageColor;
-  int margin;
-  boolean useAlwaysOnTop = true;
-  private static final long serialVersionUID = 1L;
+	// Last opened toaster
+	private int maxToaster = 0;
 
-  public Toaster()
-  {
-  }
+	// Max number of toasters for the sceen
+	private int maxToasterInSceen;
 
-  public void showToaster(Icon icon, String msg)
-  {
-    SingleToaster singleToaster = new SingleToaster();
-    if (icon != null)
-    {
-      singleToaster.iconLabel.setIcon(icon);
-    }
-    singleToaster.message.setText(msg);
-    singleToaster.animate();
-  }
+	// Font used to display message
+	private Font font;
 
-  public void showToaster(String msg)
-  {
-    showToaster(null, msg);
-  }
+	// Color for border
+	private Color borderColor;
 
-  public Font getToasterMessageFont()
-  {
-    return this.font;
-  }
+	// Color for toaster
+	private Color toasterColor;
 
-  public void setToasterMessageFont(Font f)
-  {
-    this.font = f;
-  }
+	// Set message color
+	private Color messageColor;
 
-  public Color getBorderColor()
-  {
-    return this.borderColor;
-  }
+	// Set the margin
+	int margin;
 
-  public void setBorderColor(Color borderColor)
-  {
-    this.borderColor = borderColor;
-  }
+	// Flag that indicate if use alwaysOnTop or not.
+	// method always on top start only SINCE JDK 5 !
+	boolean useAlwaysOnTop = true;
 
-  public int getDisplayTime()
-  {
-    return this.displayTime;
-  }
+	/**
+	 * Constructor to initialized toaster component...
+	 * 
+	 * @author daniele piras
+	 * 
+	 */
+	public Toaster() {
+		// Set default font...
+		font = new Font("Arial", Font.BOLD, 12);
+		// Border color
+		borderColor = new Color(245, 153, 15);
+		toasterColor = Color.WHITE;
+		messageColor = Color.BLACK;
+		useAlwaysOnTop = true;
+		// Verify AlwaysOnTop Flag...
+		try {
+			JWindow.class.getMethod("setAlwaysOnTop",
+					new Class[] { Boolean.class });
+		} catch (Exception e) {
+			useAlwaysOnTop = false;
+		}
 
-  public void setDisplayTime(int displayTime)
-  {
-    this.displayTime = displayTime;
-  }
+	}
 
-  public int getMargin()
-  {
-    return this.margin;
-  }
+	/**
+	 * Class that rappresent a single toaster
+	 * 
+	 * @author daniele piras
+	 * 
+	 */
+	class SingleToaster extends javax.swing.JWindow {
+		private static final long serialVersionUID = 1L;
 
-  public void setMargin(int margin)
-  {
-    this.margin = margin;
-  }
+		// Label to store Icon
+		private JLabel iconLabel = new JLabel();
 
-  public Color getMessageColor()
-  {
-    return this.messageColor;
-  }
+		// Text area for the message
+		private JTextArea message = new JTextArea();
 
-  public void setMessageColor(Color messageColor)
-  {
-    this.messageColor = messageColor;
-  }
+		/***
+		 * Simple costructor that initialized components...
+		 */
+		public SingleToaster() {
+			initComponents();
+		}
 
-  public int getStep()
-  {
-    return this.step;
-  }
+		/***
+		 * Function to initialized components
+		 */
+		private void initComponents() {
 
-  public void setStep(int step)
-  {
-    this.step = step;
-  }
+			setSize(toasterWidth, toasterHeight);
 
-  public int getStepTime()
-  {
-    return this.stepTime;
-  }
+			message.setFont(getToasterMessageFont());
 
-  public void setStepTime(int stepTime)
-  {
-    this.stepTime = stepTime;
-  }
+			JPanel externalPanel = new JPanel(new BorderLayout(1, 1));
+			JPanel innerPanel = 
+					new JPanel(new BorderLayout(getMargin(),getMargin()));
+			
+			externalPanel.setBackground(getBorderColor());
+			innerPanel.setBackground(getToasterColor());
+			
+			message.setBackground(getToasterColor());
+			message.setMargin(new Insets(2, 2, 2, 2));
+			message.setLineWrap(true);
+			message.setWrapStyleWord(true);
 
-  public Color getToasterColor()
-  {
-    return this.toasterColor;
-  }
+			EtchedBorder etchedBorder = 
+					(EtchedBorder) BorderFactory.createEtchedBorder();
+			
+			externalPanel.setBorder(etchedBorder);
+			externalPanel.add(innerPanel);
+			
+			message.setForeground(getMessageColor());
+			
+			innerPanel.add(iconLabel, BorderLayout.WEST);
+			innerPanel.add(message, BorderLayout.CENTER);
+			
+			getContentPane().add(externalPanel);
+		}
 
-  public void setToasterColor(Color toasterColor)
-  {
-    this.toasterColor = toasterColor;
-  }
+		/***
+		 * Start toaster animation...
+		 */
+		public void animate() {
+			(new Animation(this)).start();
+		}
 
-  public int getToasterHeight()
-  {
-    return this.toasterHeight;
-  }
+	}
 
-  public void setToasterHeight(int toasterHeight)
-  {
-    this.toasterHeight = toasterHeight;
-  }
+	/***
+	 * Class that manage the animation
+	 */
+	class Animation extends Thread {
+		SingleToaster toaster;
 
-  public int getToasterWidth()
-  {
-    return this.toasterWidth;
-  }
+		public Animation(SingleToaster toaster) {
+			this.toaster = toaster;
+		}
 
-  public void setToasterWidth(int toasterWidth)
-  {
-    this.toasterWidth = toasterWidth;
-  }
+		/**
+		 * Animate vertically the toaster. The toaster could be moved from
+		 * bottom to upper or to upper to bottom
+		 * 
+		 * @param posx
+		 * @param fromy
+		 * @param toy
+		 * @throws InterruptedException
+		 */
+		protected void animateVertically(int posx, int fromY, int toY)
+				throws InterruptedException {
 
-  class SingleToaster extends JWindow
-  {
-    private static final long serialVersionUID = 1L;
-    private JLabel iconLabel = new JLabel();
+			toaster.setLocation(posx, fromY);
+			if (toY < fromY) {
+				for (int i = fromY; i > toY; i -= step) {
+					toaster.setLocation(posx, i);
+					Thread.sleep(stepTime);
+				}
+			} else {
+				for (int i = fromY; i < toY; i += step) {
+					toaster.setLocation(posx, i);
+					Thread.sleep(stepTime);
+				}
+			}
+			toaster.setLocation(posx, toY);
+		}
 
-    private JTextArea message = new JTextArea();
+		public void run() {
+			try {
+				boolean animateFromBottom = true;
+				GraphicsEnvironment ge = GraphicsEnvironment
+						.getLocalGraphicsEnvironment();
+				Rectangle screenRect = ge.getMaximumWindowBounds();
 
-    public SingleToaster()
-    {
-      initComponents();
-    }
+				int screenHeight = (int) screenRect.height;
 
-    private void initComponents()
-    {
-      setSize(Toaster.this.toasterWidth, Toaster.this.toasterHeight);
-      this.message.setFont(Toaster.this.getToasterMessageFont());
-      JPanel externalPanel = new JPanel(new BorderLayout(1, 1));
-      externalPanel.setBackground(Toaster.this.getBorderColor());
-      JPanel innerPanel = new JPanel(new BorderLayout(Toaster.this.getMargin(), Toaster.this.getMargin()));
-      innerPanel.setBackground(Toaster.this.getToasterColor());
-      this.message.setBackground(Toaster.this.getToasterColor());
-      this.message.setMargin(new Insets(2, 2, 2, 2));
-      this.message.setLineWrap(true);
-      this.message.setWrapStyleWord(true);
+				int startYPosition;
+				int stopYPosition;
 
-      EtchedBorder etchedBorder = (EtchedBorder)
-        BorderFactory.createEtchedBorder();
-      externalPanel.setBorder(etchedBorder);
+				if (screenRect.y > 0) {
+					animateFromBottom = false; // Animate from top!
+				}
 
-      externalPanel.add(innerPanel);
-      this.message.setForeground(Toaster.this.getMessageColor());
-      innerPanel.add(this.iconLabel, "West");
-      innerPanel.add(this.message, "Center");
-      getContentPane().add(externalPanel);
-    }
+				maxToasterInSceen = screenHeight / toasterHeight;
 
-    public void animate()
-    {
-      new Toaster.Animation(this).start();
-    }
-  }
+				int posx = (int) screenRect.width - toasterWidth - 1;
 
-  class Animation extends Thread
-  {
-    Toaster.SingleToaster toaster;
+				toaster.setLocation(posx, screenHeight);
+				toaster.setVisible(true);
+				if (useAlwaysOnTop) {
+					toaster.setAlwaysOnTop(true);
+				}
 
-    public Animation(Toaster.SingleToaster toaster)
-    {
-      this.toaster = toaster;
-    }
+				if (animateFromBottom) {
+					startYPosition = screenHeight;
+					stopYPosition = startYPosition - toasterHeight - 1;
+					if (currentNumberOfToaster > 0) {
+						stopYPosition = stopYPosition
+								- (maxToaster % maxToasterInSceen * toasterHeight);
+					} else {
+						maxToaster = 0;
+					}
+				} else {
+					startYPosition = screenRect.y - toasterHeight;
+					stopYPosition = screenRect.y;
 
-    protected void animateVertically(int posx, int fromY, int toY)
-      throws InterruptedException
-    {
-      this.toaster.setLocation(posx, fromY);
-      if (toY < fromY)
-      {
-        for (int i = fromY; i > toY; i -= Toaster.this.step)
-        {
-          this.toaster.setLocation(posx, i);
-          Thread.sleep(Toaster.this.stepTime);
-        }
-      }
-      else
-      {
-        for (int i = fromY; i < toY; i += Toaster.this.step)
-        {
-          this.toaster.setLocation(posx, i);
-          Thread.sleep(Toaster.this.stepTime);
-        }
-      }
-      this.toaster.setLocation(posx, toY);
-    }
+					if (currentNumberOfToaster > 0) {
+						stopYPosition = stopYPosition
+								+ (maxToaster % maxToasterInSceen * toasterHeight);
+					} else {
+						maxToaster = 0;
+					}
+				}
 
-    public void run()
-    {
-      try
-      {
-        boolean animateFromBottom = true;
-        GraphicsEnvironment ge = 
-          GraphicsEnvironment.getLocalGraphicsEnvironment();
-        Rectangle screenRect = ge.getMaximumWindowBounds();
+				currentNumberOfToaster++;
+				maxToaster++;
 
-        int screenHeight = screenRect.height;
+				animateVertically(posx, startYPosition, stopYPosition);
+				Thread.sleep(displayTime);
+				animateVertically(posx, stopYPosition, startYPosition);
 
-        if (screenRect.y > 0)
-        {
-          animateFromBottom = false;
-        }
+				currentNumberOfToaster--;
+				toaster.setVisible(false);
+				toaster.dispose();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-        Toaster.this.maxToasterInSceen = (screenHeight / Toaster.this.toasterHeight);
+	/**
+	 * Show a toaster with the specified message and the associated icon.
+	 */
+	public void showToaster(Icon icon, String msg) {
+		SingleToaster singleToaster = new SingleToaster();
+		if (icon != null) {
+			singleToaster.iconLabel.setIcon(icon);
+		}
+		singleToaster.message.setText(msg);
+		singleToaster.animate();
+	}
 
-        int posx = screenRect.width - Toaster.this.toasterWidth - 1;
+	/**
+	 * Show a toaster with the specified message.
+	 */
+	public void showToaster(String msg) {
+		showToaster(null, msg);
+	}
 
-        this.toaster.setLocation(posx, screenHeight);
-        this.toaster.setVisible(true);
-        if (Toaster.this.useAlwaysOnTop)
-        {
-          this.toaster.setAlwaysOnTop(true);
-        }
-        int startYPosition;
-        int stopYPosition;
-        if (animateFromBottom)
-        {
-          /*int */startYPosition = screenHeight;
-          /*int */stopYPosition = startYPosition - Toaster.this.toasterHeight - 1;
-          if (Toaster.this.currentNumberOfToaster > 0)
-          {
-            stopYPosition -= Toaster.this.maxToaster % Toaster.this.maxToasterInSceen * Toaster.this.toasterHeight;
-          }
-          else
-          {
-            Toaster.this.maxToaster = 0;
-          }
-        }
-        else
-        {
-          startYPosition = screenRect.y - Toaster.this.toasterHeight;
-          stopYPosition = screenRect.y;
+	/**
+	 * @return Returns the font
+	 */
+	public Font getToasterMessageFont() {
+		return font;
+	}
 
-          if (Toaster.this.currentNumberOfToaster > 0)
-          {
-            stopYPosition += Toaster.this.maxToaster % Toaster.this.maxToasterInSceen * Toaster.this.toasterHeight;
-          }
-          else
-          {
-            Toaster.this.maxToaster = 0;
-          }
-        }
+	/**
+	 * Set the font for the message
+	 */
+	public Toaster setToasterMessageFont(Font f) {
+		font = f;
+		return this;
+	}
 
-        Toaster.this.currentNumberOfToaster += 1;
-        Toaster.this.maxToaster += 1;
+	/**
+	 * @return Returns the borderColor.
+	 */
+	public Color getBorderColor() {
+		return borderColor;
+	}
 
-        animateVertically(posx, startYPosition, stopYPosition);
-        Thread.sleep(Toaster.this.displayTime);
-        animateVertically(posx, stopYPosition, startYPosition);
+	/**
+	 * @param borderColor
+	 *            The borderColor to set.
+	 */
+	public Toaster setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
+		return this;
+	}
 
-        Toaster.this.currentNumberOfToaster -= 1;
-        this.toaster.setVisible(false);
-        this.toaster.dispose();
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-  }
+	/**
+	 * @return Returns the displayTime.
+	 */
+	public int getDisplayTime() {
+		return displayTime;
+	}
+
+	/**
+	 * @param displayTime
+	 *            The displayTime to set.
+	 */
+	public Toaster setDisplayTime(int displayTime) {
+		this.displayTime = displayTime;
+		return this;
+
+	}
+
+	/**
+	 * @return Returns the margin.
+	 */
+	public int getMargin() {
+		return margin;
+	}
+
+	/**
+	 * @param margin
+	 *            The margin to set.
+	 */
+	public Toaster setMargin(int margin) {
+		this.margin = margin;
+		return this;
+	}
+
+	/**
+	 * @return Returns the messageColor.
+	 */
+	public Color getMessageColor() {
+		return messageColor;
+	}
+
+	/**
+	 * @param messageColor
+	 *            The messageColor to set.
+	 */
+	public Toaster setMessageColor(Color messageColor) {
+		this.messageColor = messageColor;
+		return this;
+	}
+
+	/**
+	 * @return Returns the step.
+	 */
+	public int getStep() {
+		return step;
+	}
+
+	/**
+	 * @param step
+	 *            The step to set.
+	 */
+	public Toaster setStep(int step) {
+		this.step = step;
+		return this;
+	}
+
+	/**
+	 * @return Returns the stepTime in mills.
+	 */
+	public int getStepTime() {
+		return stepTime;
+	}
+
+	/**
+	 * @param stepTime
+	 *            The stepTime to set.
+	 */
+	public Toaster setStepTime(int stepTime) {
+		this.stepTime = stepTime;
+		return this;
+	}
+
+	/**
+	 * @return Returns the toasterColor.
+	 */
+	public Color getToasterColor() {
+		return toasterColor;
+	}
+
+	/**
+	 * @param toasterColor
+	 *            The toasterColor to set.
+	 */
+	public Toaster setToasterColor(Color toasterColor) {
+		this.toasterColor = toasterColor;
+		return this;
+	}
+
+	/**
+	 * @return Returns the toasterHeight.
+	 */
+	public int getToasterHeight() {
+		return toasterHeight;
+	}
+
+	/**
+	 * @param toasterHeight
+	 *            The toasterHeight to set.
+	 */
+	public Toaster setToasterHeight(int toasterHeight) {
+		this.toasterHeight = toasterHeight;
+		return this;
+	}
+
+	/**
+	 * @return Returns the toasterWidth.
+	 */
+	public int getToasterWidth() {
+		return toasterWidth;
+	}
+
+	/**
+	 * @param toasterWidth
+	 *            The toasterWidth to set.
+	 */
+	public Toaster setToasterWidth(int toasterWidth) {
+		this.toasterWidth = toasterWidth;
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param args
+	 */
+	static public void main( String args[] ) {
+
+		Toaster toasterManager = new Toaster()
+							.setStepTime(20)
+							.setStep(20);
+		toasterManager.showToaster("JToaster Hello World!");
+		
+	}
 }
