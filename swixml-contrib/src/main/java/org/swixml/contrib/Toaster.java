@@ -319,7 +319,7 @@ public class Toaster implements LogAware
                             try {
                                 
                                 if( getDisplayTime() > 0 ) {
-                                    if( _waitForDismiss.await(getDisplayTime(), TimeUnit.MILLISECONDS) ) {                                
+                                    if( !_waitForDismiss.await(getDisplayTime(), TimeUnit.MILLISECONDS) ) {                                
                                         logger.warning( "waitForDismiss timeout....." );                                    
                                     }
                                 }
