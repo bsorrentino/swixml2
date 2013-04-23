@@ -43,6 +43,10 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -51,6 +55,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import javax.swing.border.EtchedBorder;
+import org.swixml.LogAware;
+import static org.swixml.LogAware.logger;
 
 /**
  * Class to show tosters in multiplatform
@@ -58,7 +64,7 @@ import javax.swing.border.EtchedBorder;
  * @author daniele piras
  *
  */
-public class Toaster
+public class Toaster implements LogAware
 {
 	// Width of the toster
 	private int toasterWidth = 300;
@@ -73,7 +79,7 @@ public class Toaster
 	private int stepTime = 20;
 
 	// Show time
-	private int displayTime = 3000;
+	private long displayTime = 3000L;
 
 	// Current number of toaster...
 	private int currentNumberOfToaster = 0;
@@ -99,10 +105,16 @@ public class Toaster
 	// Set the margin
 	int margin;
 
+        boolean autoDismiss = true;
+        
 	// Flag that indicate if use alwaysOnTop or not.
 	// method always on top start only SINCE JDK 5 !
 	boolean useAlwaysOnTop = true;
 
+        
+        final ReentrantLock _lock = new ReentrantLock();
+        final Condition _waitForDismiss;
+        
 	/**
 	 * Constructor to initialized toaster component...
 	 * 
@@ -125,7 +137,25 @@ public class Toaster
 			useAlwaysOnTop = false;
 		}
 
+                _waitForDismiss = _lock.newCondition();
 	}
+
+        /**
+         * 
+         * @param <T>
+         * @param toaster 
+         */
+        public final void dismiss() {
+           
+            _lock.lock();
+            try {
+                _waitForDismiss.signal();
+            }
+            finally {
+                _lock.unlock();
+            }
+            
+        }
 
 	/**
 	 * Class that rappresent a single toaster
@@ -184,22 +214,15 @@ public class Toaster
 			getContentPane().add(externalPanel);
 		}
 
-		/***
-		 * Start toaster animation...
-		 */
-		public void animate() {
-			(new Animation(this)).start();
-		}
-
 	}
 
 	/***
 	 * Class that manage the animation
 	 */
-	class Animation extends Thread {
-		SingleToaster toaster;
+	public class AnimationThread extends Thread {
+		javax.swing.JWindow toaster;
 
-		public Animation(SingleToaster toaster) {
+		public AnimationThread(javax.swing.JWindow toaster) {
 			this.toaster = toaster;
 		}
 
@@ -212,7 +235,7 @@ public class Toaster
 		 * @param toy
 		 * @throws InterruptedException
 		 */
-		protected void animateVertically(int posx, int fromY, int toY)
+		public void animateVertically(int posx, int fromY, int toY)
 				throws InterruptedException {
 
 			toaster.setLocation(posx, fromY);
@@ -229,68 +252,100 @@ public class Toaster
 			}
 			toaster.setLocation(posx, toY);
 		}
-
+                
+                @Override
 		public void run() {
-			try {
-				boolean animateFromBottom = true;
-				GraphicsEnvironment ge = GraphicsEnvironment
-						.getLocalGraphicsEnvironment();
-				Rectangle screenRect = ge.getMaximumWindowBounds();
+                    try {
 
-				int screenHeight = (int) screenRect.height;
+                        boolean animateFromBottom = true;
+                        GraphicsEnvironment ge = GraphicsEnvironment
+                                .getLocalGraphicsEnvironment();
+                        Rectangle screenRect = ge.getMaximumWindowBounds();
 
-				int startYPosition;
-				int stopYPosition;
+                        int screenHeight = (int) screenRect.height;
 
-				if (screenRect.y > 0) {
-					animateFromBottom = false; // Animate from top!
-				}
+                        int startYPosition;
+                        int stopYPosition;
 
-				maxToasterInSceen = screenHeight / toasterHeight;
+                        if (screenRect.y > 0) {
+                            animateFromBottom = false; // Animate from top!
+                        }
 
-				int posx = (int) screenRect.width - toasterWidth - 1;
+                        maxToasterInSceen = screenHeight / toasterHeight;
 
-				toaster.setLocation(posx, screenHeight);
-				toaster.setVisible(true);
-				if (useAlwaysOnTop) {
-					toaster.setAlwaysOnTop(true);
-				}
+                        int posx = (int) screenRect.width - toasterWidth - 1;
 
-				if (animateFromBottom) {
-					startYPosition = screenHeight;
-					stopYPosition = startYPosition - toasterHeight - 1;
-					if (currentNumberOfToaster > 0) {
-						stopYPosition = stopYPosition
-								- (maxToaster % maxToasterInSceen * toasterHeight);
-					} else {
-						maxToaster = 0;
-					}
-				} else {
-					startYPosition = screenRect.y - toasterHeight;
-					stopYPosition = screenRect.y;
+                        toaster.setLocation(posx, screenHeight);
+                        toaster.setVisible(true);
+                        if (useAlwaysOnTop) {
+                            toaster.setAlwaysOnTop(true);
+                        }
 
-					if (currentNumberOfToaster > 0) {
-						stopYPosition = stopYPosition
-								+ (maxToaster % maxToasterInSceen * toasterHeight);
-					} else {
-						maxToaster = 0;
-					}
-				}
+                        if (animateFromBottom) {
+                            startYPosition = screenHeight;
+                            stopYPosition = startYPosition - toasterHeight - 1;
+                            if (currentNumberOfToaster > 0) {
+                                stopYPosition = stopYPosition
+                                        - (maxToaster % maxToasterInSceen * toasterHeight);
+                            } else {
+                                maxToaster = 0;
+                            }
+                        } else {
+                            startYPosition = screenRect.y - toasterHeight;
+                            stopYPosition = screenRect.y;
 
-				currentNumberOfToaster++;
-				maxToaster++;
+                            if (currentNumberOfToaster > 0) {
+                                stopYPosition = stopYPosition
+                                        + (maxToaster % maxToasterInSceen * toasterHeight);
+                            } else {
+                                maxToaster = 0;
+                            }
+                        }
 
-				animateVertically(posx, startYPosition, stopYPosition);
-				Thread.sleep(displayTime);
-				animateVertically(posx, stopYPosition, startYPosition);
+                        currentNumberOfToaster++;
+                        maxToaster++;
 
-				currentNumberOfToaster--;
-				toaster.setVisible(false);
-				toaster.dispose();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+                        animateVertically(posx, startYPosition, stopYPosition);
+                        
+                        if( isAutoDismiss() ) {
+
+                            if( getDisplayTime() > 0 ) {
+                                Thread.sleep(displayTime);
+                            }
+                        }
+                        else {
+                            
+                            _lock.lock();
+                            try {
+                                
+                                if( getDisplayTime() > 0 ) {
+                                    if( _waitForDismiss.await(getDisplayTime(), TimeUnit.MILLISECONDS) ) {                                
+                                        logger.warning( "waitForDismiss timeout....." );                                    
+                                    }
+                                }
+                                else {
+                                    _waitForDismiss.await();
+                                }
+                            }
+                            finally {
+                                _lock.unlock();
+                            }
+                        }
+                        
+                        animateVertically(posx, stopYPosition, startYPosition);
+
+                        toaster.setVisible(false);
+                        toaster.dispose();
+
+                        currentNumberOfToaster--;
+                        
+
+                    } catch (Exception e) {
+
+                        logger.log(Level.SEVERE, "error rendering toaster", e);
+                    }
 		}
+                             
 	}
 
 	/**
@@ -302,16 +357,36 @@ public class Toaster
 			singleToaster.iconLabel.setIcon(icon);
 		}
 		singleToaster.message.setText(msg);
-		singleToaster.animate();
+		animate( singleToaster );
 	}
 
 	/**
 	 * Show a toaster with the specified message.
 	 */
-	public void showToaster(String msg) {
+	public final void showToaster(String msg) {
 		showToaster(null, msg);
 	}
+        
+        /**
+         * 
+         * @param <T>
+         * @param toaster
+         * @return 
+         */
+        protected <T extends javax.swing.JWindow> AnimationThread animate( T toaster ) {
+            	final AnimationThread anim = new AnimationThread(toaster);
+                anim.start();
+                return anim;
+        }
 
+        public boolean isAutoDismiss() {
+            return autoDismiss;
+        }
+
+        public void setAutoDismiss(boolean autoDismiss) {
+            this.autoDismiss = autoDismiss;
+        }
+        
 	/**
 	 * @return Returns the font
 	 */
@@ -346,7 +421,7 @@ public class Toaster
 	/**
 	 * @return Returns the displayTime.
 	 */
-	public int getDisplayTime() {
+	public long getDisplayTime() {
 		return displayTime;
 	}
 
@@ -354,7 +429,7 @@ public class Toaster
 	 * @param displayTime
 	 *            The displayTime to set.
 	 */
-	public Toaster setDisplayTime(int displayTime) {
+	public Toaster setDisplayTime(long displayTime) {
 		this.displayTime = displayTime;
 		return this;
 
