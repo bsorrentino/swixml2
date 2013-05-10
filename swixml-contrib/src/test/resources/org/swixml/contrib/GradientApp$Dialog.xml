@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog Size="500,500" resizable="true" title="Gradient Test"  >
+
+<vbox>
+
+    <label>HELLO GRADIENT!</label>
+
+</vbox>
+
+</dialog>
