@@ -4,7 +4,7 @@
   <parent>
     <artifactId>swixml-examples</artifactId>
     <groupId>org.swixml</groupId>
-    <version>2.6.20130530</version>
+    <version>2.6-SNAPSHOT</version>
   </parent>
   <artifactId>swixml-examples-wizard</artifactId>
   <name>SWIXML WIZARD EXAMPLE - ${project.version}</name>
