@@ -2,12 +2,12 @@ package examples.slider;
 
 import javax.swing.JDialog;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class SliderSampleApplication extends SwingApplication {
+public class SliderSampleApplication extends SWIXMLApplication {
 
 	public static void main(String args []) {
-		SwingApplication.launch(SliderSampleApplication.class, args);
+		SWIXMLApplication.launch(SliderSampleApplication.class, args);
 	}
 
 	@Override

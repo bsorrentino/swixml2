@@ -8,13 +8,13 @@ package issue60;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 /**
  *
  * @author bsorrentino
  */
-public class Issue60Application extends SwingApplication{
+public class Issue60Application extends SWIXMLApplication{
 
     @Override
     protected void startup() {
@@ -37,7 +37,7 @@ public class Issue60Application extends SwingApplication{
     }
 
 	public static void main(String[] args) {
-		SwingApplication.launch(Issue60Application.class, args);
+		SWIXMLApplication.launch(Issue60Application.class, args);
 
 	}
 

@@ -4,9 +4,9 @@ import javax.swing.JDialog;
 
 import org.jdesktop.application.ResourceMap;
 import org.swixml.SwingTagLibrary;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class ButtonExample extends SwingApplication {
+public class ButtonExample extends SWIXMLApplication {
 	@Override
 	protected void startup() {
 		
@@ -39,7 +39,7 @@ public class ButtonExample extends SwingApplication {
 		System.setProperty( IGNORE_RESOURCES_PREFIX, "true");
 		System.setProperty( AUTO_INJECTFIELD, "true");
 
-		SwingApplication.launch(ButtonExample.class, args);
+		SWIXMLApplication.launch(ButtonExample.class, args);
 	}
 
 }

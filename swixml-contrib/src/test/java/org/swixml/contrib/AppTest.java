@@ -9,13 +9,13 @@ import javax.swing.JFrame;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.junit.Test;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 
 /**
  * Unit test for simple App.
  */
-public class AppTest extends SwingApplication {
+public class AppTest extends SWIXMLApplication {
 
     public class MainFrame extends JFrame {
         JSimpleMenuButton btnMenu;

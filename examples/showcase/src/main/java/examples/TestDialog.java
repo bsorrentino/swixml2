@@ -6,7 +6,7 @@ import javax.swing.JDialog;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 
 @SuppressWarnings("serial")
@@ -44,7 +44,7 @@ public class TestDialog extends JDialog {
 		
 		try {
 			
-			SwingApplication app = Application.getInstance(SwingApplication.class);
+			SWIXMLApplication app = Application.getInstance(SWIXMLApplication.class);
 			
 			JDialog dlg = app.render( new TestDialog(parent), "xml/jsr296component.xml");
 			

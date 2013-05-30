@@ -2,13 +2,13 @@ package examples;
 
 import javax.swing.JFrame;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 
-public class BindingExamplesApplication extends SwingApplication {
+public class BindingExamplesApplication extends SWIXMLApplication {
 
 	public static void main(String args []) {
-		SwingApplication.launch(BindingExamplesApplication.class, args);
+		SWIXMLApplication.launch(BindingExamplesApplication.class, args);
 	}
 	
 	

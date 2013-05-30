@@ -14,13 +14,13 @@ import javax.swing.JFrame;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Resource;
 import org.junit.Test;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 /**
  *
  * @author bsorrentino
  */
-public class SystemTrayApp extends SwingApplication {
+public class SystemTrayApp extends SWIXMLApplication {
     
     public class MainFrame extends JFrame {
         

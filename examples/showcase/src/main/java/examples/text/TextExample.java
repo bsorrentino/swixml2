@@ -2,9 +2,9 @@ package examples.text;
 
 import javax.swing.JDialog;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class TextExample extends SwingApplication {
+public class TextExample extends SWIXMLApplication {
 	@Override
 	protected void startup() {
 		
@@ -30,7 +30,7 @@ public class TextExample extends SwingApplication {
 		System.setProperty( IGNORE_RESOURCES_PREFIX, "true");
 		System.setProperty( AUTO_INJECTFIELD, "true");
 
-		SwingApplication.launch(TextExample.class, args);
+		SWIXMLApplication.launch(TextExample.class, args);
 	}
 
 }

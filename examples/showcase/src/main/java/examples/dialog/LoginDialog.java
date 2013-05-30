@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 import org.swixml.jsr.widgets.JDialogEx;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 
 @SuppressWarnings("serial")
@@ -75,7 +75,7 @@ public class LoginDialog extends JDialogEx  {
 	 */
 	@Action(name="enterAction",enabledProperty=DATA_VALID)
 	public void submit() {
-		JOptionPane.showMessageDialog( SwingApplication.getInstance(SwingApplication.class).getMainFrame(), 
+		JOptionPane.showMessageDialog( SWIXMLApplication.getInstance(SWIXMLApplication.class).getMainFrame(), 
 										String.format("submit login=[%s] password=[%s]\n", getLogin(), getPassword()));
 	}
 

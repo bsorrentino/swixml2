@@ -2,12 +2,12 @@ package org.swixml;
 
 import javax.swing.JFrame;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class SimpleApplication extends SwingApplication {
+public class SimpleApplication extends SWIXMLApplication {
 
 	public static void main(String args []) {
-		SwingApplication.launch(SimpleApplication.class, args);
+		SWIXMLApplication.launch(SimpleApplication.class, args);
 	}
 	
 	

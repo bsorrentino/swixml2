@@ -125,7 +125,12 @@
   	<dependency>
   		<groupId>org.swixml</groupId>
   		<artifactId>swixml</artifactId>
-  		<version>2.6-SNAPSHOT</version>
+  		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.swixml</groupId>
+  		<artifactId>swixml-contrib</artifactId>
+  		<version>${project.version}</version>
   	</dependency>
   </dependencies>
 

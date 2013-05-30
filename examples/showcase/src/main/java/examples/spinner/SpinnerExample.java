@@ -20,15 +20,15 @@ import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 
 import org.jdesktop.application.Action;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 /**
  *
  * @author bsorrentino
  */
-public class SpinnerExample extends SwingApplication {
+public class SpinnerExample extends SWIXMLApplication {
 
     public static void main(String args []) {
-            SwingApplication.launch(SpinnerExample.class, args);
+            SWIXMLApplication.launch(SpinnerExample.class, args);
     }
 
 

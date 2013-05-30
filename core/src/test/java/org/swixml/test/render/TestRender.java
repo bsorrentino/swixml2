@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 import org.jdesktop.application.Application;
 import org.junit.Test;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 import org.junit.Assert;
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -16,7 +16,7 @@ public class TestRender {
 	private static final int TEST_WIDTH = 300;
 	private static final int TEST_HEIGTH = 350;
 
-	static class MyApp extends SwingApplication {
+	static class MyApp extends SWIXMLApplication {
 
 		@Override
 		protected void startup() {
@@ -28,7 +28,7 @@ public class TestRender {
 	
 	@Test public void renderSize() throws Exception {
 		
-		SwingApplication app = new MyApp();
+		SWIXMLApplication app = new MyApp();
 		
 		MyFrame f = app.render( new MyFrame() );
 

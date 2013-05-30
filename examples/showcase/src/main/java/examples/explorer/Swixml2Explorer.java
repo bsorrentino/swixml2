@@ -21,7 +21,7 @@ import org.jdesktop.application.Action;
 import org.swixml.SwingTagLibrary;
 import org.swixml.XFrame;
 import org.swixml.examples.wizard.DDLWizardApplication;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 import examples.border.BorderExample;
 import examples.combo.ComboExample;
@@ -45,7 +45,7 @@ import examples.tree.TreeExample;
 import examples.util.GenericTreeModel;
 
 
-public class Swixml2Explorer extends SwingApplication  {
+public class Swixml2Explorer extends SWIXMLApplication  {
 
 	static final Logger logger = Logger.getAnonymousLogger();
 	
@@ -397,7 +397,7 @@ public class Swixml2Explorer extends SwingApplication  {
                 for( String f : ff ) {
                     System.out.printf( "font-family [%s]\n", f );
                 }
-		SwingApplication.launch(Swixml2Explorer.class, args);
+		SWIXMLApplication.launch(Swixml2Explorer.class, args);
 
 	}
 

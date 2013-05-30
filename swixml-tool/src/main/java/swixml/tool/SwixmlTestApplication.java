@@ -16,15 +16,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.LocalStorage;
 import org.swixml.LogUtil;
 import org.swixml.SwingEngine;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.factory.BeanFactory;
+import org.swixml.jsr296.SWIXMLApplication;
 
 
-public class SwixmlTestApplication extends SwingApplication {
+public class SwixmlTestApplication extends SWIXMLApplication {
 
     private static final String STORAGE = "swixmltool.storage";
 
@@ -177,6 +179,9 @@ public class SwixmlTestApplication extends SwingApplication {
             try {
 
             final SwingEngine<Container> engine = new SwingEngine<Container>( null );
+            
+            engine.getTaglib().registerUnknowTagFactory( new BeanFactory( JPanel.class ) );
+            
             engine.setClassLoader( loader );
 
             final Container c = engine.render(f);
@@ -264,12 +269,12 @@ public class SwixmlTestApplication extends SwingApplication {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-                System.setProperty("org.swixml.designTime", "true");
+                System.setProperty(SwingEngine.DESIGN_TIME, "true");
 
 
 	}
 
 	public static void main( String args[] ) {
-		SwingApplication.launch(SwixmlTestApplication.class, args);
+		SWIXMLApplication.launch(SwixmlTestApplication.class, args);
 	}
 }

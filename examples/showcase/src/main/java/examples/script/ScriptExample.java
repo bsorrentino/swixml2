@@ -9,9 +9,9 @@ import javax.swing.JDialog;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import org.swixml.SwingEngine;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class ScriptExample extends SwingApplication {
+public class ScriptExample extends SWIXMLApplication {
 
     
     
@@ -83,6 +83,6 @@ public class ScriptExample extends SwingApplication {
         System.setProperty(IGNORE_RESOURCES_PREFIX, "true");
         System.setProperty(AUTO_INJECTFIELD, "true");
 
-        SwingApplication.launch(ScriptExample.class, args);
+        SWIXMLApplication.launch(ScriptExample.class, args);
     }
 }

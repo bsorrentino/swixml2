@@ -3,9 +3,9 @@ package examples.tree;
 
 import javax.swing.JDialog;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class TreeExample extends SwingApplication {
+public class TreeExample extends SWIXMLApplication {
 
 	
 	@Override
@@ -26,7 +26,7 @@ public class TreeExample extends SwingApplication {
 	}
 
 	public static void main(String args []) {
-		SwingApplication.launch(TreeExample.class, args);
+		SWIXMLApplication.launch(TreeExample.class, args);
 	}
 	
 }

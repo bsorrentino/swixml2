@@ -72,7 +72,9 @@ import org.swixml.processor.TagProcessor;
 public abstract class TagLibrary {
 
   private Map<String,Factory> tags = new HashMap<String,Factory>(100);
-
+  
+  private Factory unknowTagFactory;
+  
   /**
    * Constructs a new TagLibrary and regisiters all factories.
    */
@@ -85,6 +87,13 @@ public abstract class TagLibrary {
    */
   abstract protected void registerTags();
 
+  /**
+   * 
+   * @param factory 
+   */
+  public final void registerUnknowTagFactory( Factory factory ) {
+      unknowTagFactory = factory;
+  }
   /**
    * 
    * @param name
@@ -141,7 +150,10 @@ public abstract class TagLibrary {
    * @return <code>Factory</code> - regsitered for the given tag name
    */
   public Factory getFactory( String name ) {
-    return (Factory) tags.get( name.toLowerCase() );
+    Factory result =  tags.get( name.toLowerCase() );
+    
+    return (result==null) ? unknowTagFactory : result;
+    
   }
 
   /**
@@ -156,7 +168,7 @@ public abstract class TagLibrary {
 	    	  return f;
 	      }
 	  }
-	  return null;
+	  return unknowTagFactory;
    
   }
 

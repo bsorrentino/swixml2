@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import org.jdesktop.application.Application;
 import org.junit.Test;
 import org.swixml.jsr.widgets.JDialogEx;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class GradientApp extends SwingApplication{
+public class GradientApp extends SWIXMLApplication{
 
     public static class Dialog extends JDialogEx {
 	

@@ -3,9 +3,9 @@ package org.swixml.test.issue34;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Application;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class Issue34Application extends SwingApplication {
+public class Issue34Application extends SWIXMLApplication {
 
 	@Override
 	protected void startup() {

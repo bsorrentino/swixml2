@@ -77,7 +77,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.jar.Manifest;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.ScriptException;
 import javax.swing.AbstractButton;
@@ -93,6 +95,7 @@ import org.swixml.localization.LocalizerJSR296Impl;
 import org.swixml.script.ScriptService;
 import org.swixml.script.ScriptServiceDefaultImpl;
 import org.w3c.dom.Document;
+import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
 /**
@@ -105,6 +108,7 @@ import org.xml.sax.InputSource;
  * @version $Revision: 1.5 $
  */
 public class SwingEngine<T extends Container> implements LogAware {
+    public static final String DESIGN_TIME = "org.swixml.designTime";
 
 	public static interface Namespaces {
 		
@@ -168,11 +172,43 @@ public class SwingEngine<T extends Container> implements LogAware {
   //
   /** display the swing release version to system out. */
   static {
-    System.out.println("SwixML 2.6");
+    System.out.printf("SWIXML2 - %s\n", getVersion());
   }
 
+  private static String getVersion() 
+  {
+    final String className = SwingEngine.class.getSimpleName() + ".class";
+    final String classPath = SwingEngine.class.getResource(className).toString();
+    
+    if (!classPath.startsWith("jar")) {
+      // Class not from JAR
+      return "development version";
+    }
+    
+    final String manifestPath = new StringBuilder()
+                                    .append(classPath.substring(0, classPath.lastIndexOf("!") + 1))
+                                    .append("/META-INF/MANIFEST.MF")
+                                    .toString();
+    
+    
+        try {
+            Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+            final java.util.jar.Attributes attr = manifest.getMainAttributes();
+
+            /*
+            for( Object a : attr.keySet()) {
+                System.out.printf( "key=[%s]\n", String.valueOf(a) );
+            }
+            */
+            return  attr.getValue("Implementation-Version");
+        } catch (IOException ex) {
+            
+            return "<unknown version>";
+        }
+  }
+  
   public static boolean isDesignTime( ) {
-      return Boolean.getBoolean("org.swixml.designTime");
+      return Boolean.getBoolean(DESIGN_TIME);
   }
   //
   //  Member Variables

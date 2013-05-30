@@ -7,15 +7,15 @@ package examples.border;
 
 import javax.swing.JDialog;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 /**
  *
  * @author bsorrentino
  */
-public class BorderExample extends SwingApplication {
+public class BorderExample extends SWIXMLApplication {
     public static void main(String args[]) {
-        SwingApplication.launch(BorderExample.class, args);
+        SWIXMLApplication.launch(BorderExample.class, args);
     }
 
     @Override

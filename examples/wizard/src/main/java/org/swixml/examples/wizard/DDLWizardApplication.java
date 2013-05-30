@@ -25,10 +25,10 @@ import org.netbeans.spi.wizard.WizardBranchController;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 
-public class DDLWizardApplication extends SwingApplication implements DDLWizardConstants {
+public class DDLWizardApplication extends SWIXMLApplication implements DDLWizardConstants {
 
         private static final boolean USE_BRANCH = true;
 
@@ -53,7 +53,7 @@ public class DDLWizardApplication extends SwingApplication implements DDLWizardC
         }
 
         public boolean cancel(Map wizardData) {
-            getInstance(SwingApplication.class).getMainFrame().dispose();
+            getInstance(SWIXMLApplication.class).getMainFrame().dispose();
         	//exit();
             return true;
         }
@@ -172,7 +172,7 @@ else {
 
       /* Object result = */WizardDisplayer.showWizard(wizard, new Rectangle(x,y,w,h));
       
-      getInstance(SwingApplication.class).getMainFrame().dispose(); 
+      getInstance(SWIXMLApplication.class).getMainFrame().dispose(); 
   	//exit();
 
    }

@@ -4,9 +4,9 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Application;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
-public class LayoutExample extends SwingApplication {
+public class LayoutExample extends SWIXMLApplication {
 
     @Override
     protected void startup() {

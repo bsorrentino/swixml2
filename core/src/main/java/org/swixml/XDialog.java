@@ -71,7 +71,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.application.Application;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 /**
  * XDialog simply extends JDialog to allow instantiation with a parent frame
@@ -101,7 +101,7 @@ public class XDialog extends JDialog {
    */
   public XDialog() throws HeadlessException {
     //super( SwingEngine.getAppFrame() != null && SwingEngine.getAppFrame().isDisplayable() ? SwingEngine.getAppFrame() : null );
-	super( (null!=Application.getInstance(SwingApplication.class)) ? Application.getInstance(SwingApplication.class).getMainFrame() : null);
+	super( (null!=Application.getInstance(SWIXMLApplication.class)) ? Application.getInstance(SWIXMLApplication.class).getMainFrame() : null);
   }
 
   /**

@@ -2,14 +2,14 @@ package examples.combo;
 
 import javax.swing.JDialog;
 
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 
-public class ComboExample extends SwingApplication {
+public class ComboExample extends SWIXMLApplication {
 
 
 	public static void main(String args []) {
-		SwingApplication.launch(ComboExample.class, args);
+		SWIXMLApplication.launch(ComboExample.class, args);
 	}
 	
 	

@@ -61,7 +61,7 @@ import javax.swing.AbstractAction;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 /**
  * XAction, Action Wrapper to generate Actions on  the fly.
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
@@ -77,7 +77,7 @@ public class XAction extends AbstractAction implements LogAware {
     this.client= client;
 
     try {
-    	ApplicationContext ctx = SwingApplication.getInstance().getContext();
+    	ApplicationContext ctx = SWIXMLApplication.getInstance().getContext();
     	
     	ApplicationActionMap actionMap =ctx.getActionMap(client);
     	

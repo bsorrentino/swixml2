@@ -10,12 +10,12 @@ import javax.swing.event.ListSelectionEvent;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.observablecollections.ObservableCollections;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 import examples.SimpleBean;
 import examples.SimpleBean2;
 
-public class TableExample extends SwingApplication {
+public class TableExample extends SWIXMLApplication {
 
 	private static final String SWIXML_SOURCE = "examples/table/TableDialog.xml";
 
@@ -106,7 +106,7 @@ public class TableExample extends SwingApplication {
 	}
 
 	public static void main(String args []) {
-		SwingApplication.launch(TableExample.class, args);
+		SWIXMLApplication.launch(TableExample.class, args);
 	}
 	
 }

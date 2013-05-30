@@ -19,13 +19,13 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Bindings;
-import org.swixml.jsr296.SwingApplication;
+import org.swixml.jsr296.SWIXMLApplication;
 
 /**
  *
  * @author softphone
  */
-public class ComboApplication extends SwingApplication {
+public class ComboApplication extends SWIXMLApplication {
 
         public class ComboDialog extends JDialog {
 
