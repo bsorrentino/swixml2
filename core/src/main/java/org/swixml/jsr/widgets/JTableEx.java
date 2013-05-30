@@ -25,6 +25,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Converter;
+import org.swixml.LogAware;
 import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
 
@@ -33,7 +34,7 @@ import org.swixml.jsr295.BindingUtils;
  * @author sorrentino
  */
 @SuppressWarnings("serial")
-public class JTableEx extends JTable implements BindableListWidget, BindableBasicWidget {
+public class JTableEx extends JTable implements BindableListWidget, BindableBasicWidget, LogAware {
 
     private Action action;
     private Action dblClickAction = null;
@@ -207,20 +208,22 @@ public class JTableEx extends JTable implements BindableListWidget, BindableBasi
 	@Override
     public void addNotify() {
 
-        if( beanList == null ) {
+        final String bw = getBindWith();
 
-            if( getBindWith()!=null ) {
-                Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
+        if( bw!=null ) {
+            Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
-                BeanProperty<Object, List<?>> p = BeanProperty.create( getBindWith() );
+            BeanProperty<Object, List<?>> p = BeanProperty.create( bw );
 
-                beanList = p.getValue(client);
-
-            }
+            beanList = p.getValue(client);
 
         }
+
         if( beanList!=null ) {
-        	  	
+        	 
+            if( bw==null) {
+                logger.warning( "used the deprecated property bindList instead of bindWidth!");
+            }
             if( beanClass!=null ) {
                  BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, beanList, getBindClass(), isAllPropertiesBound());
             }

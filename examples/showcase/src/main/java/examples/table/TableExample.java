@@ -14,6 +14,8 @@ import org.swixml.jsr296.SWIXMLApplication;
 
 import examples.SimpleBean;
 import examples.SimpleBean2;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TableExample extends SWIXMLApplication {
 
@@ -24,6 +26,7 @@ public class TableExample extends SWIXMLApplication {
 
 		final List<SimpleBean> myData = ObservableCollections.observableList( new ArrayList<SimpleBean>() );
 		final List<SimpleBean2> myData2 = ObservableCollections.observableList( new ArrayList<SimpleBean2>() );
+		final List<Map<String,Object>> myDataAsMap = ObservableCollections.observableList( new ArrayList<Map<String,Object>>() );
 
 		public JTable table; /* automatically bound */
 		public JTable table2; /* automatically bound */
@@ -37,6 +40,13 @@ public class TableExample extends SWIXMLApplication {
 				myData2.add( new SimpleBean2() );
 			}
 			
+                        {
+                            Map<String,Object> bean = new HashMap<String,Object>();
+                            bean.put("field1", 1);
+                            bean.put("field2", true);
+                            bean.put("field3", "test");
+                            myDataAsMap.add( bean );
+                        }
 		}
 		
 		/**
@@ -52,11 +62,19 @@ public class TableExample extends SWIXMLApplication {
 		public Class<?> getMyDataClass() {
 		      return SimpleBean.class;
 		}
-		/**
+
+                /**
 		 * list bound
 		 */
 		public final List<SimpleBean2> getMyData2() {
 			return myData2;
+		}
+
+                /**
+		 * list bound
+		 */
+		public final List<Map<String,Object>> getMyDataAsMap() {
+			return myDataAsMap;
 		}
 		
 		/**
