@@ -26,6 +26,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Converter;
 import org.swixml.LogAware;
+import static org.swixml.LogAware.logger;
 import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
 
@@ -207,7 +208,10 @@ public class JTableEx extends JTable implements BindableListWidget, BindableBasi
 
 	@Override
     public void addNotify() {
-
+        if( beanList==null) {
+            logger.warning( "used the deprecated property bindList instead of bindWidth!");
+        }
+            
         final String bw = getBindWith();
 
         if( bw!=null ) {
@@ -221,9 +225,6 @@ public class JTableEx extends JTable implements BindableListWidget, BindableBasi
 
         if( beanList!=null ) {
         	 
-            if( bw==null) {
-                logger.warning( "used the deprecated property bindList instead of bindWidth!");
-            }
             if( beanClass!=null ) {
                  BindingUtils.initTableBindingFromBeanInfo( null, UpdateStrategy.READ_WRITE, this, beanList, getBindClass(), isAllPropertiesBound());
             }

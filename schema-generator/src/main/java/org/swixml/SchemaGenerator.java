@@ -127,7 +127,7 @@ public class SchemaGenerator {
    * @return <code>Element</code> - passed in root.
    */
   private static Element addSwixmlTags(Element root) {
-    TagLibrary taglib = new SwingEngine().getTaglib();
+    TagLibrary taglib = new SwingEngine(null).getTaglib();
     for (Object name : new TreeSet(taglib.getTagClasses().keySet())) {
       Element elem = new Element("element", XSNS);
       elem.setAttribute("name", name.toString());

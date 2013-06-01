@@ -112,16 +112,24 @@ import org.swixml.processor.TableColumnTagProcessor;
  */
 public final class SwingTagLibrary extends TagLibrary {
 
-  private static SwingTagLibrary INSTANCE = new SwingTagLibrary();
+  private static SwingTagLibrary INSTANCE = null;
+  
   public static SwingTagLibrary getInstance() {
-    return SwingTagLibrary.INSTANCE;
+      
+      synchronized( SwingTagLibrary.class ) {
+          if( INSTANCE==null  ) {
+              INSTANCE = new SwingTagLibrary();
+              INSTANCE.registerTags();
+          }
+      
+     }
+     return INSTANCE;
   }
 
   /**
    * Constructs a Swing Library by registering swings widgets
    */
   private SwingTagLibrary() {
-    registerTags();
   }
 
   /**
@@ -209,15 +217,10 @@ public final class SwingTagLibrary extends TagLibrary {
 
     registerTag("script", new ScriptFactory() );
     
-    ServiceLoader<TagLibraryService> loader = ServiceLoader.load(TagLibraryService.class);
-    if( loader== null ) return;
+    final ClassLoader cl = Thread.currentThread().getContextClassLoader();
     
-    for( TagLibraryService tls : loader ) {
-    	logger.info( "processing TagLibrary service provider " + tls);
-    	
-    	tls.registerTags(this);
-    	
-    }
+    loadSPITags(cl);
+    
   }
 }
 

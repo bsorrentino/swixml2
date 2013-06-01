@@ -89,6 +89,7 @@ import javax.swing.JMenu;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import static org.swixml.LogAware.logger;
 import org.swixml.dom.DOMUtil;
 import org.swixml.localization.LocalizerDefaultImpl;
 import org.swixml.localization.LocalizerJSR296Impl;
@@ -251,7 +252,7 @@ public class SwingEngine<T extends Container> implements LogAware {
   /**
    * Default ctor for a SwingEngine.
    */
-  protected SwingEngine() {
+  private SwingEngine() {
     //if( Boolean.getBoolean( Application.USE_COMMON_LOCALIZER ) ) {
     if( Application.getBooleanProperty(Application.USE_COMMON_LOCALIZER) ) {
     	localizer = new LocalizerJSR296Impl();
@@ -270,20 +271,30 @@ public class SwingEngine<T extends Container> implements LogAware {
    * @param client <code>Object</code> owner of this instance
    */
   public SwingEngine(T client) {
-    this();
-    this.client = client;
-
-    try {
-		this.script = new ScriptServiceDefaultImpl();
-		
-		script.put("client", client);
-		
-	} catch (ScriptException e) {
-		logger.log( Level.SEVERE,  "error initializing script", e);
-	}
-
+    this(client, Thread.currentThread().getContextClassLoader());
   }
 
+  /**
+   * Constructor to be used if the SwingEngine is not extend but used through object composition.
+   *
+   * @param client <code>Object</code> owner of this instance
+   * @param loader 
+   */
+  public SwingEngine(T client, ClassLoader loader) {
+      this();
+      this.client = client;
+      setClassLoader(loader);
+
+      try {
+          this.script = new ScriptServiceDefaultImpl();
+
+          script.put("client", client);
+
+      } catch (ScriptException e) {
+          logger.log(Level.SEVERE, "error initializing script", e);
+      }
+
+  }
 
   public ScriptService getScript() {
 	return script;
@@ -703,7 +714,7 @@ public class SwingEngine<T extends Container> implements LogAware {
    *
    * @param l <code>Locale</code>
    */
-  public void setLocale(Locale l) {
+  public final void setLocale(Locale l) {
     if (SwingEngine.isMacOSXSupported() && SwingEngine.isMacOSX()) {
       l = new Locale(l.getLanguage(),
               l.getCountry(),
@@ -746,11 +757,13 @@ public class SwingEngine<T extends Container> implements LogAware {
    * @see ClassLoader#loadClass
    * @see ClassLoader#getResource
    */
-  public void setClassLoader(ClassLoader cl) {
+  
+  private void setClassLoader(ClassLoader cl) {
     this.cl = cl;
     this.localizer.setClassLoader(cl);
   }
-
+  
+  
   /**
    * @return <code>ClassLoader</code>- the Classloader used for all <i> getResourse..()</i> and <i>loadClass()</i>
    *         calls.

@@ -55,6 +55,8 @@ package org.swixml;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
+import static org.swixml.LogUtil.logger;
 
 import org.swixml.factory.BeanFactory;
 import org.swixml.processor.TagProcessor;
@@ -75,13 +77,10 @@ public abstract class TagLibrary {
   
   private Factory unknowTagFactory;
   
-  /**
-   * Constructs a new TagLibrary and regisiters all factories.
-   */
-  public TagLibrary() {
-    registerTags();
+  protected TagLibrary() {
+      
   }
-
+  
   /**
    * Registers all factories for the TagLibrary.
    */
@@ -172,6 +171,21 @@ public abstract class TagLibrary {
    
   }
 
+  /**
+   * 
+   * @param cl 
+   */
+  public void loadSPITags( ClassLoader cl ) {
+    ServiceLoader<TagLibraryService> loader = ServiceLoader.load(TagLibraryService.class, cl);
+    if( loader== null ) return;
+    
+    for( TagLibraryService tls : loader ) {
+    	logger.info( String.format("processing TagLibrary service provider [%s]", tls));
+    	
+    	tls.registerTags(this);
+    	
+    }
 
+  }
 
 }

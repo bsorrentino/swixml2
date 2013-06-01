@@ -10,23 +10,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.logging.Level;
 
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.LocalStorage;
+import org.swixml.LogAware;
 import org.swixml.LogUtil;
 import org.swixml.SwingEngine;
 import org.swixml.factory.BeanFactory;
 import org.swixml.jsr296.SWIXMLApplication;
 
 
-public class SwixmlTestApplication extends SWIXMLApplication {
+public class SwixmlTestApplication extends SWIXMLApplication implements LogAware {
 
     private static final String STORAGE = "swixmltool.storage";
 
@@ -61,18 +60,26 @@ public class SwixmlTestApplication extends SWIXMLApplication {
     @SuppressWarnings("serial")
     public class MainFrame extends JDialog {
 
+        
         String currentSize;
-        ClassLoader loader = getClass().getClassLoader();
+        ClassloaderBuilder loader = new ClassloaderBuilder();
 
+        
         final JFileChooser fc = new JFileChooser();
 
         public MainFrame() {
                 fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-                loadResource( getResourceObject() );
+                fc.setMultiSelectionEnabled(true);
+                
+                //loadResource( getResourceObject() );
 
         }
 
+        public java.util.List<URL> getResourceList() {
+        
+            return loader.getUrls();
+        } 
+        
         public String getCurrentSize() {
             return currentSize;
         }
@@ -116,17 +123,17 @@ public class SwixmlTestApplication extends SWIXMLApplication {
                 firePropertyChange( "file", oldValue, settings.getLastSelectedFolder());
         }
 
-        private void loadResource( File file ) {
-            if( null==file ) return;
+        private void loadResource( File[] files ) {
+            if( null==files || files.length==0 ) return;
 
             try {
-                URL[] url = new URL[1];
-
-                url[0] = file.toURI().toURL();
-
-                loader = new URLClassLoader( url );
+                
+                for( File file : files ) {
+                    loader.add( file );
+                }
+                
             } catch (Exception ex) {
-                Logger.getLogger(SwixmlTestApplication.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, "error loading resource", ex);
             }
 
 
@@ -138,13 +145,13 @@ public class SwixmlTestApplication extends SWIXMLApplication {
             int returnVal = fc.showOpenDialog(this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
+                File[] files = fc.getSelectedFiles();
                 //This is where a real application would open the file.
 
 
-                loadResource( file );
+                loadResource( files );
                 
-                setResource( file.getAbsolutePath() );
+                setResource( files[0].getAbsolutePath() );
 
             }
             //firePropertyChange("fileSelected", null, null);
@@ -178,12 +185,17 @@ public class SwixmlTestApplication extends SWIXMLApplication {
 
             try {
 
-            final SwingEngine<Container> engine = new SwingEngine<Container>( null );
+            final ClassLoader cl = loader.build();
+            final SwingEngine<Container> engine = new SwingEngine<Container>( null, cl );
+            
+            try {
+            engine.getTaglib().loadSPITags(cl);
+            } catch( Throwable e ) {
+                logger.log( Level.WARNING, "taglib looading error", e);
+            }
             
             engine.getTaglib().registerUnknowTagFactory( new BeanFactory( JPanel.class ) );
             
-            engine.setClassLoader( loader );
-
             final Container c = engine.render(f);
 
             c.addComponentListener( new ComponentListener() {
@@ -261,7 +273,7 @@ public class SwixmlTestApplication extends SWIXMLApplication {
 	protected void startup() {
 
 		try {
-			JDialog frame = render( new MainFrame(), "swixml/SwixmlTestDialog.xml");
+			JDialog frame = render( new MainFrame() );
 			show( frame );
 	        Rectangle rc = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 			frame.setBounds(rc.x, rc.y, 600, 130);

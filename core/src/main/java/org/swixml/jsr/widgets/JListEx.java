@@ -11,6 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Converter;
+import static org.swixml.LogAware.logger;
 import org.swixml.SwingEngine;
 import org.swixml.jsr295.BindingUtils;
 
@@ -86,16 +87,18 @@ public class JListEx extends JList implements BindableListWidget, BindableBasicW
 
     @Override
     public void addNotify() {
-        if( beanList == null ) {
+        if( beanList==null) {
+            logger.warning( "used the deprecated property bindList instead of bindWidth!");
+        }
+        
+        final String bw = getBindWith();
 
-            if( getBindWith()!=null ) {
-                Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
+        if( bw!=null ) {
+            Object client = getClientProperty( SwingEngine.CLIENT_PROPERTY );
 
-                BeanProperty<Object, List<?>> p = BeanProperty.create( getBindWith() );
+            BeanProperty<Object, List<?>> p = BeanProperty.create( bw );
 
-                beanList = p.getValue(client);
-
-            }
+            beanList = p.getValue(client);
 
         }
 

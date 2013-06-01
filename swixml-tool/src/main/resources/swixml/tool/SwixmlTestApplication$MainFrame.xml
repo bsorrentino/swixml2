@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<dialog minimumSize="600,200" 
+        resizable="true" 
+        title="Swixml2 test Dialog"  
+        defaultCloseOperation="JFrame.DO_NOTHING_ON_CLOSE">
+
+<panel layout="borderLayout">
+
+    <hbox constraints="borderLayout.NORTH"  
+        border="CompoundBorder(EmptyBorder(10,1,10,10), TitledBorder(swixml file))">
+        <textfield bindWith="file" columns="15"/>
+		<button name="browse" text="..." action="browse" />
+		<box.hglue/>
+    </hbox>
+
+    <vbox>
+    
+    <scrollpane constraints="borderLayout.CENTER" border="TitledBorder(Resources)" minimumSize="100,100">
+        <list bindWith="resourceList">
+            
+        </list>        
+    </scrollpane>
+        
+    </vbox>
+    <hbox constraints="borderLayout.SOUTH">
+    	<button text="Add Resource" action="resource"/>
+    	<box.hstrut width="5"/>
+        <label bindWith="currentSize"/>
+    	<box.glue/>
+    	<box.hstrut width="5"/>
+    	<button text="Submit" action="submit"/>
+    	<box.hstrut width="5"/>
+    	<button text="Close" action="close"/>
+    </hbox>
+    
+</panel>
+
+</dialog>
