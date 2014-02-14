@@ -70,7 +70,6 @@ goal ==> webstart:jnlp
 <goal>jnlp</goal>
 </goals>
 
-<phase>install</phase>
 <configuration>
 
 
