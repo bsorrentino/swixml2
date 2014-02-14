@@ -3492,8 +3492,8 @@
       <xs:attribute name="leafIcon" type="xs:string" />
       <xs:attribute name="invokesStopCellEditing" type="xs:boolean" />
       <xs:attribute name="cellRenderer" type="xs:string" />
-      <xs:attribute name="scrollsOnExpand" type="xs:boolean" />
       <xs:attribute name="dragEnabled" type="xs:boolean" />
+      <xs:attribute name="scrollsOnExpand" type="xs:boolean" />
       <xs:attribute name="location" type="xs:string" />
       <xs:attribute name="focusTraversalKeysEnabled" type="xs:boolean" />
       <xs:attribute name="closedIcon" type="xs:string" />
