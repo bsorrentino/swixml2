@@ -617,6 +617,7 @@
           <xs:documentation>deprecated</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="opacity" type="xs:string" />
       <xs:attribute name="foreground" type="xs:string" />
       <xs:attribute name="ignoreRepaint" type="xs:boolean" />
       <xs:attribute name="focusableWindowState" type="xs:boolean" />
@@ -641,6 +642,7 @@
       <xs:attribute name="cursor" type="xs:string" />
       <xs:attribute name="resizable" type="xs:boolean" />
       <xs:attribute name="contentPane" type="xs:string" />
+      <xs:attribute name="autoRequestFocus" type="xs:boolean" />
       <xs:attribute name="JMenuBar" type="xs:string" />
       <xs:attribute name="modalExclusionType" type="xs:string" />
       <xs:attribute name="transferHandler" type="xs:string" />
@@ -648,9 +650,11 @@
       <xs:attribute name="modal" type="xs:boolean" />
       <xs:attribute name="alwaysOnTop" type="xs:boolean" />
       <xs:attribute name="location" type="xs:string" />
+      <xs:attribute name="type" type="xs:string" />
       <xs:attribute name="focusTraversalKeysEnabled" type="xs:boolean" />
       <xs:attribute name="componentOrientation" type="xs:string" />
       <xs:attribute name="font" type="xs:string" />
+      <xs:attribute name="shape" type="xs:string" />
       <xs:attribute name="dropTarget" type="xs:string" />
       <xs:attribute name="iconImage" type="xs:string" />
       <xs:attribute name="layout" type="xs:string" />
@@ -857,6 +861,7 @@
           <xs:documentation>deprecated</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="opacity" type="xs:string" />
       <xs:attribute name="foreground" type="xs:string" />
       <xs:attribute name="ignoreRepaint" type="xs:boolean" />
       <xs:attribute name="focusableWindowState" type="xs:boolean" />
@@ -880,18 +885,21 @@
       <xs:attribute name="cursor" type="xs:string" />
       <xs:attribute name="resizable" type="xs:boolean" />
       <xs:attribute name="contentPane" type="xs:string" />
+      <xs:attribute name="autoRequestFocus" type="xs:boolean" />
       <xs:attribute name="JMenuBar" type="xs:string" />
       <xs:attribute name="modalExclusionType" type="xs:string" />
       <xs:attribute name="transferHandler" type="xs:string" />
       <xs:attribute name="title" type="xs:string" />
       <xs:attribute name="alwaysOnTop" type="xs:boolean" />
       <xs:attribute name="location" type="xs:string" />
+      <xs:attribute name="type" type="xs:string" />
       <xs:attribute name="menuBar" type="xs:string" />
       <xs:attribute name="focusTraversalKeysEnabled" type="xs:boolean" />
       <xs:attribute name="maximizedBounds" type="xs:string" />
       <xs:attribute name="extendedState" type="xs:string" />
       <xs:attribute name="componentOrientation" type="xs:string" />
       <xs:attribute name="font" type="xs:string" />
+      <xs:attribute name="shape" type="xs:string" />
       <xs:attribute name="dropTarget" type="xs:string" />
       <xs:attribute name="iconImage" type="xs:string" />
       <xs:attribute name="state" type="xs:string" />
@@ -3484,8 +3492,8 @@
       <xs:attribute name="leafIcon" type="xs:string" />
       <xs:attribute name="invokesStopCellEditing" type="xs:boolean" />
       <xs:attribute name="cellRenderer" type="xs:string" />
-      <xs:attribute name="scrollsOnExpand" type="xs:boolean" />
       <xs:attribute name="dragEnabled" type="xs:boolean" />
+      <xs:attribute name="scrollsOnExpand" type="xs:boolean" />
       <xs:attribute name="location" type="xs:string" />
       <xs:attribute name="focusTraversalKeysEnabled" type="xs:boolean" />
       <xs:attribute name="closedIcon" type="xs:string" />
