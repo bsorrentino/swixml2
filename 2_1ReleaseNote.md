@@ -1,0 +1,90 @@
+# Release 2.1 #
+
+## NEW ##
+
+---
+
+  * integrated source code of JSR296 1.03
+  * integrated source code of JSR295 1.2.1
+  * included classes from com.applet.eawt jar
+
+  * Added a SwingComponent interface and SwingComponentBase implementation to allow to split application in several modules
+
+### Added useful instance methods ###
+
+  * SwingApplication.renderFrame
+  * SwingApplication.renderDialog
+  * SwingComponentBase.renderFrame
+  * SwingComponentBase.renderDialog
+
+
+## NEW TAGs ##
+
+---
+
+  * <box.glue>
+  * <box.hglue>
+  * <box.vglue>
+  * <box.hstrut>
+  * <box.vstrut>
+  * <box.rigidarea>
+  * 
+
+&lt;vgapbox&gt;
+
+
+  * 
+
+&lt;hgapbox&gt;
+
+
+
+
+
+## CHANGES ##
+
+---
+
+
+  * SwingApplication inherits from org.jdesktop.application.SingleFrameApplication
+
+### substitute tags to add binding, action and resource management as described in JSR295,JSR296 ###
+  * 
+
+&lt;Label&gt;
+
+ from class JLabel to class  org.swixml.jsr.widget.JLabelEx
+  * 
+
+&lt;Table&gt;
+
+ from class JTable to class  org.swixml.jsr.widget.JTableEx
+  * 
+
+&lt;TextArea&gt;
+
+ from class JTextArea to class  org.swixml.jsr.widget.JTextAreaEx
+  * 
+
+&lt;TextField&gt;
+
+ from class JTextField to class  org.swixml.jsr.widget.JTextFieldEx
+  * 
+
+&lt;PasswordField&gt;
+
+ from class JPasswordField to class  org.swixml.jsr.widget.JPasswordFieldEx
+  * 
+
+&lt;Tree&gt;
+
+ from class JTree to class  org.swixml.jsr.widget.JTreeEx
+
+Deprecated:
+
+  * SwingEngine.setAppFrame()
+  * SwingEngine.getAppFrame()
+
+## BUG FIXES ##
+
+---
