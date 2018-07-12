@@ -334,7 +334,6 @@ public static final String TAG_SCRIPT = "script";
     Object result = getSwing(processCustomAttributes(jdoc.getDocumentElement()), container);
 
     linkLabels();
-    supportMacOS();
 
     this.lbl_map.clear();
     this.mac_map.clear();
@@ -401,22 +400,6 @@ public static final String TAG_SCRIPT = "script";
     	if( logger.isLoggable(Level.FINE))  
     		logger.warning("linkLabels: class cast exception" );
       }
-    }
-  }
-
-  /**
-   * Link actions with the MacOS' system menu bar
-   */
-  private void supportMacOS() {
-    if (SwingEngine.isMacOSXSupported() && SwingEngine.isMacOSX()) {
-      try {
-        Application.getInstance().getMacApp().update(mac_map);
-      } catch (Throwable t) {
-        // intentionally empty
-      	if( logger.isLoggable(Level.FINE))  
-    		logger.log( Level.WARNING, "supportMacOS invocation error", t );
-      }
-
     }
   }
 

@@ -12,13 +12,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
+
 import org.jdesktop.application.Application;
 import org.junit.Test;
+import org.swixml.ApplicationPropertiesEnum;
 import org.swixml.jsr.widgets.JDialogEx;
 import org.swixml.jsr296.SWIXMLApplication;
 
 public class GradientApp extends SWIXMLApplication{
 
+    @SuppressWarnings("serial")
     public static class Dialog extends JDialogEx {
 	
     
@@ -63,7 +66,7 @@ public class GradientApp extends SWIXMLApplication{
 
         try {
             
-            System.setProperty(Application.AUTO_INJECTFIELD, String.valueOf(true));
+            ApplicationPropertiesEnum.AUTO_INJECTFIELD.set(true);
             
             Dialog dlg = super.render(new Dialog());
             

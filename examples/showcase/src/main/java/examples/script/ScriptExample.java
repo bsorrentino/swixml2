@@ -1,13 +1,14 @@
 package examples.script;
 
-import java.awt.Component;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+
+import org.swixml.ApplicationPropertiesEnum;
 import org.swixml.SwingEngine;
 import org.swixml.jsr296.SWIXMLApplication;
 
@@ -80,8 +81,8 @@ public class ScriptExample extends SWIXMLApplication {
      */
     public static void main(String[] args) {
 
-        System.setProperty(IGNORE_RESOURCES_PREFIX, "true");
-        System.setProperty(AUTO_INJECTFIELD, "true");
+        ApplicationPropertiesEnum.IGNORE_RESOURCES_PREFIX.set(true);
+        ApplicationPropertiesEnum.AUTO_INJECTFIELD.set(true);
 
         SWIXMLApplication.launch(ScriptExample.class, args);
     }

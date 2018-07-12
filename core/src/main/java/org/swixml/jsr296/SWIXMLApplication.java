@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.Reader;
 
 import org.jdesktop.application.SingleFrameApplication;
+import org.swixml.ApplicationPropertiesEnum;
 import org.swixml.LogAware;
 import org.swixml.SwingEngine;
 import org.swixml.script.ScriptService;
@@ -64,7 +65,7 @@ public abstract class SWIXMLApplication extends SingleFrameApplication  {
     	final SwingEngine<T> engine = new SwingEngine<T>( container, getClass().getClassLoader() );
 
         //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        if( ApplicationPropertiesEnum.AUTO_INJECTFIELD.getBoolean() ) getContext().getResourceMap().injectFields(container);
 
         String resource = container.getClass().getName().replace('.', '/').concat(".xml");
         
@@ -89,8 +90,7 @@ public abstract class SWIXMLApplication extends SingleFrameApplication  {
     	if( null==resource ) throw new IllegalArgumentException( "resource is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container, getClass().getClassLoader() );
 
-        //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        if( ApplicationPropertiesEnum.AUTO_INJECTFIELD.getBoolean() ) getContext().getResourceMap().injectFields(container);
 
         ScriptService service = engine.getScript();
         if( service != null ) {
@@ -111,8 +111,7 @@ public abstract class SWIXMLApplication extends SingleFrameApplication  {
     	if( null==reader ) throw new IllegalArgumentException( "reader is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container, getClass().getClassLoader() );
 
-        //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        if( ApplicationPropertiesEnum.AUTO_INJECTFIELD.getBoolean() ) getContext().getResourceMap().injectFields(container);
 
         ScriptService service = engine.getScript();
         if( service != null ) {
@@ -132,8 +131,7 @@ public abstract class SWIXMLApplication extends SingleFrameApplication  {
     	if( null==xmlFile ) throw new IllegalArgumentException( "xmlFile is null!");
     	final SwingEngine<T> engine = new SwingEngine<T>( container, getClass().getClassLoader() );
 
-        //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        if( ApplicationPropertiesEnum.AUTO_INJECTFIELD.getBoolean() ) getContext().getResourceMap().injectFields(container);
 
         ScriptService service = engine.getScript();
         if( service != null ) {
@@ -155,7 +153,7 @@ public abstract class SWIXMLApplication extends SingleFrameApplication  {
     	final SwingEngine<T> engine = new SwingEngine<T>( container, getClass().getClassLoader() );
 
         //if( Boolean.getBoolean(AUTO_INJECTFIELD)) getContext().getResourceMap().injectFields(container);
-        if( getBooleanProperty(AUTO_INJECTFIELD) ) getContext().getResourceMap().injectFields(container);
+        if( ApplicationPropertiesEnum.AUTO_INJECTFIELD.getBoolean() ) getContext().getResourceMap().injectFields(container);
 
         ScriptService service = engine.getScript();
         if( service != null ) {
