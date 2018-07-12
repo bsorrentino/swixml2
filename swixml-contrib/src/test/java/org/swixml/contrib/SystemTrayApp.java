@@ -4,16 +4,23 @@
  */
 package org.swixml.contrib;
 
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Resource;
 import org.junit.Test;
+import org.swixml.ApplicationPropertiesEnum;
 import org.swixml.jsr296.SWIXMLApplication;
 
 /**
@@ -79,7 +86,7 @@ public class SystemTrayApp extends SWIXMLApplication {
 
         try {
             
-            System.setProperty(Application.AUTO_INJECTFIELD, String.valueOf(true));
+            ApplicationPropertiesEnum.AUTO_INJECTFIELD.set(true);
             
             MainFrame mainFrame = super.render(new MainFrame());
             

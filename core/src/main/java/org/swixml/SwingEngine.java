@@ -253,8 +253,7 @@ public class SwingEngine<T extends Container> implements LogAware {
    * Default ctor for a SwingEngine.
    */
   private SwingEngine() {
-    //if( Boolean.getBoolean( Application.USE_COMMON_LOCALIZER ) ) {
-    if( Application.getBooleanProperty(Application.USE_COMMON_LOCALIZER) ) {
+    if( ApplicationPropertiesEnum.USE_COMMON_LOCALIZER.getBoolean() ) {
     	localizer = new LocalizerJSR296Impl();
     }
     else {
@@ -715,11 +714,6 @@ public class SwingEngine<T extends Container> implements LogAware {
    * @param l <code>Locale</code>
    */
   public final void setLocale(Locale l) {
-    if (SwingEngine.isMacOSXSupported() && SwingEngine.isMacOSX()) {
-      l = new Locale(l.getLanguage(),
-              l.getCountry(),
-              SwingEngine.MAC_OSX_LOCALE_VARIANT);
-    }
     this.localizer.setLocale(l);
   }
 
@@ -1067,18 +1061,6 @@ public class SwingEngine<T extends Container> implements LogAware {
    */
   public static boolean isMacOSXSupported() {
     return SwingEngine.MAC_OSX_SUPPORTED;
-  }
-
-  /**
-   * Indicates if currently running on Mac OS X
-   * 
-   * use Application.getInstance().isMacOSX();
-   *
-   * @return <code>boolean</code>- indicating if currently running on a MAC
-   */
-  @Deprecated
-  public static boolean isMacOSX() {
-    return Application.getInstance().isMacOSX();
   }
 
   /**

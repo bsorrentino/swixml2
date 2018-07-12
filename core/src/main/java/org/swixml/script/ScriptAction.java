@@ -23,7 +23,7 @@ public class ScriptAction extends AbstractAction implements LogAware {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
 				
 		if( service == null ) {
 			return;
@@ -31,4 +31,5 @@ public class ScriptAction extends AbstractAction implements LogAware {
 		
 		service.invokeFunctionSafe(methodName, e);
 	}
+	
 }
